@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : webpages.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Structure for the webpages table.
+-->
+<table>
+    <column>
+        <name>idpage</name>
+        <type>serial</type>
+        <null>NO</null>
+        <default>nextval('webpages_idpage_seq'::regclass)</default>
+    </column>
+    <column>
+        <name>permalink</name>
+        <type>character varying(200)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>title</name>
+        <type>character varying(200)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>description</name>
+        <type>character varying(300)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>webpages_pkey</name>
+        <type>PRIMARY KEY (idpage)</type>
+    </constraint>
+</table>

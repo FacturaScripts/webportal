@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Base\Controller;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Plugins\webportal\Model;
 
 /**
  * Description of PortalHome
@@ -28,9 +29,45 @@ use FacturaScripts\Core\Base\Controller;
  */
 class PortalHome extends Controller
 {
+
+    /**
+     *
+     * @var WebPage 
+     */
+    public $webPage;
+
+    public function getPageData()
+    {
+        $pageData = parent::getPageData();
+        $pageData['title'] = 'webportal';
+        $pageData['menu'] = 'admin';
+        $pageData['showonmenu'] = false;
+
+        return $pageData;
+    }
+
+    public function getPublicMenu()
+    {
+        $menu = [];
+        $webPageModel = new Model\WebPage();
+        foreach ($webPageModel->all() as $webPage) {
+            $menu[] = [
+                'id' => $webPage->idpage,
+                'title' => $webPage->title,
+                'url' => $this->url() . '&permalink=' . $webPage->permalink
+            ];
+        }
+
+        return $menu;
+    }
+
     public function publicCore(&$response)
     {
         parent::publicCore($response);
         $this->setTemplate('Public/PortalHome');
+
+        $permalink = $this->request->get('permalink', 'home');
+        $this->webPage = new Model\WebPage();
+        $this->webPage->loadFromCode('', [new DataBaseWhere('permalink', $permalink)]);
     }
 }

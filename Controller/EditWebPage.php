@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?php
+/**
  * This file is part of webportal plugin for FacturaScripts.
  * Copyright (C) 2018  Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
@@ -15,22 +15,32 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * Initial description for the controller EditFabricante
- *
- * @author Carlos García Gómez <carlos@facturascripts.com>
--->
+ */
+namespace FacturaScripts\Plugins\webportal\Controller;
 
-<view>
-    <columns>
-        <group name="default" numcolumns="12">
-            <column name="name" display="none" order="0">
-                <widget type="text" fieldname="name" readonly="true" required="true" />
-            </column>
-            <column name="webtitle" numcolumns="3" order="100">
-                <widget type="text" fieldname="webtitle"/>
-            </column>
-        </group>
-    </columns>
-</view>
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Lib\ExtendedController;
+
+/**
+ * Description of EditWebPage
+ *
+ * @author Carlos García Gómez
+ */
+class EditWebPage extends ExtendedController\PanelController
+{
+
+    protected function createViews()
+    {
+        $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'webpage');
+    }
+
+    protected function loadData($keyView, $view)
+    {
+        switch ($keyView) {
+            case 'EditWebPage':
+                $code = $this->request->get('code');
+                $view->loadData($code);
+                break;
+        }
+    }
+}

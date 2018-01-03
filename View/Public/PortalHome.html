@@ -1,5 +1,13 @@
 {% extends "Master/MicroTemplate.html" %}
 
+{% block meta %}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{ fsc.webPage.title }}</title>
+<meta name="description" content="{{ fsc.webPage.description }}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="{{ i18n.trans('facturascripts') }}" />
+{% endblock %}
+
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <a class="navbar-brand" href="index.php">
@@ -11,9 +19,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="nav navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+            {% for menuItem in fsc.getPublicMenu() %}
+            {% set activeClass = (menuItem['id'] == fsc.webPage.idpage) ? ' active' : '' %}
+            <li class="nav-item{{ activeClass }}">
+                <a class="nav-link" href="{{ menuItem['url'] }}">{{ menuItem['title'] }}</a>
             </li>
+            {% endfor %}
         </ul>
         <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
             <li class="nav-item">
@@ -24,6 +35,17 @@
         </ul>
     </div>
 </nav>
+
+<br/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>{{ fsc.webPage.title }}</h1>
+            <p>{{ fsc.webPage.description }}</p>
+        </div>
+    </div>
+</div>
 
 <form action="index.php" method="post" class="form">
     <div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
