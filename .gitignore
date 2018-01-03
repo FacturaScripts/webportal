@@ -1,0 +1,9 @@
+/.idea/
+/nbproject/
+.DS_Store
+.htaccess
+composer.lock
+package-lock.json
+*.cache
+*.lock
+.vscode
