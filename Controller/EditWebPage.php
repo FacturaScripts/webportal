@@ -33,6 +33,16 @@ class EditWebPage extends ExtendedController\PanelController
     {
         $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'webpage');
     }
+    
+    public function getPageData()
+    {
+        $pageData = parent::getPageData();
+        $pageData['menu'] = 'admin';
+        $pageData['showonmenu'] = false;
+        $pageData['icon'] = 'fa-globe';
+        
+        return $pageData;
+    }
 
     protected function loadData($keyView, $view)
     {

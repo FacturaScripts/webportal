@@ -27,6 +27,18 @@
         <type>character varying(300)</type>
         <null>NO</null>
     </column>
+    <column>
+        <name>showonmenu</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>true</default>
+    </column>
+    <column>
+        <name>showonfooter</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>true</default>
+    </column>
     <constraint>
         <name>webpages_pkey</name>
         <type>PRIMARY KEY (idpage)</type>

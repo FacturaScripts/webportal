@@ -31,11 +31,19 @@
             <column name="title" numcolumns="12" order="2">
                 <widget type="text" fieldname="title" required="true" />
             </column>
-            <column name="permalink" numcolumns="12" order="2">
+            <column name="description" numcolumns="12" order="3">
+                <widget type="textarea" fieldname="description" required="true" />
+            </column>
+        </group>
+        <group name="info" numcolumns="12">
+            <column name="permalink" numcolumns="6" order="4">
                 <widget type="text" fieldname="permalink" required="true" />
             </column>
-            <column name="description" numcolumns="12" order="2">
-                <widget type="textarea" fieldname="description" required="true" />
+            <column name="showonmenu" numcolumns="3" order="5">
+                <widget type="checkbox" fieldname="showonmenu" />
+            </column>
+            <column name="showonfooter" numcolumns="3" order="6">
+                <widget type="checkbox" fieldname="showonfooter" />
             </column>
         </group>
     </columns>

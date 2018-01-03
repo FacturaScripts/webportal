@@ -42,7 +42,23 @@
     <div class="row">
         <div class="col-12">
             <h1>{{ fsc.webPage.title }}</h1>
-            <p>{{ fsc.webPage.description }}</p>
+            <p class="lead">{{ fsc.webPage.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <ul>
+                {% for menuItem in fsc.getPublicFooter() %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ menuItem['url'] }}">{{ menuItem['title'] }}</a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

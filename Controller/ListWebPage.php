@@ -39,6 +39,7 @@ class ListWebPage extends ExtendedController\ListController
         $pageData = parent::getPageData();
         $pageData['title'] = 'web-pages';
         $pageData['menu'] = 'admin';
+        $pageData['icon'] = 'fa-globe';
         
         return $pageData;
     }

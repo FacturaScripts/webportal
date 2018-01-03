@@ -27,11 +27,17 @@
         <column name="code" display="none" order="100">
             <widget type="text" fieldname="idpage" onclick="EditWebPage" />
         </column>
-        <column name="title" display="left" order="100">
+        <column name="title" display="left" order="110">
             <widget type="text" fieldname="title" />
         </column>
-        <column name="description" display="left" order="100">
+        <column name="description" display="left" order="120">
             <widget type="text" fieldname="description" />
+        </column>
+        <column name="showonmenu" display="center" order="130">
+            <widget type="checkbox" fieldname="showonmenu" />
+        </column>
+        <column name="showonfooter" display="center" order="130">
+            <widget type="checkbox" fieldname="showonfooter" />
         </column>
     </columns>
 </view>

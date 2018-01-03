@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace FacturaScripts\Plugins\webportal\Model;
 
 use FacturaScripts\Core\Model\Base;
@@ -28,18 +27,21 @@ use FacturaScripts\Core\Model\Base;
  */
 class WebPage
 {
+
     use Base\ModelTrait;
-    
-    public $idpage;
-    public $title;
-    public $permalink;
+
     public $description;
-    
+    public $idpage;
+    public $permalink;
+    public $showonmenu;
+    public $showonfooter;
+    public $title;
+
     public function tableName()
     {
         return 'webpages';
     }
-    
+
     public function primaryColumn()
     {
         return 'idpage';
@@ -56,5 +58,14 @@ class WebPage
     {
         return 'INSERT INTO ' . static::tableName() . " (title,description,permalink)"
             . " VALUES ('Home','Home','home');";
+    }
+
+    public function test()
+    {
+        $this->description = self::noHtml($this->description);
+        $this->permalink = self::noHtml($this->permalink);
+        $this->title = self::noHtml($this->title);
+
+        return true;
     }
 }

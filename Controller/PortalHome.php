@@ -51,10 +51,33 @@ class PortalHome extends Controller
         $menu = [];
         $webPageModel = new Model\WebPage();
         foreach ($webPageModel->all() as $webPage) {
+            if(!$webPage->showonmenu) {
+                continue;
+            }
+            
             $menu[] = [
                 'id' => $webPage->idpage,
                 'title' => $webPage->title,
-                'url' => $this->url() . '&permalink=' . $webPage->permalink
+                'url' => $this->url() . '&permalink=' . $webPage->permalink . '.html'
+            ];
+        }
+
+        return $menu;
+    }
+
+    public function getPublicFooter()
+    {
+        $menu = [];
+        $webPageModel = new Model\WebPage();
+        foreach ($webPageModel->all() as $webPage) {
+            if(!$webPage->showonfooter) {
+                continue;
+            }
+            
+            $menu[] = [
+                'id' => $webPage->idpage,
+                'title' => $webPage->title,
+                'url' => $this->url() . '&permalink=' . $webPage->permalink . '.html'
             ];
         }
 
@@ -67,6 +90,18 @@ class PortalHome extends Controller
         $this->setTemplate('Public/PortalHome');
 
         $permalink = $this->request->get('permalink', 'home');
+        if (substr($permalink, -9) === '.amp.html') {
+            $this->setTemplate('Public/PortalHomeAMP');
+            $permalink = substr($permalink, 0, -9);
+        } else if (substr($permalink, -5) === '.html') {
+            $permalink = substr($permalink, 0, -5);
+        }
+
+        $this->loadWebPage($permalink);
+    }
+
+    private function loadWebPage($permalink)
+    {
         $this->webPage = new Model\WebPage();
         $this->webPage->loadFromCode('', [new DataBaseWhere('permalink', $permalink)]);
     }
