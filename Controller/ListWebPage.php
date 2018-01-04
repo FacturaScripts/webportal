@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController;
+use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
  * Description of ListWebPage
@@ -32,15 +33,60 @@ class ListWebPage extends ExtendedController\ListController
     {
         $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'webpages', 'fa-globe');
         $this->addOrderBy('ListWebPage', 'title');
+        $this->addOrderBy('ListWebPage', 'posnumber');
     }
-    
+
     public function getPageData()
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'web-pages';
         $pageData['menu'] = 'admin';
         $pageData['icon'] = 'fa-globe';
-        
+
         return $pageData;
+    }
+
+    protected function execAfterAction($action)
+    {
+        switch ($action) {
+            case 'htaccess':
+                if ($this->regenHtaccess()) {
+                    $this->miniLog->info($this->i18n->trans('record-updated-correctly'));
+                } else {
+                    $this->miniLog->alert($this->i18n->trans('error'));
+                }
+                break;
+
+            default:
+                parent::execAfterAction($action);
+        }
+    }
+
+    private function regenHtaccess()
+    {
+        $htaccess = file_get_contents(FS_FOLDER . '/htaccess-sample');
+        $htaccess .= "\n\n<IfModule mod_rewrite.c>\n   RewriteEngine On\n\n";
+
+        $langcodes = [];
+        $webPageModel = new WebPage();
+        foreach ($webPageModel->all([], ['posnumber' => 'ASC'], 0, 1000) as $webPage) {
+            $htaccess .= "   RewriteRule ^" . $webPage->langcode . '/' . $webPage->permalink . "$ "
+                . $webPage->internalLink() . "&%{QUERY_STRING} [L]\n";
+
+            if (!in_array($webPage->langcode, $langcodes)) {
+                $langcodes[] = $webPage->langcode;
+            }
+        }
+
+        foreach ($langcodes as $lang) {
+            $htaccess .= "   RewriteRule ^" . $lang . "$ index.php?page="
+                . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
+            
+            $htaccess .= "   RewriteRule ^" . $lang . "/$ index.php?page="
+                . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
+        }
+
+        $htaccess .= "</IfModule>\n";
+        return file_put_contents('.htaccess', $htaccess);
     }
 }

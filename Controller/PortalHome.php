@@ -31,6 +31,13 @@ class PortalHome extends Controller
 {
 
     /**
+     * Visitor language code.
+     * 
+     * @var string 
+     */
+    public $langcode;
+
+    /**
      *
      * @var WebPage 
      */
@@ -48,40 +55,14 @@ class PortalHome extends Controller
 
     public function getPublicMenu()
     {
-        $menu = [];
-        $webPageModel = new Model\WebPage();
-        foreach ($webPageModel->all() as $webPage) {
-            if(!$webPage->showonmenu) {
-                continue;
-            }
-            
-            $menu[] = [
-                'id' => $webPage->idpage,
-                'title' => $webPage->title,
-                'url' => $this->url() . '&permalink=' . $webPage->permalink . '.html'
-            ];
-        }
-
-        return $menu;
+        $where = [new DataBaseWhere('showonmenu', true)];
+        return $this->getAuxMenu($where);
     }
 
     public function getPublicFooter()
     {
-        $menu = [];
-        $webPageModel = new Model\WebPage();
-        foreach ($webPageModel->all() as $webPage) {
-            if(!$webPage->showonfooter) {
-                continue;
-            }
-            
-            $menu[] = [
-                'id' => $webPage->idpage,
-                'title' => $webPage->title,
-                'url' => $this->url() . '&permalink=' . $webPage->permalink . '.html'
-            ];
-        }
-
-        return $menu;
+        $where = [new DataBaseWhere('showonfooter', true)];
+        return $this->getAuxMenu($where);
     }
 
     public function publicCore(&$response)
@@ -89,20 +70,52 @@ class PortalHome extends Controller
         parent::publicCore($response);
         $this->setTemplate('Public/PortalHome');
 
-        $permalink = $this->request->get('permalink', 'home');
-        if (substr($permalink, -9) === '.amp.html') {
-            $this->setTemplate('Public/PortalHomeAMP');
-            $permalink = substr($permalink, 0, -9);
-        } else if (substr($permalink, -5) === '.html') {
-            $permalink = substr($permalink, 0, -5);
+        $this->langcode = $this->request->get('langcode');
+        if(empty($this->langcode)) {
+            foreach($this->request->getLanguages() as $lang) {
+                $this->langcode = substr($lang, 0, 2);
+                break;
+            }
         }
 
-        $this->loadWebPage($permalink);
+        $permalink = $this->request->get('permalink', 'home');
+        if ($this->request->get('amp') !== null) {
+            $this->setTemplate('Public/PortalHomeAMP');
+        }
+
+        $this->loadWebPage($permalink, $this->langcode);
     }
 
-    private function loadWebPage($permalink)
+    private function getAuxMenu($where)
     {
+        $menu = [];
+        if ($this->langcode !== '') {
+            $where[] = new DataBaseWhere('langcode', $this->langcode);
+        }
+
+        $webPageModel = new Model\WebPage();
+        foreach ($webPageModel->all($where, ['posnumber' => 'ASC']) as $webPage) {
+            $menu[] = [
+                'id' => $webPage->idpage,
+                'title' => $webPage->title,
+                'link' => $webPage->link()
+            ];
+        }
+
+        return $menu;
+    }
+
+    private function loadWebPage($permalink, $langcode = '')
+    {
+        $where = [new DataBaseWhere('permalink', $permalink),];
+        if ($langcode !== '') {
+            $where[] = new DataBaseWhere('langcode', $langcode);
+        }
+
         $this->webPage = new Model\WebPage();
-        $this->webPage->loadFromCode('', [new DataBaseWhere('permalink', $permalink)]);
+        if (!$this->webPage->loadFromCode('', $where) && $langcode !== '') {
+            /// if fails, we try to load any page with the same permalink
+            $this->loadWebPage($permalink);
+        }
     }
 }

@@ -31,6 +31,9 @@
             <column name="webtitle" numcolumns="3" order="100">
                 <widget type="text" fieldname="webtitle"/>
             </column>
+            <column name="webpath" numcolumns="3" order="100">
+                <widget type="text" fieldname="webpath"/>
+            </column>
         </group>
     </columns>
 </view>

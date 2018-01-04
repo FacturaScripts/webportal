@@ -1,4 +1,4 @@
-{% extends "Master/MicroTemplate.html" %}
+{% extends "Master/PublicTemplate.html" %}
 
 {% block meta %}
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -9,9 +9,10 @@
 {% endblock %}
 
 {% block body %}
+{% set webPath = appSettings.get('webportal','webpath','') %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <a class="navbar-brand" href="index.php">
-        <img src="Core/Assets/Images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="FacturaScripts"/>
+        <img src="{{ webPath }}/Core/Assets/Images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="FacturaScripts"/>
         {{ appSettings.get('webportal','webtitle','webportal') }}
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +23,7 @@
             {% for menuItem in fsc.getPublicMenu() %}
             {% set activeClass = (menuItem['id'] == fsc.webPage.idpage) ? ' active' : '' %}
             <li class="nav-item{{ activeClass }}">
-                <a class="nav-link" href="{{ menuItem['url'] }}">{{ menuItem['title'] }}</a>
+                <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
             </li>
             {% endfor %}
         </ul>
@@ -55,7 +56,7 @@
             <ul>
                 {% for menuItem in fsc.getPublicFooter() %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ menuItem['url'] }}">{{ menuItem['title'] }}</a>
+                    <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
                 </li>
                 {% endfor %}
             </ul>
@@ -63,7 +64,7 @@
     </div>
 </div>
 
-<form action="index.php" method="post" class="form">
+<form action="{{ webPath }}/index.php" method="post" class="form">
     <div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

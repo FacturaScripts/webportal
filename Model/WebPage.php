@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -28,13 +29,73 @@ use FacturaScripts\Core\Model\Base;
 class WebPage
 {
 
-    use Base\ModelTrait;
+    use Base\ModelTrait {
+        clear as traitClear;
+    }
 
+    const DEFAULT_CONTROLLER = 'PortalHome';
+
+    /**
+     * Custom controller to redir when clic on this link.
+     * 
+     * @var string 
+     */
+    public $customcontroller;
+
+    /**
+     * Page description.
+     * 
+     * @var string 
+     */
     public $description;
+
+    /**
+     * Primary key.
+     * 
+     * @var int 
+     */
     public $idpage;
+
+    /**
+     * Language code, in 2 characters,
+     * 
+     * @var string
+     */
+    public $langcode;
+
+    /**
+     * Permanent link.
+     * 
+     * @var string 
+     */
     public $permalink;
+
+    /**
+     * Position number.
+     * 
+     * @var type 
+     */
+    public $posnumber;
+
+    /**
+     * Show link on menu.
+     * 
+     * @var bool 
+     */
     public $showonmenu;
+
+    /**
+     * Show link on footer.
+     * 
+     * @var bool 
+     */
     public $showonfooter;
+
+    /**
+     * Page title.
+     * 
+     * @var string
+     */
     public $title;
 
     public function tableName()
@@ -58,6 +119,31 @@ class WebPage
     {
         return 'INSERT INTO ' . static::tableName() . " (title,description,permalink)"
             . " VALUES ('Home','Home','home');";
+    }
+
+    public function clear()
+    {
+        $this->traitClear();
+        $this->langcode = substr(FS_LANG, 0, 2);
+        $this->posnumber = 100;
+        $this->showonmenu = true;
+        $this->showonfooter = true;
+    }
+
+    public function link()
+    {
+        $webPath = AppSettings::get('webportal', 'webpath', '');
+        return $webPath . '/' . $this->langcode . '/' . $this->permalink;
+    }
+
+    public function internalLink()
+    {
+        $extra = '&langcode=' . $this->langcode;
+        if ($this->customcontroller) {
+            return 'index.php?page=' . $this->customcontroller . $extra;
+        }
+
+        return 'index.php?page=' . self::DEFAULT_CONTROLLER . '&permalink=' . $this->permalink . $extra;
     }
 
     public function test()

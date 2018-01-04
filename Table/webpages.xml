@@ -39,6 +39,20 @@
         <null>NO</null>
         <default>true</default>
     </column>
+    <column>
+        <name>customcontroller</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>posnumber</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>100</default>
+    </column>
+    <column>
+        <name>langcode</name>
+        <type>character varying(2)</type>
+    </column>
     <constraint>
         <name>webpages_pkey</name>
         <type>PRIMARY KEY (idpage)</type>
