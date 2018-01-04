@@ -117,8 +117,8 @@ class WebPage
      */
     public function install()
     {
-        return 'INSERT INTO ' . static::tableName() . " (title,description,permalink)"
-            . " VALUES ('Home','Home','home');";
+        return 'INSERT INTO ' . static::tableName() . " (title,description,permalink,langcode)"
+            . " VALUES ('Home','Home','home','" . substr(FS_LANG, 0, 2) . "');";
     }
 
     public function clear()
