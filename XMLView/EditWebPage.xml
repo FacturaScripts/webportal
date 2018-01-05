@@ -16,9 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *
- * Initial description for the controller EditAtributo
- *
  * @author Carlos García Gómez <carlos@facturascripts.com>
 -->
 
@@ -56,5 +53,10 @@
             </column>
         </group>
     </columns>
+    <rows>
+        <row type="actions">
+            <button type="action" label="preview" color="info" action="preview" icon="fa-eye" />
+        </row>
+    </rows>
 </view>
 

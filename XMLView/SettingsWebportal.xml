@@ -16,9 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *
- * Initial description for the controller EditFabricante
- *
  * @author Carlos García Gómez <carlos@facturascripts.com>
 -->
 
@@ -28,11 +25,17 @@
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" required="true" />
             </column>
-            <column name="webtitle" numcolumns="3" order="100">
-                <widget type="text" fieldname="webtitle"/>
+            <column name="title" numcolumns="3" order="100">
+                <widget type="text" fieldname="title"/>
             </column>
-            <column name="webpath" numcolumns="3" order="100">
-                <widget type="text" fieldname="webpath"/>
+            <column name="path" numcolumns="3" order="110">
+                <widget type="text" fieldname="path"/>
+            </column>
+            <column name="url" numcolumns="6" order="120">
+                <widget type="text" fieldname="url"/>
+            </column>
+            <column name="copyright" title="copyright-text" numcolumns="12" order="120">
+                <widget type="textarea" fieldname="copyright"/>
             </column>
         </group>
     </columns>

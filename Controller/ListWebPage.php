@@ -31,9 +31,18 @@ class ListWebPage extends ExtendedController\ListController
 
     protected function createViews()
     {
-        $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'webpages', 'fa-globe');
+        /// Web pages
+        $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'web-pages', 'fa-globe');
+        $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'posnumber');
+
+        /// Web blocks
+        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'web-block', 'fa-code');
+        $this->addSearchFields('ListWebBlock', ['column1', 'column2', 'column3', 'column4']);
+        $this->addOrderBy('ListWebBlock', 'idblock');
+        $this->addOrderBy('ListWebBlock', 'idpage');
+        $this->addOrderBy('ListWebBlock', 'posnumber');
     }
 
     public function getPageData()
@@ -81,7 +90,7 @@ class ListWebPage extends ExtendedController\ListController
         foreach ($langcodes as $lang) {
             $htaccess .= "   RewriteRule ^" . $lang . "$ index.php?page="
                 . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
-            
+
             $htaccess .= "   RewriteRule ^" . $lang . "/$ index.php?page="
                 . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
         }

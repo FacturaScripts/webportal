@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ fsc.webPage.langcode }}" xml:lang="{{ fsc.webPage.langcode }}" >
+    <head>
+        {# Website config #}
+        {% set webPath = appSettings.get('webportal','path','') %}
+        {% set webTitle = appSettings.get('webportal','title','') %}
+        {% set webCopyright = appSettings.get('webportal','copyright','') %}
+
+        {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>{{ fsc.webPage.title }}</title>
+        <meta name="description" content="{{ fsc.webPage.description }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="FacturaScripts" />
+        {% endblock %}
+        {% block icons %}
+        <link rel="shortcut icon" href="{{ webPath }}/Core/Assets/Images/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ webPath }}/Core/Assets/Images/apple-icon-180x180.png" />
+        {% endblock %}
+        {% block css %}
+        <link rel="stylesheet" href="{{ webPath }}/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="{{ webPath }}/node_modules/font-awesome/css/font-awesome.min.css" />
+        {% endblock %}
+        {% block javascript %}
+        <script type="text/javascript" src="{{ webPath }}/node_modules/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ webPath }}/node_modules/popper.js/dist/umd/popper.min.js"></script>
+        <script type="text/javascript" src="{{ webPath }}/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            {% block navbarContent %}
+            <a class="navbar-brand" href="{{ webPath }}">
+                <img src="{{ webPath }}/Core/Assets/Images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="{{ webTitle }}"/>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav mr-auto">
+                    {% for menuItem in fsc.getPublicMenu() %}
+                    {% set activeClass = (menuItem['id'] == fsc.webPage.idpage) ? ' active' : '' %}
+                    <li class="nav-item{{ activeClass }}">
+                        <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">
+                            <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endblock %}
+        </nav>
+        {% endblock %}
+        {% block messages %}
+        {% from 'Macro/Utils.html' import message as show_message %}
+        {{ show_message(log, ['error', 'critical', 'alert', 'emergency'], 'danger') }}
+        {{ show_message(log, ['warning'], 'warning') }}
+        {{ show_message(log, ['notice'], 'success') }}
+        {{ show_message(log, ['info'], 'info') }}
+        {% endblock %}
+        {% block body %}{% endblock %}
+        <form action="{{ webPath }}/index.php" method="post" class="form">
+            <div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ i18n.trans('login') }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="text" name="fsNick" class="form-control" maxlength="50" placeholder="{{ i18n.trans('user') }}" required="" autocomplete="off" autofocus=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="password" name="fsPassword" class="form-control" maxlength="50" placeholder="{{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-block btn-primary">
+                                {{ i18n.trans('login') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% block footer %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <hr/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <ul>
+                        {% for menuItem in fsc.getPublicFooter() %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <p class="help-block">{{ webCopyright }}</p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </body>
+</html>

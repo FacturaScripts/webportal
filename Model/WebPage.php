@@ -48,7 +48,7 @@ class WebPage
      * @var string 
      */
     public $description;
-
+    
     /**
      * Primary key.
      * 
@@ -132,7 +132,7 @@ class WebPage
 
     public function link()
     {
-        $webPath = AppSettings::get('webportal', 'webpath', '');
+        $webPath = AppSettings::get('webportal', 'path', '');
         return $webPath . '/' . $this->langcode . '/' . $this->permalink;
     }
 

@@ -32,15 +32,19 @@ class EditWebPage extends ExtendedController\PanelController
     protected function createViews()
     {
         $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'webpage');
+        $this->addEditListView('\FacturaScripts\Dinamic\Model\WebBlock', 'EditWebBlock', 'webblock');
+        
+        /// Disable columns
+        $this->views['EditWebBlock']->disableColumn('idpage', true);
     }
-    
+
     public function getPageData()
     {
         $pageData = parent::getPageData();
         $pageData['menu'] = 'admin';
         $pageData['showonmenu'] = false;
         $pageData['icon'] = 'fa-globe';
-        
+
         return $pageData;
     }
 
@@ -51,6 +55,27 @@ class EditWebPage extends ExtendedController\PanelController
                 $code = $this->request->get('code');
                 $view->loadData($code);
                 break;
+            
+            case 'EditWebBlock':
+                $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
+                $where = [new DataBaseWhere('idpage', $idpage)];
+                $view->loadData($where);
+                break;
+        }
+    }
+
+    protected function execAfterAction($view, $action)
+    {
+        switch ($action) {
+            case 'preview':
+                $model = $this->views['EditWebPage']->getModel();
+                if ($model !== false) {
+                    $this->response->headers->set('Refresh', '0; '.$model->link());
+                }
+                break;
+
+            default:
+                parent::execAfterAction($view, $action);
         }
     }
 }

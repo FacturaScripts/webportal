@@ -18,30 +18,15 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Base\Controller;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Plugins\webportal\Model;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 
 /**
  * Description of PortalHome
  *
  * @author Carlos García Gómez
  */
-class PortalHome extends Controller
+class PortalHome extends PortalController
 {
-
-    /**
-     * Visitor language code.
-     * 
-     * @var string 
-     */
-    public $langcode;
-
-    /**
-     *
-     * @var WebPage 
-     */
-    public $webPage;
 
     public function getPageData()
     {
@@ -51,71 +36,5 @@ class PortalHome extends Controller
         $pageData['showonmenu'] = false;
 
         return $pageData;
-    }
-
-    public function getPublicMenu()
-    {
-        $where = [new DataBaseWhere('showonmenu', true)];
-        return $this->getAuxMenu($where);
-    }
-
-    public function getPublicFooter()
-    {
-        $where = [new DataBaseWhere('showonfooter', true)];
-        return $this->getAuxMenu($where);
-    }
-
-    public function publicCore(&$response)
-    {
-        parent::publicCore($response);
-        $this->setTemplate('Public/PortalHome');
-
-        $this->langcode = $this->request->get('langcode');
-        if(empty($this->langcode)) {
-            foreach($this->request->getLanguages() as $lang) {
-                $this->langcode = substr($lang, 0, 2);
-                break;
-            }
-        }
-
-        $permalink = $this->request->get('permalink', 'home');
-        if ($this->request->get('amp') !== null) {
-            $this->setTemplate('Public/PortalHomeAMP');
-        }
-
-        $this->loadWebPage($permalink, $this->langcode);
-    }
-
-    private function getAuxMenu($where)
-    {
-        $menu = [];
-        if ($this->langcode !== '') {
-            $where[] = new DataBaseWhere('langcode', $this->langcode);
-        }
-
-        $webPageModel = new Model\WebPage();
-        foreach ($webPageModel->all($where, ['posnumber' => 'ASC']) as $webPage) {
-            $menu[] = [
-                'id' => $webPage->idpage,
-                'title' => $webPage->title,
-                'link' => $webPage->link()
-            ];
-        }
-
-        return $menu;
-    }
-
-    private function loadWebPage($permalink, $langcode = '')
-    {
-        $where = [new DataBaseWhere('permalink', $permalink),];
-        if ($langcode !== '') {
-            $where[] = new DataBaseWhere('langcode', $langcode);
-        }
-
-        $this->webPage = new Model\WebPage();
-        if (!$this->webPage->loadFromCode('', $where) && $langcode !== '') {
-            /// if fails, we try to load any page with the same permalink
-            $this->loadWebPage($permalink);
-        }
     }
 }

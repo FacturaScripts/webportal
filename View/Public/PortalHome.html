@@ -1,104 +1,27 @@
-{% extends "Master/PublicTemplate.html" %}
-
-{% block meta %}
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>{{ fsc.webPage.title }}</title>
-<meta name="description" content="{{ fsc.webPage.description }}" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="generator" content="{{ i18n.trans('facturascripts') }}" />
-{% endblock %}
+{% extends "Master/PortalTemplate.html" %}
 
 {% block body %}
-{% set webPath = appSettings.get('webportal','webpath','') %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-    <a class="navbar-brand" href="index.php">
-        <img src="{{ webPath }}/Core/Assets/Images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="FacturaScripts"/>
-        {{ appSettings.get('webportal','webtitle','webportal') }}
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="nav navbar-nav mr-auto">
-            {% for menuItem in fsc.getPublicMenu() %}
-            {% set activeClass = (menuItem['id'] == fsc.webPage.idpage) ? ' active' : '' %}
-            <li class="nav-item{{ activeClass }}">
-                <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">
-                    <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> Login
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<br/>
-
+{% for block in fsc.webBlocks %}
+{% if block.type == 'columns' %}
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            <h1>{{ fsc.webPage.title }}</h1>
-            <p class="lead">{{ fsc.webPage.description }}</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <hr/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <ul>
-                {% for menuItem in fsc.getPublicFooter() %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% if block.numcolumns == 1 %}
+        <div class="col-12">{{ block.column1() | raw }}</div>
+        {% elseif block.numcolumns == 2 %}
+        <div class="col-6">{{ block.column1() | raw }}</div>
+        <div class="col-6">{{ block.column2() | raw }}</div>
+        {% elseif block.numcolumns == 3 %}
+        <div class="col-4">{{ block.column1() | raw }}</div>
+        <div class="col-4">{{ block.column2() | raw }}</div>
+        <div class="col-4">{{ block.column3() | raw }}</div>
+        {% else %}
+        <div class="col-3">{{ block.column1() | raw }}</div>
+        <div class="col-3">{{ block.column2() | raw }}</div>
+        <div class="col-3">{{ block.column3() | raw }}</div>
+        <div class="col-3">{{ block.column4() | raw }}</div>
+        {% endif %}
     </div>
 </div>
-
-<form action="{{ webPath }}/index.php" method="post" class="form">
-    <div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ i18n.trans('login') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </span>
-                            <input type="text" name="fsNick" class="form-control" maxlength="50" placeholder="{{ i18n.trans('user') }}" required="" autocomplete="off" autofocus=""/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-key" aria-hidden="true"></i>
-                            </span>
-                            <input type="password" name="fsPassword" class="form-control" maxlength="50" placeholder="{{ i18n.trans('password') }}" required="" autocomplete="off"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-block btn-primary">
-                        {{ i18n.trans('login') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+{% endif %}
+{% endfor %}
 {% endblock %}
