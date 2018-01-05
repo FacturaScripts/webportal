@@ -6,19 +6,19 @@
 <div class="container">
     <div class="row">
         {% if block.numcolumns == 1 %}
-        <div class="col-12">{{ block.column1() | raw }}</div>
+        <div class="col-sm-12">{{ block.column1() | raw }}</div>
         {% elseif block.numcolumns == 2 %}
-        <div class="col-6">{{ block.column1() | raw }}</div>
-        <div class="col-6">{{ block.column2() | raw }}</div>
+        <div class="col-sm-6">{{ block.column1() | raw }}</div>
+        <div class="col-sm-6">{{ block.column2() | raw }}</div>
         {% elseif block.numcolumns == 3 %}
-        <div class="col-4">{{ block.column1() | raw }}</div>
-        <div class="col-4">{{ block.column2() | raw }}</div>
-        <div class="col-4">{{ block.column3() | raw }}</div>
+        <div class="col-sm-4">{{ block.column1() | raw }}</div>
+        <div class="col-sm-4">{{ block.column2() | raw }}</div>
+        <div class="col-sm-4">{{ block.column3() | raw }}</div>
         {% else %}
-        <div class="col-3">{{ block.column1() | raw }}</div>
-        <div class="col-3">{{ block.column2() | raw }}</div>
-        <div class="col-3">{{ block.column3() | raw }}</div>
-        <div class="col-3">{{ block.column4() | raw }}</div>
+        <div class="col-sm-4 col-md-3">{{ block.column1() | raw }}</div>
+        <div class="col-sm-4 col-md-3">{{ block.column2() | raw }}</div>
+        <div class="col-sm-4 col-md-3">{{ block.column3() | raw }}</div>
+        <div class="col-sm-12 col-md-3">{{ block.column4() | raw }}</div>
         {% endif %}
     </div>
 </div>

@@ -31,8 +31,8 @@ class EditWebPage extends ExtendedController\PanelController
 
     protected function createViews()
     {
-        $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'webpage');
-        $this->addEditListView('\FacturaScripts\Dinamic\Model\WebBlock', 'EditWebBlock', 'webblock');
+        $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'page', 'fa-globe');
+        $this->addEditListView('\FacturaScripts\Dinamic\Model\WebBlock', 'EditWebBlock', 'block', 'fa-code');
         
         /// Disable columns
         $this->views['EditWebBlock']->disableColumn('idpage', true);

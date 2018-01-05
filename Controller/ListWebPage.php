@@ -32,13 +32,13 @@ class ListWebPage extends ExtendedController\ListController
     protected function createViews()
     {
         /// Web pages
-        $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'web-pages', 'fa-globe');
+        $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'pages', 'fa-globe');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'posnumber');
 
         /// Web blocks
-        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'web-block', 'fa-code');
+        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
         $this->addSearchFields('ListWebBlock', ['column1', 'column2', 'column3', 'column4']);
         $this->addOrderBy('ListWebBlock', 'idblock');
         $this->addOrderBy('ListWebBlock', 'idpage');

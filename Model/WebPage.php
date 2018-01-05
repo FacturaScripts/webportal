@@ -50,6 +50,13 @@ class WebPage
     public $description;
     
     /**
+     * Icon to use in menu.
+     * 
+     * @var string
+     */
+    public $icon;
+    
+    /**
      * Primary key.
      * 
      * @var int 
@@ -73,9 +80,16 @@ class WebPage
     /**
      * Position number.
      * 
-     * @var type 
+     * @var int
      */
     public $posnumber;
+    
+    /**
+     * Short tittle to show on menu.
+     * 
+     * @var string
+     */
+    public $shorttitle;
 
     /**
      * Show link on menu.
@@ -117,8 +131,8 @@ class WebPage
      */
     public function install()
     {
-        return 'INSERT INTO ' . static::tableName() . " (title,description,permalink,langcode)"
-            . " VALUES ('Home','Home','home','" . substr(FS_LANG, 0, 2) . "');";
+        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,permalink,langcode)"
+            . " VALUES ('Home','Home','Home','home','" . substr(FS_LANG, 0, 2) . "');";
     }
 
     public function clear()
@@ -149,8 +163,10 @@ class WebPage
     public function test()
     {
         $this->description = self::noHtml($this->description);
+        $this->icon = self::noHtml($this->icon);
         $this->permalink = self::noHtml($this->permalink);
         $this->title = self::noHtml($this->title);
+        $this->shorttitle = self::noHtml($this->shorttitle);
 
         return true;
     }

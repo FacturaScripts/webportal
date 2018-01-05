@@ -90,21 +90,12 @@ class PortalController extends Controller
 
     private function getAuxMenu($where)
     {
-        $menu = [];
         if ($this->langcode2 !== '') {
             $where[] = new DataBaseWhere('langcode', $this->langcode2);
         }
 
         $webPageModel = new Model\WebPage();
-        foreach ($webPageModel->all($where, ['posnumber' => 'ASC']) as $webPage) {
-            $menu[] = [
-                'id' => $webPage->idpage,
-                'title' => $webPage->title,
-                'link' => $webPage->link()
-            ];
-        }
-
-        return $menu;
+        return $webPageModel->all($where, ['posnumber' => 'ASC']);
     }
 
     private function processWebPage()

@@ -23,9 +23,17 @@
         <null>NO</null>
     </column>
     <column>
+        <name>shorttitle</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
         <name>description</name>
         <type>character varying(300)</type>
         <null>NO</null>
+    </column>
+    <column>
+        <name>icon</name>
+        <type>character varying(25)</type>
     </column>
     <column>
         <name>showonmenu</name>

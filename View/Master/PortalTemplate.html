@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{ fsc.webPage.langcode }}" xml:lang="{{ fsc.webPage.langcode }}" >
     <head>
         {# Website config #}
+        {% set webCopyright = appSettings.get('webportal','copyright','') %}
         {% set webPath = appSettings.get('webportal','path','') %}
         {% set webTitle = appSettings.get('webportal','title','') %}
-        {% set webCopyright = appSettings.get('webportal','copyright','') %}
+        {% set webUrl = appSettings.get('webportal','url','') %}
 
         {% block meta %}
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -12,6 +13,8 @@
         <meta name="description" content="{{ fsc.webPage.description }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="generator" content="FacturaScripts" />
+        <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.link() }}" />
+        <link rel="amphtml" href="{{ webUrl }}{{ fsc.webPage.link() }}?amp" />
         {% endblock %}
         {% block icons %}
         <link rel="shortcut icon" href="{{ webPath }}/Core/Assets/Images/favicon.ico" />
@@ -40,13 +43,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav mr-auto">
                     {% for menuItem in fsc.getPublicMenu() %}
-                    {% set activeClass = (menuItem['id'] == fsc.webPage.idpage) ? ' active' : '' %}
+                    {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}
                     <li class="nav-item{{ activeClass }}">
-                        <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
+                        <a class="nav-link" href="{{ menuItem.link() | raw }}">
+                            <i class="fa {{ menuItem.icon }} fa-fw" aria-hidden="true"></i>
+                            {{ menuItem.shorttitle }}
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>
-                <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> Login
@@ -110,16 +116,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6">
                     <ul>
                         {% for menuItem in fsc.getPublicFooter() %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ menuItem['link'] }}">{{ menuItem['title'] }}</a>
+                        <li>
+                            <a href="{{ menuItem.link() | raw }}">{{ menuItem.title }}</a>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     <p class="help-block">{{ webCopyright }}</p>
                 </div>
             </div>
