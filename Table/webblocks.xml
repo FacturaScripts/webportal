@@ -42,6 +42,14 @@
         <type>text</type>
     </column>
     <column>
+        <name>containerclass</name>
+        <type>character varying(60)</type>
+    </column>
+    <column>
+        <name>rowclass</name>
+        <type>character varying(60)</type>
+    </column>
+    <column>
         <name>posnumber</name>
         <type>integer</type>
         <null>NO</null>

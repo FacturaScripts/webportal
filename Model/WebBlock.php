@@ -34,34 +34,6 @@ class WebBlock
     }
 
     /**
-     * Primary key.
-     * 
-     * @var int 
-     */
-    public $idblock;
-
-    /**
-     * Page related.
-     * 
-     * @var int 
-     */
-    public $idpage;
-
-    /**
-     * Block type: head, footer, columns.
-     * 
-     * @var string 
-     */
-    public $type;
-
-    /**
-     * Number of columns.
-     * 
-     * @var int
-     */
-    public $numcolumns;
-
-    /**
      * Content of column 1.
      * 
      * @var string
@@ -88,13 +60,55 @@ class WebBlock
      * @var string
      */
     public $column4;
+    
+    /**
+     * Bootstrap container class.
+     * 
+     * @var string
+     */
+    public $containerclass;
+
+    /**
+     * Primary key.
+     * 
+     * @var int 
+     */
+    public $idblock;
+
+    /**
+     * Page related.
+     * 
+     * @var int 
+     */
+    public $idpage;
+
+    /**
+     * Number of columns.
+     * 
+     * @var int
+     */
+    public $numcolumns;
 
     /**
      * Position number.
      * 
-     * @var type 
+     * @var int
      */
     public $posnumber;
+    
+    /**
+     * Bootstrap row class.
+     * 
+     * @var string
+     */
+    public $rowclass;
+
+    /**
+     * Block type: head, footer, columns.
+     * 
+     * @var string 
+     */
+    public $type;
 
     public function tableName()
     {
@@ -109,10 +123,12 @@ class WebBlock
     public function clear()
     {
         $this->traitClear();
-        $this->type = 'columns';
-        $this->numcolumns = 1;
         $this->column1 = 'Hello world!';
+        $this->containerclass = 'container';
+        $this->numcolumns = 1;
         $this->posnumber = 100;
+        $this->rowclass = 'row';
+        $this->type = 'columns';
     }
 
     public function test()

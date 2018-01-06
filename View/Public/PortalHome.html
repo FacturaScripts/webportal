@@ -3,8 +3,8 @@
 {% block body %}
 {% for block in fsc.webBlocks %}
 {% if block.type == 'columns' %}
-<div class="container">
-    <div class="row">
+<div class="{{ block.containerclass }}">
+    <div class="{{ block.rowclass }}">
         {% if block.numcolumns == 1 %}
         <div class="col-sm-12">{{ block.column1() | raw }}</div>
         {% elseif block.numcolumns == 2 %}

@@ -132,7 +132,8 @@ class WebPage
     public function install()
     {
         return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,permalink,langcode)"
-            . " VALUES ('Home','Home','Home','home','" . substr(FS_LANG, 0, 2) . "');";
+            . " VALUES ('Home','Home','Home','home','" . substr(FS_LANG, 0, 2) . "'),"
+            . " ('404','404','404','404','" . substr(FS_LANG, 0, 2) . "');";
     }
 
     public function clear()

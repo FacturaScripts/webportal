@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Lib\ExtendedController;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
@@ -61,6 +62,7 @@ class ListWebPage extends ExtendedController\ListController
             case 'htaccess':
                 if ($this->regenHtaccess()) {
                     $this->miniLog->info($this->i18n->trans('record-updated-correctly'));
+                    $this->setPortalAsHome();
                 } else {
                     $this->miniLog->alert($this->i18n->trans('error'));
                 }
@@ -76,6 +78,7 @@ class ListWebPage extends ExtendedController\ListController
         $htaccess = file_get_contents(FS_FOLDER . '/htaccess-sample');
         $htaccess .= "\n\n<IfModule mod_rewrite.c>\n   RewriteEngine On\n\n";
 
+        $page404 = '';
         $langcodes = [];
         $webPageModel = new WebPage();
         foreach ($webPageModel->all([], ['posnumber' => 'ASC'], 0, 1000) as $webPage) {
@@ -84,6 +87,10 @@ class ListWebPage extends ExtendedController\ListController
 
             if (!in_array($webPage->langcode, $langcodes)) {
                 $langcodes[] = $webPage->langcode;
+            }
+
+            if ($webPage->permalink === '404') {
+                $page404 = $webPage->internalLink();
             }
         }
 
@@ -95,7 +102,20 @@ class ListWebPage extends ExtendedController\ListController
                 . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
         }
 
-        $htaccess .= "</IfModule>\n";
+        $htaccess .= "</IfModule>\n\n";
+
+        if ($page404 !== '') {
+            $htaccess .= "ErrorDocument 404 " . AppSettings::get('webportal', 'path') . '/' . $page404 . "\n";
+        }
         return file_put_contents('.htaccess', $htaccess);
+    }
+
+    private function setPortalAsHome()
+    {
+        $appSettings = new AppSettings();
+        if ($appSettings->get('default', 'homepage') !== 'PortalHome') {
+            $appSettings->set('default', 'homepage', 'PortalHome');
+            $appSettings->save();
+        }
     }
 }
