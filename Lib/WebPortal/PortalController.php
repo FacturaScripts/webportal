@@ -34,20 +34,6 @@ class PortalController extends Controller
 {
 
     /**
-     * Visitor language code.
-     * 
-     * @var string 
-     */
-    public $langcode2;
-
-    /**
-     * Web block to add to this page.
-     * 
-     * @var Model\WebBlock[]
-     */
-    public $webBlocks;
-
-    /**
      * The web page object.
      * 
      * @var Model\WebPage 
@@ -90,10 +76,6 @@ class PortalController extends Controller
 
     private function getAuxMenu($where)
     {
-        if ($this->langcode2 !== '') {
-            $where[] = new DataBaseWhere('langcode', $this->langcode2);
-        }
-
         $webPageModel = new Model\WebPage();
         return $webPageModel->all($where, ['posnumber' => 'ASC']);
     }
@@ -101,42 +83,12 @@ class PortalController extends Controller
     private function processWebPage()
     {
         $this->setTemplate('Public/PortalHome');
-
-        $this->langcode2 = $this->request->get('langcode');
-        if (empty($this->langcode2)) {
-            foreach ($this->request->getLanguages() as $lang) {
-                $this->langcode2 = substr($lang, 0, 2);
-                break;
-            }
-        }
-
-        $permalink = $this->request->get('permalink', 'home');
-        if ($this->request->get('amp') !== null) {
-            $this->setTemplate('Public/PortalHomeAMP');
-        }
-
-        $this->loadWebPage($permalink, $this->langcode2);
-    }
-
-    private function loadWebPage($permalink, $langcode = '')
-    {
-        $where = [new DataBaseWhere('permalink', $permalink),];
-        if ($langcode !== '') {
-            $where[] = new DataBaseWhere('langcode', $langcode);
-        }
-
-        $this->webBlocks = [];
         $this->webPage = new Model\WebPage();
-        if ($this->webPage->loadFromCode('', $where)) {
-            $webBlockModel = new Model\WebBlock();
-            $whereBlocks = [
-                new DataBaseWhere('idpage', $this->webPage->idpage, '=', 'OR'),
-                new DataBaseWhere('type', 'head', '=', 'OR')
-            ];
-            $this->webBlocks = $webBlockModel->all($whereBlocks, ['posnumber' => 'ASC']);
-        } elseif ($langcode !== '') {
-            /// if fails, we try to load any page with the same permalink
-            $this->loadWebPage($permalink);
+
+        $routeData = explode('/', $this->uri);
+        switch (count($routeData)) {
+            default:
+                $this->webPage->loadFromCode(false, [new DataBaseWhere('permalink', $routeData[1])]);
         }
     }
 }

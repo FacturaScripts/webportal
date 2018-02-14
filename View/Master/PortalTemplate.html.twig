@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ fsc.webPage.langcode }}" xml:lang="{{ fsc.webPage.langcode }}" >
+    <head>
+        {# Website config #}
+        {% set webCopyright = appSettings.get('webportal','copyright','') %}
+        {% set webTitle = appSettings.get('webportal','title','') %}
+        {% set webUrl = appSettings.get('webportal','url','') %}
+        {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>{{ fsc.webPage.title }}</title>
+            <meta name="description" content="{{ fsc.webPage.description }}" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="generator" content="FacturaScripts" />
+            <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.link() }}" />
+        {% endblock %}
+        {% block icons %}
+            <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico') }}" />
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
+        {% endblock %}
+        {% block css %}
+            <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('node_modules/font-awesome/css/font-awesome.min.css') }}" />
+        {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        {% for menuItem in fsc.getPublicMenu() %}
+                            {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}
+                            <li class="nav-item">
+                                <a class="nav-link{{ activeClass }}" href="{{ menuItem.link() | raw }}">
+                                    {{ menuItem.shorttitle }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li class="nav-item">
+                            {% if fsc.user %}
+                            <a class="nav-link" href="{{ constant('FS_ROUTE') }}/">{{ i18n.trans('enter') }}</a>
+                            {% else %}
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">{{ i18n.trans('login') }}</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        {% endblock %}
+        {% block messages %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% from 'Macro/Utils.html.twig' import message as show_message %}
+                        {{ show_message(log, ['error', 'critical', 'alert', 'emergency'], 'danger') }}
+                        {{ show_message(log, ['warning'], 'warning') }}
+                        {{ show_message(log, ['notice'], 'success') }}
+                        {{ show_message(log, ['info'], 'info') }}
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        {% block body %}
+        {% endblock %}
+        <br/><br/><br/>
+        <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
+            <div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ i18n.trans('login') }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                                        </span>
+                                    </span>
+                                    <input type="text" name="fsNick" class="form-control" maxlength="50" placeholder="{{ i18n.trans('user') }}" required="" autocomplete="off" autofocus=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                        </span>
+                                    </span>
+                                    <input type="password" name="fsPassword" class="form-control" maxlength="50" placeholder="{{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-primary">
+                                {{ i18n.trans('login') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% block footer %}
+            <div class="bg-secondary text-white">
+                <br/><br/><br/>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            {% for menuItem in fsc.getPublicFooter() %}
+                                <a href="{{ menuItem.link() | raw }}" class="text-light">{{ menuItem.title }}</a> |
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <p class="help-block">{{ webCopyright }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        {% block javascript %}
+            <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

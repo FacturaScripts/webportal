@@ -25,16 +25,18 @@
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" required="true" />
             </column>
-            <column name="title" numcolumns="3" order="100">
+            <column name="title" numcolumns="12" order="100">
                 <widget type="text" fieldname="title"/>
             </column>
-            <column name="path" numcolumns="3" order="110">
-                <widget type="text" fieldname="path"/>
-            </column>
-            <column name="url" numcolumns="6" order="120">
+            <column name="url" numcolumns="9" order="110">
                 <widget type="text" fieldname="url"/>
             </column>
-            <column name="copyright" title="copyright-text" numcolumns="12" order="120">
+            <column name="homepage" numcolumns="3" order="120">
+                <widget type="select" fieldname="homepage">
+                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
+                </widget>
+            </column>
+            <column name="copyright" title="copyright-text" numcolumns="12" order="130">
                 <widget type="textarea" fieldname="copyright"/>
             </column>
         </group>

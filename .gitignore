@@ -1,5 +1,6 @@
 /.idea/
 /nbproject/
+/node_modules/
 .DS_Store
 .htaccess
 composer.lock

@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Lib\ExtendedController;
-use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
  * Description of ListWebPage
@@ -37,13 +36,6 @@ class ListWebPage extends ExtendedController\ListController
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'posnumber');
-
-        /// Web blocks
-        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
-        $this->addSearchFields('ListWebBlock', ['column1', 'column2', 'column3', 'column4']);
-        $this->addOrderBy('ListWebBlock', 'idblock');
-        $this->addOrderBy('ListWebBlock', 'idpage');
-        $this->addOrderBy('ListWebBlock', 'posnumber');
     }
 
     public function getPageData()
@@ -58,56 +50,8 @@ class ListWebPage extends ExtendedController\ListController
 
     protected function execAfterAction($action)
     {
-        switch ($action) {
-            case 'htaccess':
-                if ($this->regenHtaccess()) {
-                    $this->miniLog->info($this->i18n->trans('record-updated-correctly'));
-                    $this->setPortalAsHome();
-                } else {
-                    $this->miniLog->alert($this->i18n->trans('error'));
-                }
-                break;
-
-            default:
-                parent::execAfterAction($action);
-        }
-    }
-
-    private function regenHtaccess()
-    {
-        $htaccess = file_get_contents(FS_FOLDER . '/htaccess-sample');
-        $htaccess .= "\n\n<IfModule mod_rewrite.c>\n   RewriteEngine On\n\n";
-
-        $page404 = '';
-        $langcodes = [];
-        $webPageModel = new WebPage();
-        foreach ($webPageModel->all([], ['posnumber' => 'ASC'], 0, 1000) as $webPage) {
-            $htaccess .= "   RewriteRule ^" . $webPage->langcode . '/' . $webPage->permalink . "$ "
-                . $webPage->internalLink() . "&%{QUERY_STRING} [L]\n";
-
-            if (!in_array($webPage->langcode, $langcodes)) {
-                $langcodes[] = $webPage->langcode;
-            }
-
-            if ($webPage->permalink === '404') {
-                $page404 = $webPage->internalLink();
-            }
-        }
-
-        foreach ($langcodes as $lang) {
-            $htaccess .= "   RewriteRule ^" . $lang . "$ index.php?page="
-                . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
-
-            $htaccess .= "   RewriteRule ^" . $lang . "/$ index.php?page="
-                . $webPageModel::DEFAULT_CONTROLLER . "&langcode=" . $lang . "&%{QUERY_STRING} [L]\n";
-        }
-
-        $htaccess .= "</IfModule>\n\n";
-
-        if ($page404 !== '') {
-            $htaccess .= "ErrorDocument 404 " . AppSettings::get('webportal', 'path') . '/' . $page404 . "\n";
-        }
-        return file_put_contents('.htaccess', $htaccess);
+        $this->setPortalAsHome();
+        parent::execAfterAction($action);
     }
 
     private function setPortalAsHome()

@@ -18,7 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
-use FacturaScripts\Core\App\AppSettings;
+use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -26,12 +26,10 @@ use FacturaScripts\Core\Model\Base;
  *
  * @author Carlos García Gómez
  */
-class WebPage
+class WebPage extends Base\ModelClass
 {
 
-    use Base\ModelTrait {
-        clear as traitClear;
-    }
+    use Base\ModelTrait;
 
     const DEFAULT_CONTROLLER = 'PortalHome';
 
@@ -48,14 +46,14 @@ class WebPage
      * @var string 
      */
     public $description;
-    
+
     /**
      * Icon to use in menu.
      * 
      * @var string
      */
     public $icon;
-    
+
     /**
      * Primary key.
      * 
@@ -83,7 +81,7 @@ class WebPage
      * @var int
      */
     public $posnumber;
-    
+
     /**
      * Short tittle to show on menu.
      * 
@@ -112,12 +110,12 @@ class WebPage
      */
     public $title;
 
-    public function tableName()
+    public static function tableName()
     {
         return 'webpages';
     }
 
-    public function primaryColumn()
+    public static function primaryColumn()
     {
         return 'idpage';
     }
@@ -131,14 +129,14 @@ class WebPage
      */
     public function install()
     {
-        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,permalink,langcode)"
-            . " VALUES ('Home','Home','Home','home','" . substr(FS_LANG, 0, 2) . "'),"
-            . " ('404','404','404','404','" . substr(FS_LANG, 0, 2) . "');";
+        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
+            . "permalink,langcode,showonmenu,showonfooter) VALUES "
+            . "('Home','Home','Home description','home','" . substr(FS_LANG, 0, 2) . "',true,false);";
     }
 
     public function clear()
     {
-        $this->traitClear();
+        parent::clear();
         $this->langcode = substr(FS_LANG, 0, 2);
         $this->posnumber = 100;
         $this->showonmenu = true;
@@ -147,27 +145,20 @@ class WebPage
 
     public function link()
     {
-        $webPath = AppSettings::get('webportal', 'path', '');
-        return $webPath . '/' . $this->langcode . '/' . $this->permalink;
-    }
-
-    public function internalLink()
-    {
-        $extra = '&langcode=' . $this->langcode;
-        if ($this->customcontroller) {
-            return 'index.php?page=' . $this->customcontroller . $extra;
+        if ($this->langcode === substr(FS_LANG, 0, 2)) {
+            return FS_ROUTE . '/' . $this->permalink;
         }
 
-        return 'index.php?page=' . self::DEFAULT_CONTROLLER . '&permalink=' . $this->permalink . $extra;
+        return FS_ROUTE . '/' . $this->langcode . '/' . $this->permalink;
     }
 
     public function test()
     {
-        $this->description = self::noHtml($this->description);
-        $this->icon = self::noHtml($this->icon);
-        $this->permalink = self::noHtml($this->permalink);
-        $this->title = self::noHtml($this->title);
-        $this->shorttitle = self::noHtml($this->shorttitle);
+        $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
+        $this->icon = Utils::noHtml($this->icon);
+        $this->permalink = Utils::noHtml($this->permalink);
+        $this->title = Utils::noHtml($this->title);
+        $this->shorttitle = Utils::noHtml($this->shorttitle);
 
         return true;
     }

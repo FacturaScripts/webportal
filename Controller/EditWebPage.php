@@ -18,7 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\App\AppRouter;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
@@ -32,10 +32,6 @@ class EditWebPage extends ExtendedController\PanelController
     protected function createViews()
     {
         $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'page', 'fa-globe');
-        $this->addEditListView('\FacturaScripts\Dinamic\Model\WebBlock', 'EditWebBlock', 'block', 'fa-code');
-        
-        /// Disable columns
-        $this->views['EditWebBlock']->disableColumn('idpage', true);
     }
 
     public function getPageData()
@@ -55,13 +51,24 @@ class EditWebPage extends ExtendedController\PanelController
                 $code = $this->request->get('code');
                 $view->loadData($code);
                 break;
-            
-            case 'EditWebBlock':
-                $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
-                $where = [new DataBaseWhere('idpage', $idpage)];
-                $view->loadData($where);
-                break;
         }
+    }
+
+    protected function execPreviousAction($view, $action)
+    {
+        if ($action === 'save') {
+            $appRouter = new AppRouter();
+            foreach ($this->views['EditWebPage']->getModel()->all() as $webpage) {
+                if (empty($webpage->customcontroller)) {
+                    $appRouter->setRoute('/' . $webpage->permalink, 'PortalHome', $webpage->idpage);
+                    continue;
+                }
+
+                $appRouter->setRoute('/' . $webpage->permalink, $webpage->customcontroller, $webpage->idpage);
+            }
+        }
+
+        return parent::execPreviousAction($view, $action);
     }
 
     protected function execAfterAction($view, $action)
@@ -70,7 +77,7 @@ class EditWebPage extends ExtendedController\PanelController
             case 'preview':
                 $model = $this->views['EditWebPage']->getModel();
                 if ($model !== false) {
-                    $this->response->headers->set('Refresh', '0; '.$model->link());
+                    $this->response->headers->set('Refresh', '0; ' . $model->link());
                 }
                 break;
 
