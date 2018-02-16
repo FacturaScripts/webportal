@@ -67,30 +67,51 @@ class PageComposer
         /// Page blocks for this page
         $where = [new DataBaseWhere('idpage', $page->idpage)];
         foreach ($this->webBlock->all($where, ['ordernum' => 'ASC'], 0, 0) as $block) {
-            $this->addBlock($block, $page);
+            $this->addBlock($block);
         }
 
         /// Page blocks for all pages
         $where2 = [new DataBaseWhere('idpage', null, 'IS')];
         foreach ($this->webBlock->all($where2, ['ordernum' => 'ASC'], 0, 0) as $block) {
-            $this->addBlock($block, $page);
+            $this->addBlock($block);
         }
+
+        $this->checkBody($page);
     }
 
-    private function addBlock(WebBlock $block, WebPage $page)
+    private function addBlock(WebBlock $block)
     {
         $container = 'container';
         switch ($block->type) {
             case 'body-container-fluid':
-                $container .= 'fluid';
+                $container .= '-fluid';
             /// no break
             case 'body-container':
                 $block->type = 'body';
                 $block->content = '<br/><div class="' . $container . '"><div class="row"><div class="col-12">'
-                    . '<small>' . $page->lastmod . '</small>' . $block->content . '</div></div></div>';
+                    . $block->content . '</div></div></div>';
                 break;
         }
 
         $this->blocks[] = $block;
+    }
+
+    private function checkBody(WebPage &$page)
+    {
+        $bodyFound = false;
+        foreach ($this->blocks as $block) {
+            if ('body' === substr($block->type, 0, 4)) {
+                $bodyFound = true;
+                break;
+            }
+        }
+
+        if (!$bodyFound) {
+            $emptyBlock = new WebBlock();
+            $emptyBlock->idpage = $page->idpage;
+            $emptyBlock->type = 'body-container';
+            $emptyBlock->content = '<h1>' . $page->title . '</h1><p>' . $page->description . '</p>';
+            $this->addBlock($emptyBlock);
+        }
     }
 }

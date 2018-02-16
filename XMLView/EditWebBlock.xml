@@ -38,7 +38,7 @@
             </column>
             <column name="idpage" numcolumns="12" order="120">
                 <widget type="select" fieldname="idpage">
-                    <values source="webpages" fieldcode="idpage" fieldtitle="title"></values>
+                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
                 </widget>
             </column>
             <column name="sort" numcolumns="12" order="130">

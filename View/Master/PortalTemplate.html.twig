@@ -24,6 +24,7 @@
         {% block css %}
             <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
             <link rel="stylesheet" href="{{ asset('node_modules/font-awesome/css/font-awesome.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/webportal.css') }}" />
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -73,9 +74,11 @@
             </div>
         {% endblock %}
         {% block body %}
-            {% for block in fsc.pageComposer.getBlocks('body') %}
-                {{ block.content() | raw }}
-            {% endfor %}
+            <div class="body-section">
+                {% for block in fsc.pageComposer.getBlocks('body') %}
+                    {{ block.content() | raw }}
+                {% endfor %}
+            </div>
         {% endblock %}
         <br/><br/><br/>
         <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
@@ -118,7 +121,7 @@
             </div>
         </form>
         {% block footer %}
-            <div class="bg-secondary text-white">
+            <div class="footer-section bg-secondary text-white">
                 <br/><br/><br/>
                 {% for block in fsc.pageComposer.getBlocks('footer') %}
                     {{ block.content() | raw }}
@@ -126,8 +129,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-8">
-                            {% for menuItem in fsc.getPublicFooter() %}
-                                <a href="{{ menuItem.link() | raw }}" class="text-light">{{ menuItem.title }}</a> |
+                            {% for key, menuItem in fsc.getPublicFooter() %}
+                                {% if key > 0 %}|{% endif %}
+                                <a href="{{ menuItem.link() | raw }}" class="text-light">{{ menuItem.title }}</a>
                             {% endfor %}
                         </div>
                         <div class="col-md-4 text-right">
