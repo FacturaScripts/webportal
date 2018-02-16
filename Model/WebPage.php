@@ -67,6 +67,27 @@ class WebPage extends Base\ModelClass
      * @var string
      */
     public $langcode;
+    
+    /**
+     * Last modification date.
+     *
+     * @var string
+     */
+    public $lastmod;
+
+    /**
+     * Hide to search engines.
+     *
+     * @var bool
+     */
+    public $noindex;
+
+    /**
+     * Position number.
+     * 
+     * @var int
+     */
+    public $ordernum;
 
     /**
      * Permanent link.
@@ -74,13 +95,6 @@ class WebPage extends Base\ModelClass
      * @var string 
      */
     public $permalink;
-
-    /**
-     * Position number.
-     * 
-     * @var int
-     */
-    public $posnumber;
 
     /**
      * Short tittle to show on menu.
@@ -130,15 +144,19 @@ class WebPage extends Base\ModelClass
     public function install()
     {
         return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
-            . "permalink,langcode,showonmenu,showonfooter) VALUES "
-            . "('Home','Home','Home description','home','" . substr(FS_LANG, 0, 2) . "',true,false);";
+            . "permalink,langcode,showonmenu,showonfooter,noindex) VALUES "
+            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false),"
+            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true),"
+            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true);";
     }
 
     public function clear()
     {
         parent::clear();
         $this->langcode = substr(FS_LANG, 0, 2);
-        $this->posnumber = 100;
+        $this->lastmod = date('d-m-Y');
+        $this->noindex = false;
+        $this->ordernum = 100;
         $this->showonmenu = true;
         $this->showonfooter = true;
     }
@@ -146,20 +164,26 @@ class WebPage extends Base\ModelClass
     public function link()
     {
         if ($this->langcode === substr(FS_LANG, 0, 2)) {
-            return FS_ROUTE . '/' . $this->permalink;
+            return FS_ROUTE . $this->permalink;
         }
 
-        return FS_ROUTE . '/' . $this->langcode . '/' . $this->permalink;
+        return FS_ROUTE . '/' . $this->langcode . $this->permalink;
     }
 
     public function test()
     {
+        $this->description = str_replace("\n", ' ', $this->description);
         $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
         $this->icon = Utils::noHtml($this->icon);
         $this->permalink = Utils::noHtml($this->permalink);
         $this->title = Utils::noHtml($this->title);
         $this->shorttitle = Utils::noHtml($this->shorttitle);
 
+        if (substr($this->permalink, 0, 1) !== '/') {
+            $this->permalink = '/' . $this->permalink;
+        }
+
+        $this->lastmod = date('d-m-Y');
         return true;
     }
 }

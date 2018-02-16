@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : webblocks.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Structure for the webblocks table.
+-->
+<table>
+    <column>
+        <name>idblock</name>
+        <type>serial</type>
+        <null>NO</null>
+        <default>nextval('webblocks_idblock_seq'::regclass)</default>
+    </column>
+    <column>
+        <name>idpage</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>type</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>content</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>ordernum</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>100</default>
+    </column>
+    <constraint>
+        <name>webblocks_pkey</name>
+        <type>PRIMARY KEY (idblock)</type>
+    </constraint>
+</table>

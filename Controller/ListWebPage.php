@@ -34,14 +34,22 @@ class ListWebPage extends ExtendedController\ListController
         /// Web pages
         $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'pages', 'fa-globe');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
+        $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
-        $this->addOrderBy('ListWebPage', 'posnumber');
+        $this->addOrderBy('ListWebPage', 'ordernum');
+
+        /// Web blocks
+        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
+        $this->addSearchFields('ListWebBlock', ['content']);
+        $this->addOrderBy('ListWebBlock', 'idblock', 'code');
+        $this->addOrderBy('ListWebBlock', 'idpage');
+        $this->addOrderBy('ListWebBlock', 'ordernum');
     }
 
     public function getPageData()
     {
         $pageData = parent::getPageData();
-        $pageData['title'] = 'web-pages';
+        $pageData['title'] = 'pages';
         $pageData['menu'] = 'admin';
         $pageData['icon'] = 'fa-globe';
 
@@ -59,6 +67,12 @@ class ListWebPage extends ExtendedController\ListController
         $appSettings = new AppSettings();
         if ($appSettings->get('default', 'homepage') !== 'PortalHome') {
             $appSettings->set('default', 'homepage', 'PortalHome');
+            $appSettings->save();
+        }
+        
+        /// set portal home page
+        if ($appSettings->get('webportal', 'homepage') === null) {
+            $appSettings->set('webportal', 'homepage', 1);
             $appSettings->save();
         }
     }

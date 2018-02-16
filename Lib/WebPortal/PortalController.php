@@ -18,10 +18,12 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\User;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\PageComposer;
 use FacturaScripts\Plugins\webportal\Model;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,16 +41,22 @@ class PortalController extends Controller
      * @var Model\WebPage 
      */
     public $webPage;
-
-    public function getPublicMenu()
-    {
-        $where = [new DataBaseWhere('showonmenu', true)];
-        return $this->getAuxMenu($where);
-    }
+    
+    /**
+     *
+     * @var PageComposer
+     */
+    public $pageComposer;
 
     public function getPublicFooter()
     {
         $where = [new DataBaseWhere('showonfooter', true)];
+        return $this->getAuxMenu($where);
+    }
+
+    public function getPublicMenu()
+    {
+        $where = [new DataBaseWhere('showonmenu', true)];
         return $this->getAuxMenu($where);
     }
 
@@ -64,8 +72,8 @@ class PortalController extends Controller
 
     /**
      * 
-     * @param Response $response
-     * @param User $user
+     * @param Response              $response
+     * @param User                  $user
      * @param ControllerPermissions $permissions
      */
     public function privateCore(&$response, $user, $permissions)
@@ -77,18 +85,29 @@ class PortalController extends Controller
     private function getAuxMenu($where)
     {
         $webPageModel = new Model\WebPage();
-        return $webPageModel->all($where, ['posnumber' => 'ASC']);
+        return $webPageModel->all($where, ['ordernum' => 'ASC']);
+    }
+    
+    private function getWebPage()
+    {
+        $webPage = new Model\WebPage();
+
+        if ($this->uri === '/' || $this->uri === 'index.php') {
+            if($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
+                return $webPage;
+            }
+        }
+
+        $webPage->loadFromCode(false, [new DataBaseWhere('permalink', $this->uri)]);
+        return $webPage;
     }
 
     private function processWebPage()
     {
-        $this->setTemplate('Public/PortalHome');
-        $this->webPage = new Model\WebPage();
-
-        $routeData = explode('/', $this->uri);
-        switch (count($routeData)) {
-            default:
-                $this->webPage->loadFromCode(false, [new DataBaseWhere('permalink', $routeData[1])]);
-        }
+        $this->setTemplate('Master/PortalTemplate');
+        $this->pageComposer = new PageComposer();
+        $this->webPage = $this->getWebPage();
+        
+        $this->pageComposer->set($this->webPage);
     }
 }

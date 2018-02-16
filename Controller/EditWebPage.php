@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppRouter;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
@@ -32,6 +33,7 @@ class EditWebPage extends ExtendedController\PanelController
     protected function createViews()
     {
         $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'page', 'fa-globe');
+        $this->addListView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
     }
 
     public function getPageData()
@@ -51,21 +53,18 @@ class EditWebPage extends ExtendedController\PanelController
                 $code = $this->request->get('code');
                 $view->loadData($code);
                 break;
+
+            case 'ListWebBlock':
+                $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
+                $view->loadData(false, [new DataBaseWhere('idpage', $idpage)]);
+                break;
         }
     }
 
     protected function execPreviousAction($view, $action)
     {
         if ($action === 'save') {
-            $appRouter = new AppRouter();
-            foreach ($this->views['EditWebPage']->getModel()->all() as $webpage) {
-                if (empty($webpage->customcontroller)) {
-                    $appRouter->setRoute('/' . $webpage->permalink, 'PortalHome', $webpage->idpage);
-                    continue;
-                }
-
-                $appRouter->setRoute('/' . $webpage->permalink, $webpage->customcontroller, $webpage->idpage);
-            }
+            $this->setRoutes();
         }
 
         return parent::execPreviousAction($view, $action);
@@ -78,11 +77,21 @@ class EditWebPage extends ExtendedController\PanelController
                 $model = $this->views['EditWebPage']->getModel();
                 if ($model !== false) {
                     $this->response->headers->set('Refresh', '0; ' . $model->link());
+                    $this->setRoutes();
                 }
                 break;
 
             default:
                 parent::execAfterAction($view, $action);
+        }
+    }
+
+    private function setRoutes()
+    {
+        $appRouter = new AppRouter();
+        foreach ($this->views['EditWebPage']->getModel()->all() as $webpage) {
+            $customController = empty($webpage->customcontroller) ? 'PortalHome' : $webpage->customcontroller;
+            $appRouter->setRoute($webpage->permalink, $customController, $webpage->idpage);
         }
     }
 }

@@ -11,7 +11,11 @@
             <meta name="description" content="{{ fsc.webPage.description }}" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="generator" content="FacturaScripts" />
+            {% if fsc.webpage.noindex %}<meta name="robots" content="noindex" />{% endif %}
             <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.link() }}" />
+            {% for block in fsc.pageComposer.getBlocks('meta') %}
+                {{ block.content() | raw }}
+            {% endfor %}
         {% endblock %}
         {% block icons %}
             <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico') }}" />
@@ -20,6 +24,9 @@
         {% block css %}
             <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
             <link rel="stylesheet" href="{{ asset('node_modules/font-awesome/css/font-awesome.min.css') }}" />
+            {% for block in fsc.pageComposer.getBlocks('css') %}
+                {{ block.content() | raw }}
+            {% endfor %}
         {% endblock %}
     </head>
     <body>
@@ -66,6 +73,9 @@
             </div>
         {% endblock %}
         {% block body %}
+            {% for block in fsc.pageComposer.getBlocks('body') %}
+                {{ block.content() | raw }}
+            {% endfor %}
         {% endblock %}
         <br/><br/><br/>
         <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
@@ -110,6 +120,9 @@
         {% block footer %}
             <div class="bg-secondary text-white">
                 <br/><br/><br/>
+                {% for block in fsc.pageComposer.getBlocks('footer') %}
+                    {{ block.content() | raw }}
+                {% endfor %}
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-8">
@@ -128,6 +141,9 @@
             <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+            {% for block in fsc.pageComposer.getBlocks('javascript') %}
+                {{ block.content() | raw }}
+            {% endfor %}
         {% endblock %}
     </body>
 </html>

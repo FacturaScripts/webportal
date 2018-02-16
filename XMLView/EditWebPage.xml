@@ -25,37 +25,42 @@
             <column name="code" display="none" order="100">
                 <widget type="text" fieldname="idpage" required="true" />
             </column>
-            <column name="permalink" numcolumns="4" order="110">
+            <column name="permalink" numcolumns="3" order="110">
                 <widget type="text" fieldname="permalink" required="true" />
             </column>
-            <column name="title" numcolumns="8" order="120">
+            <column name="title" numcolumns="7" order="120">
                 <widget type="text" fieldname="title" required="true" />
             </column>
-            <column name="short-title" numcolumns="4" order="130">
-                <widget type="text" fieldname="shorttitle" required="true" />
-            </column>
-            <column name="icon" numcolumns="4" order="140">
-                <widget type="text" fieldname="icon" />
-            </column>
-            <column name="lang-code" numcolumns="4" order="150">
+            <column name="lang-code" numcolumns="2" order="150">
                 <widget type="text" fieldname="langcode" required="true" />
             </column>
             <column name="description" numcolumns="12" order="160">
                 <widget type="textarea" fieldname="description" required="true" />
             </column>
         </group>
-        <group name="info" numcolumns="12">
-            <column name="position-number" numcolumns="2" order="100">
-                <widget type="number" fieldname="posnumber" />
-            </column>
-            <column name="custom-controller" numcolumns="3" order="110">
-                <widget type="text" fieldname="customcontroller" />
-            </column>
-            <column name="showonmenu" numcolumns="3" order="120">
+        <group name="visibility" numcolumns="3">
+            <column name="showonmenu" numcolumns="12" order="100">
                 <widget type="checkbox" fieldname="showonmenu" />
             </column>
-            <column name="showonfooter" numcolumns="3" order="130">
+            <column name="showonfooter" numcolumns="12" order="110">
                 <widget type="checkbox" fieldname="showonfooter" />
+            </column>
+            <column name="noindex" numcolumns="12" order="120">
+                <widget type="checkbox" fieldname="noindex" />
+            </column>
+        </group>
+        <group name="advanced" numcolumns="9">
+            <column name="short-title" numcolumns="3" order="120">
+                <widget type="text" fieldname="shorttitle" required="true" />
+            </column>
+            <column name="icon" numcolumns="3" order="130">
+                <widget type="text" fieldname="icon" />
+            </column>
+            <column name="sort" numcolumns="3" order="140">
+                <widget type="number" fieldname="posnumber" />
+            </column>
+            <column name="custom-controller" numcolumns="3" order="150">
+                <widget type="text" fieldname="customcontroller" />
             </column>
         </group>
     </columns>
@@ -65,4 +70,3 @@
         </row>
     </rows>
 </view>
-
