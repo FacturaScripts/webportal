@@ -26,74 +26,47 @@ use FacturaScripts\Core\Model\Base;
  *
  * @author Carlos García Gómez
  */
-class WebBlock extends Base\ModelClass
+class WebCluster extends Base\ModelClass
 {
 
     use Base\ModelTrait;
 
     /**
-     * Block content.
+     * Page description.
      * 
-     * @var string
+     * @var string 
      */
-    public $content;
+    public $description;
 
     /**
      * Primary key.
      * 
      * @var int 
      */
-    public $idblock;
+    public $idcluster;
 
     /**
-     * Page related.
-     * 
-     * @var int 
-     */
-    public $idpage;
-
-    /**
-     * Position number.
-     * 
-     * @var int
-     */
-    public $ordernum;
-
-    /**
-     * Block type: body, meta, css, javascript, footer.
+     * Page title.
      * 
      * @var string
      */
-    public $type;
+    public $title;
 
     public static function tableName()
     {
-        return 'webblocks';
+        return 'webclusters';
     }
 
     public static function primaryColumn()
     {
-        return 'idblock';
-    }
-
-    public function clear()
-    {
-        parent::clear();
-        $this->content = 'Hello world!';
-        $this->ordernum = 100;
-        $this->type = 'body';
+        return 'idcluster';
     }
 
     public function test()
     {
-        $this->content = Utils::noHtml($this->content);
-
+        $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
+        $this->title = Utils::noHtml($this->title);
         return true;
-    }
-
-    public function content()
-    {
-        return Utils::fixHtml($this->content);
     }
     
     public function url($type = 'auto', $list = 'List')

@@ -39,6 +39,7 @@ class EditWebPage extends ExtendedController\PanelController
     public function getPageData()
     {
         $pageData = parent::getPageData();
+        $pageData['title'] = 'page';
         $pageData['menu'] = 'admin';
         $pageData['showonmenu'] = false;
         $pageData['icon'] = 'fa-globe';

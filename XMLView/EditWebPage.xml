@@ -50,17 +50,24 @@
             </column>
         </group>
         <group name="advanced" numcolumns="9">
-            <column name="short-title" numcolumns="3" order="120">
+            <column name="short-title" numcolumns="4" order="120">
                 <widget type="text" fieldname="shorttitle" required="true" />
             </column>
-            <column name="icon" numcolumns="3" order="130">
-                <widget type="text" fieldname="icon" />
-            </column>
-            <column name="sort" numcolumns="3" order="140">
+            <column name="sort" numcolumns="4" order="140">
                 <widget type="number" fieldname="ordernum" />
             </column>
-            <column name="custom-controller" numcolumns="3" order="150">
+            <column name="custom-controller" numcolumns="4" order="150">
                 <widget type="text" fieldname="customcontroller" />
+            </column>
+        </group>
+        <group name="cluster">
+            <column name="cluster" numcolumns="4" order="100">
+                <widget type="select" fieldname="idcluster">
+                    <values source="webclusters" fieldcode="idcluster" fieldtitle="title"></values>
+                </widget>
+            </column>
+            <column name="icon" numcolumns="3" order="110">
+                <widget type="text" fieldname="icon" />
             </column>
         </group>
     </columns>

@@ -34,6 +34,13 @@ class WebPage extends Base\ModelClass
     const DEFAULT_CONTROLLER = 'PortalHome';
 
     /**
+     * Cluster name to add this page.
+     *
+     * @var string
+     */
+    public $cluster;
+
+    /**
      * Custom controller to redir when clic on this link.
      * 
      * @var string 
@@ -48,8 +55,8 @@ class WebPage extends Base\ModelClass
     public $description;
 
     /**
-     * Icon to use in menu.
-     * 
+     * Icon to use in cluster.
+     *
      * @var string
      */
     public $icon;
@@ -67,7 +74,7 @@ class WebPage extends Base\ModelClass
      * @var string
      */
     public $langcode;
-    
+
     /**
      * Last modification date.
      *
@@ -134,6 +141,11 @@ class WebPage extends Base\ModelClass
         return 'idpage';
     }
 
+    public function primaryDescriptionColumn()
+    {
+        return 'permalink';
+    }
+
     /**
      * This function is called when creating the model table. Returns the SQL
      * that will be executed after the creation of the table. Useful to insert values
@@ -144,15 +156,16 @@ class WebPage extends Base\ModelClass
     public function install()
     {
         return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
-            . "permalink,langcode,showonmenu,showonfooter,noindex) VALUES "
-            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false),"
-            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true),"
-            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true);";
+            . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
+            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-page'),"
+            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-page'),"
+            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-page');";
     }
 
     public function clear()
     {
         parent::clear();
+        $this->icon = 'fa-page';
         $this->langcode = substr(FS_LANG, 0, 2);
         $this->lastmod = date('d-m-Y');
         $this->noindex = false;
@@ -172,9 +185,9 @@ class WebPage extends Base\ModelClass
 
     public function test()
     {
+        $this->cluster = Utils::noHtml($this->cluster);
         $this->description = str_replace("\n", ' ', $this->description);
         $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
-        $this->icon = Utils::noHtml($this->icon);
         $this->permalink = Utils::noHtml($this->permalink);
         $this->title = Utils::noHtml($this->title);
         $this->shorttitle = Utils::noHtml($this->shorttitle);

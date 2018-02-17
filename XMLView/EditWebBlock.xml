@@ -30,6 +30,7 @@
                     <values title="body">body</values>
                     <values title="body-container">body-container</values>
                     <values title="body-container-fluid">body-container-fluid</values>
+                    <values title="body-cluster">body-cluster</values>
                     <values title="meta">meta</values>
                     <values title="css">css</values>
                     <values title="javascript">javascript</values>

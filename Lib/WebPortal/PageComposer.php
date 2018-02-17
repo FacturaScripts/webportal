@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Plugins\webportal\Model\WebBlock;
+use FacturaScripts\Plugins\webportal\Model\WebCluster;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
@@ -42,10 +43,17 @@ class PageComposer
      */
     private $webBlock;
 
+    /**
+     *
+     * @var WebCluster
+     */
+    private $webCluster;
+
     public function __construct()
     {
         $this->blocks = [];
         $this->webBlock = new WebBlock();
+        $this->webCluster = new WebCluster();
     }
 
     public function getBlocks($type)
@@ -67,29 +75,33 @@ class PageComposer
         /// Page blocks for this page
         $where = [new DataBaseWhere('idpage', $page->idpage)];
         foreach ($this->webBlock->all($where, ['ordernum' => 'ASC'], 0, 0) as $block) {
-            $this->addBlock($block);
+            $this->addBlock($block, $page);
         }
 
         /// Page blocks for all pages
         $where2 = [new DataBaseWhere('idpage', null, 'IS')];
         foreach ($this->webBlock->all($where2, ['ordernum' => 'ASC'], 0, 0) as $block) {
-            $this->addBlock($block);
+            $this->addBlock($block, $page);
         }
 
         $this->checkBody($page);
     }
 
-    private function addBlock(WebBlock $block)
+    private function addBlock(WebBlock $block, WebPage $page)
     {
         $container = 'container';
         switch ($block->type) {
+            case 'body-cluster':
+                $block->type = 'body';
+                $block->content = $this->getClusterHtml($block->content, $page);
+                break;
+
             case 'body-container-fluid':
                 $container .= '-fluid';
             /// no break
             case 'body-container':
                 $block->type = 'body';
-                $block->content = '<br/><div class="' . $container . '"><div class="row"><div class="col-12">'
-                    . $block->content . '</div></div></div>';
+                $block->content = $this->getHtmlContainer($block->content, $container);
                 break;
         }
 
@@ -111,7 +123,37 @@ class PageComposer
             $emptyBlock->idpage = $page->idpage;
             $emptyBlock->type = 'body-container';
             $emptyBlock->content = '<h1>' . $page->title . '</h1><p>' . $page->description . '</p>';
-            $this->addBlock($emptyBlock);
+            $this->addBlock($emptyBlock, $page);
         }
+    }
+
+    private function getClusterHtml($idcluster, WebPage $page)
+    {
+        $cluster = $this->webCluster->get($idcluster);
+        if (!$cluster) {
+            return $this->getHtmlContainer('<h3>Cluster no encontrado</h3>');
+        }
+
+        $html = '<br/><div class="container"><div class="row">'
+            . '<div class="col-md-12"><h3>' . $cluster->title . '</h3><p>' . $cluster->description . '</p></div>'
+            . '</div><div class="row">';
+        foreach ($page->all([new DataBaseWhere('idcluster', $idcluster)]) as $clusterPage) {
+            if ($clusterPage->idpage === $page->idpage) {
+                continue;
+            }
+
+            $html .= '<div class="col-md-4"><a href="' . $clusterPage->link() . '" class="btn btn-info btn-lg btn-block">'
+                . '<i class="fa ' . $clusterPage->icon . ' fa-4x"></i></a><h4>' . $clusterPage->title . '</h4>'
+                . '<p>' . $clusterPage->description . '</p></div>';
+        }
+        $html .= '</div></div>';
+
+        return $html;
+    }
+
+    private function getHtmlContainer($content, $containerClass = 'container')
+    {
+        return '<br/><div class="' . $containerClass . '"><div class="row"><div class="col-12">'
+            . $content . '</div></div></div>';
     }
 }

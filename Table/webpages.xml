@@ -13,6 +13,10 @@
         <default>nextval('webpages_idpage_seq'::regclass)</default>
     </column>
     <column>
+        <name>idcluster</name>
+        <type>integer</type>
+    </column>
+    <column>
         <name>permalink</name>
         <type>character varying(200)</type>
         <null>NO</null>

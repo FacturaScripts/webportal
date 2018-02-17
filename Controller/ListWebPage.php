@@ -44,6 +44,11 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebBlock', 'idblock', 'code');
         $this->addOrderBy('ListWebBlock', 'idpage');
         $this->addOrderBy('ListWebBlock', 'ordernum');
+        
+        /// Web clusters
+        $this->addView('\FacturaScripts\Dinamic\Model\WebCluster', 'ListWebCluster', 'clusters', 'fa-newspaper-o');
+        $this->addSearchFields('ListWebCluster', ['title','description']);
+        $this->addOrderBy('ListWebCluster', 'title');
     }
 
     public function getPageData()
