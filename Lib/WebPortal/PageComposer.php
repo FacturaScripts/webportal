@@ -111,14 +111,21 @@ class PageComposer
     private function checkBody(WebPage &$page)
     {
         $bodyFound = false;
+        $title = '';
         foreach ($this->blocks as $block) {
             if ('body' === substr($block->type, 0, 4)) {
                 $bodyFound = true;
+                $title = $this->getH1Ttitle($block->content());
                 break;
             }
         }
 
-        if (!$bodyFound) {
+        if ($bodyFound) {
+            if ($title !== '' && $page->title !== $title) {
+                $page->title = $title;
+                $page->save();
+            }
+        } else {
             $emptyBlock = new WebBlock();
             $emptyBlock->idpage = $page->idpage;
             $emptyBlock->type = 'body-container';
@@ -137,18 +144,32 @@ class PageComposer
         $html = '<br/><div class="container"><div class="row">'
             . '<div class="col-md-12"><h3>' . $cluster->title . '</h3><p>' . $cluster->description . '</p></div>'
             . '</div><div class="row">';
-        foreach ($page->all([new DataBaseWhere('idcluster', $idcluster)]) as $clusterPage) {
+        foreach ($page->all([new DataBaseWhere('idcluster', $idcluster)]) as $key => $clusterPage) {
             if ($clusterPage->idpage === $page->idpage) {
                 continue;
             }
 
-            $html .= '<div class="col-md-4"><a href="' . $clusterPage->link() . '" class="btn btn-info btn-lg btn-block">'
-                . '<i class="fa ' . $clusterPage->icon . ' fa-4x"></i></a><h4>' . $clusterPage->title . '</h4>'
+            $html .= '<div class="col-md-4"><a href="' . $clusterPage->link() . '" class="btn btn-'
+                . $this->getColorClass($key) . ' btn-lg btn-block">'
+                . '<i class="fa ' . $clusterPage->icon . ' fa-4x"></i><br/>' . $clusterPage->title . '</a>'
                 . '<p>' . $clusterPage->description . '</p></div>';
         }
         $html .= '</div></div>';
 
         return $html;
+    }
+
+    private function getColorClass($key = 0)
+    {
+        $classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+        return $classes[$key];
+    }
+
+    private function getH1Ttitle($content)
+    {
+        $matches = [];
+        preg_match_all("/<h1>(.*?)<\/h1>/", $content, $matches);
+        return isset($matches[1][0]) ? $matches[1][0] : '';
     }
 
     private function getHtmlContainer($content, $containerClass = 'container')

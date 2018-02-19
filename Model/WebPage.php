@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
@@ -165,7 +166,7 @@ class WebPage extends Base\ModelClass
     public function clear()
     {
         parent::clear();
-        $this->icon = 'fa-page';
+        $this->icon = 'fa-file-o';
         $this->langcode = substr(FS_LANG, 0, 2);
         $this->lastmod = date('d-m-Y');
         $this->noindex = false;
@@ -176,11 +177,11 @@ class WebPage extends Base\ModelClass
 
     public function link()
     {
-        if ($this->langcode === substr(FS_LANG, 0, 2)) {
-            return FS_ROUTE . $this->permalink;
+        if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
+            return FS_ROUTE . '/';
         }
 
-        return FS_ROUTE . '/' . $this->langcode . $this->permalink;
+        return FS_ROUTE . $this->permalink;
     }
 
     public function test()
@@ -192,7 +193,9 @@ class WebPage extends Base\ModelClass
         $this->title = Utils::noHtml($this->title);
         $this->shorttitle = Utils::noHtml($this->shorttitle);
 
-        if (substr($this->permalink, 0, 1) !== '/') {
+        if ($this->langcode !== substr(FS_LANG, 0, 2) && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
+            $this->permalink = '/' . $this->langcode . '/' . $this->permalink;
+        } elseif (substr($this->permalink, 0, 1) !== '/') {
             $this->permalink = '/' . $this->permalink;
         }
 

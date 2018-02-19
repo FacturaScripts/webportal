@@ -36,17 +36,17 @@ class PortalController extends Controller
 {
 
     /**
+     *
+     * @var PageComposer
+     */
+    public $pageComposer;
+
+    /**
      * The web page object.
      * 
      * @var Model\WebPage 
      */
     public $webPage;
-    
-    /**
-     *
-     * @var PageComposer
-     */
-    public $pageComposer;
 
     public function getPublicFooter()
     {
@@ -84,16 +84,20 @@ class PortalController extends Controller
 
     private function getAuxMenu($where)
     {
+        if ($this->webPage) {
+            $where[] = new DataBaseWhere('langcode', $this->webPage->langcode);
+        }
+
         $webPageModel = new Model\WebPage();
         return $webPageModel->all($where, ['ordernum' => 'ASC']);
     }
-    
+
     private function getWebPage()
     {
         $webPage = new Model\WebPage();
 
         if ($this->uri === '/' || $this->uri === 'index.php') {
-            if($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
+            if ($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
                 return $webPage;
             }
         }
@@ -107,7 +111,7 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
-        
+
         $this->pageComposer->set($this->webPage);
     }
 }
