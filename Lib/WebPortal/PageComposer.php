@@ -89,7 +89,7 @@ class PageComposer
 
     private function addBlock(WebBlock $block, WebPage $page)
     {
-        $container = 'container';
+        $container = 'container grid-lg';
         switch ($block->type) {
             case 'body-cluster':
                 $block->type = 'body';
@@ -97,7 +97,7 @@ class PageComposer
                 break;
 
             case 'body-container-fluid':
-                $container .= '-fluid';
+                $container = 'container';
             /// no break
             case 'body-container':
                 $block->type = 'body';
@@ -141,17 +141,17 @@ class PageComposer
             return $this->getHtmlContainer('<h3>Cluster no encontrado</h3>');
         }
 
-        $html = '<br/><div class="container"><div class="row">'
-            . '<div class="col-md-12"><h3>' . $cluster->title . '</h3><p>' . $cluster->description . '</p></div>'
-            . '</div><div class="row">';
+        $html = '<div class="empty"><h3 class="empty-title">' . $cluster->title . '</h3>'
+            . '<p class="empty-subtitle">' . $cluster->description . '</p><div class="container grid-lg">'
+            . '<div class="columns">';
         foreach ($page->all([new DataBaseWhere('idcluster', $idcluster)]) as $key => $clusterPage) {
             if ($clusterPage->idpage === $page->idpage) {
                 continue;
             }
 
-            $html .= '<div class="col-md-4"><a href="' . $clusterPage->link() . '" class="btn btn-'
-                . $this->getColorClass($key) . ' btn-lg btn-block">'
-                . '<i class="fa ' . $clusterPage->icon . ' fa-4x"></i><br/>' . $clusterPage->title . '</a>'
+            $html .= '<div class="column col-md-4 col-sm-12">'
+                . '<div class="text-center"><i class="fa ' . $clusterPage->icon . ' fa-4x"></i></div>&nbsp;'
+                . '<a href="' . $clusterPage->link() . '" class="btn btn-' . $this->getColorClass($key) . ' btn-block">' . $clusterPage->shorttitle . '</a>'
                 . '<p>' . $clusterPage->description . '</p></div>';
         }
         $html .= '</div></div>';
