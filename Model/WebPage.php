@@ -158,9 +158,9 @@ class WebPage extends Base\ModelClass
     {
         return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
             . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
-            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-page'),"
-            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-page'),"
-            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-page');";
+            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
+            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o'),"
+            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
     }
 
     public function clear()

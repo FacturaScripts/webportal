@@ -29,6 +29,16 @@ use FacturaScripts\Plugins\webportal\Model\WebPage;
 class Sitemap extends Controller
 {
 
+    public function getPageData()
+    {
+        $pageData = parent::getPageData();
+        $pageData['title'] = 'sitemap';
+        $pageData['menu'] = 'admin';
+        $pageData['showonmenu'] = false;
+
+        return $pageData;
+    }
+
     public function publicCore(&$response)
     {
         parent::publicCore($response);

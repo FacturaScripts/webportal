@@ -61,9 +61,14 @@
                 </section>
                 <section class="navbar-section">
                     {% if fsc.user %}
-                        <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
-                            <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
-                        </a>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
+                                <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
+                                <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                            </a>
+                        </div>
                     {% else %}
                         <a class="btn btn-primary" href="#" onclick="$('#loginModal').addClass('active')">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>

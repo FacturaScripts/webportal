@@ -89,19 +89,15 @@ class PageComposer
 
     private function addBlock(WebBlock $block, WebPage $page)
     {
-        $container = 'container grid-lg';
         switch ($block->type) {
             case 'body-cluster':
                 $block->type = 'body';
                 $block->content = $this->getClusterHtml($block->content, $page);
                 break;
 
-            case 'body-container-fluid':
-                $container = 'container';
-            /// no break
             case 'body-container':
                 $block->type = 'body';
-                $block->content = $this->getHtmlContainer($block->content, $container);
+                $block->content = $this->getHtmlContainer($block->content);
                 break;
         }
 
@@ -172,7 +168,7 @@ class PageComposer
         return isset($matches[1][0]) ? $matches[1][0] : '';
     }
 
-    private function getHtmlContainer($content, $containerClass = 'container')
+    private function getHtmlContainer($content, $containerClass = 'container grid-lg')
     {
         return '<br/><div class="' . $containerClass . '"><div class="row"><div class="col-12">'
             . $content . '</div></div></div>';
