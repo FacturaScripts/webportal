@@ -1,0 +1,14 @@
+<!--
+    Loads and displays a list of messages from the given types
+-->
+{% macro message(log, types, style) %}
+{% set messages = log.read(types) %}
+{% if messages|length > 0 %}
+<div class="toast toast-{{ style }}">
+    {% for msg in messages %}
+    {{ msg.message|raw }}
+    {% if not loop.last %}<br />{% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
