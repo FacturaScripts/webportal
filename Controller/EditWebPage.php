@@ -80,6 +80,10 @@ class EditWebPage extends ExtendedController\PanelController
                     $this->response->headers->set('Refresh', '0; ' . $model->link());
                     $this->setRoutes();
                 }
+                if($this->user->homepage !== 'PortalHome') {
+                    $this->user->homepage = 'PortalHome';
+                    $this->user->save();
+                }
                 break;
 
             default:

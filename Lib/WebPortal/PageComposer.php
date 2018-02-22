@@ -150,7 +150,7 @@ class PageComposer
                 . '<a href="' . $clusterPage->link() . '" class="btn btn-' . $this->getColorClass($key) . ' btn-block">' . $clusterPage->shorttitle . '</a>'
                 . '<p>' . $clusterPage->description . '</p></div>';
         }
-        $html .= '</div></div>';
+        $html .= '</div></div></div>';
 
         return $html;
     }

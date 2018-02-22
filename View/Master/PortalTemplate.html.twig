@@ -70,7 +70,7 @@
                             </a>
                         </div>
                     {% else %}
-                        <a class="btn btn-primary" href="#" onclick="$('#loginModal').addClass('active')">
+                        <a class="btn btn-primary" href="#" onclick="return showModal('loginModal')">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -104,7 +104,7 @@
                 <a href="#close" class="modal-overlay" aria-label="Close"></a>
                 <div class="modal-container">
                     <div class="modal-header">
-                        <a href="#close" onclick="$('#loginModal').removeClass('active')" class="btn btn-clear float-right" aria-label="Close"></a>
+                        <a href="#close" onclick="return hideModal('loginModal')" class="btn btn-clear float-right" aria-label="Close"></a>
                         <div class="modal-title h5">{{ i18n.trans('login') }}</div>
                         <p>{{ i18n.trans('login-text') }}</p>
                     </div>
@@ -151,7 +151,18 @@
             </div>
         {% endblock %}
         {% block javascript %}
-            <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript">
+                function showModal(idModal) {
+                    var element = document.getElementById(idModal);
+                    element.classList.add("active");
+                    return false;
+                }
+                function hideModal(idModal) {
+                    var element = document.getElementById(idModal);
+                    element.classList.remove("active");
+                    return false;
+                }
+            </script>
             {% for block in fsc.pageComposer.getBlocks('javascript') %}
                 {{ block.content() | raw }}
             {% endfor %}
