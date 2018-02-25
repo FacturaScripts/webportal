@@ -25,6 +25,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PageComposer;
 use FacturaScripts\Plugins\webportal\Model;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -40,6 +41,12 @@ class PortalController extends Controller
      * @var PageComposer
      */
     public $pageComposer;
+
+    /**
+     *
+     * @var bool
+     */
+    public $showCookiesPolicy = false;
 
     /**
      * The web page object.
@@ -60,6 +67,19 @@ class PortalController extends Controller
         return $this->getAuxMenu($where);
     }
 
+    public function cookiesPolicy()
+    {
+        $html = '';
+        foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
+            $html = $cookiePage->description . ' <a href="' . $cookiePage->link() . '">'
+                . $this->i18n->trans('read-more') . '</a> | <a href="?okCookies=TRUE">'
+                . $this->i18n->trans('accept') . '</a>';
+            break;
+        }
+
+        return $html;
+    }
+
     /**
      * 
      * @param Response $response
@@ -68,6 +88,16 @@ class PortalController extends Controller
     {
         parent::publicCore($response);
         $this->processWebPage();
+
+        /// cookie check
+        $this->showCookiesPolicy = true;
+        if ('TRUE' === $this->request->query->get('okCookies', '')) {
+            $expire = time() + FS_COOKIES_EXPIRE;
+            $this->response->headers->setCookie(new Cookie('okCookies', time(), $expire));
+            $this->showCookiesPolicy = false;
+        } elseif ('' !== $this->request->cookies->get('okCookies', '')) {
+            $this->showCookiesPolicy = false;
+        }
     }
 
     /**

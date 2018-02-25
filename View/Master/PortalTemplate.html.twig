@@ -87,6 +87,7 @@
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
                         {{ Macros.message(log, ['info'], 'primary') }}
+                        {% if fsc.showCookiesPolicy %}<div class="toast toast-primary">{{ fsc.cookiesPolicy() | raw }}</div>{% endif %}
                     </div>
                 </div>
             </div>
