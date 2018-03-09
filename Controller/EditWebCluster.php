@@ -29,12 +29,6 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditWebCluster extends ExtendedController\PanelController
 {
 
-    protected function createViews()
-    {
-        $this->addEditView('\FacturaScripts\Dinamic\Model\WebCluster', 'EditWebCluster', 'cluster', 'fa-newspaper-o');
-        $this->addListView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'pages', 'fa-globe');
-    }
-
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -44,6 +38,12 @@ class EditWebCluster extends ExtendedController\PanelController
         $pageData['icon'] = 'fa-newspaper-o';
 
         return $pageData;
+    }
+
+    protected function createViews()
+    {
+        $this->addEditView('WebCluster', 'EditWebCluster', 'cluster', 'fa-newspaper-o');
+        $this->addListView('WebPage', 'ListWebPage', 'pages', 'fa-globe');
     }
 
     protected function loadData($keyView, $view)

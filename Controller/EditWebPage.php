@@ -30,12 +30,6 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditWebPage extends ExtendedController\PanelController
 {
 
-    protected function createViews()
-    {
-        $this->addEditView('\FacturaScripts\Dinamic\Model\WebPage', 'EditWebPage', 'page', 'fa-globe');
-        $this->addListView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
-    }
-
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -45,6 +39,12 @@ class EditWebPage extends ExtendedController\PanelController
         $pageData['icon'] = 'fa-globe';
 
         return $pageData;
+    }
+
+    protected function createViews()
+    {
+        $this->addEditView('WebPage', 'EditWebPage', 'page', 'fa-globe');
+        $this->addListView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
     }
 
     protected function loadData($keyView, $view)

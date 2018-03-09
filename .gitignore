@@ -3,7 +3,6 @@
 /node_modules/
 .DS_Store
 .htaccess
-composer.lock
 package-lock.json
 *.cache
 *.lock

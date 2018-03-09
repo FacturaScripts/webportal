@@ -119,7 +119,7 @@ class PortalController extends Controller
         }
 
         $webPageModel = new Model\WebPage();
-        return $webPageModel->all($where, ['ordernum' => 'ASC']);
+        return $webPageModel->all($where, ['ordernum' => 'ASC', 'shorttitle' => 'ASC']);
     }
 
     private function getWebPage()

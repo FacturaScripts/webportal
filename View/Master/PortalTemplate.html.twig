@@ -51,7 +51,7 @@
                                 {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}
                                 <li>
                                     <a class="btn btn-link{{ activeClass }}" href="{{ menuItem.link() | raw }}">
-                                        {{ menuItem.shorttitle }}
+                                        <i class="fa {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -70,7 +70,7 @@
                             </a>
                         </div>
                     {% else %}
-                        <a class="btn btn-primary" href="#" onclick="return showModal('loginModal')">
+                        <a class="btn" href="#" onclick="return showModal('loginModal')">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -86,8 +86,8 @@
                         {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
-                        {{ Macros.message(log, ['info'], 'primary') }}
-                        {% if fsc.showCookiesPolicy %}<div class="toast toast-primary">{{ fsc.cookiesPolicy() | raw }}</div>{% endif %}
+                        {{ Macros.message(log, ['info'], '') }}
+                        {% if fsc.showCookiesPolicy %}<div class="toast toast-warning">{{ fsc.cookiesPolicy() | raw }}</div>{% endif %}
                     </div>
                 </div>
             </div>

@@ -29,28 +29,6 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class ListWebPage extends ExtendedController\ListController
 {
 
-    protected function createViews()
-    {
-        /// Web pages
-        $this->addView('\FacturaScripts\Dinamic\Model\WebPage', 'ListWebPage', 'pages', 'fa-globe');
-        $this->addSearchFields('ListWebPage', ['title', 'description']);
-        $this->addOrderBy('ListWebPage', 'permalink');
-        $this->addOrderBy('ListWebPage', 'title');
-        $this->addOrderBy('ListWebPage', 'ordernum');
-
-        /// Web blocks
-        $this->addView('\FacturaScripts\Dinamic\Model\WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
-        $this->addSearchFields('ListWebBlock', ['content']);
-        $this->addOrderBy('ListWebBlock', 'idblock', 'code');
-        $this->addOrderBy('ListWebBlock', 'idpage');
-        $this->addOrderBy('ListWebBlock', 'ordernum');
-        
-        /// Web clusters
-        $this->addView('\FacturaScripts\Dinamic\Model\WebCluster', 'ListWebCluster', 'clusters', 'fa-newspaper-o');
-        $this->addSearchFields('ListWebCluster', ['title','description']);
-        $this->addOrderBy('ListWebCluster', 'title');
-    }
-
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -59,6 +37,28 @@ class ListWebPage extends ExtendedController\ListController
         $pageData['icon'] = 'fa-globe';
 
         return $pageData;
+    }
+
+    protected function createViews()
+    {
+        /// Web pages
+        $this->addView('WebPage', 'ListWebPage', 'pages', 'fa-globe');
+        $this->addSearchFields('ListWebPage', ['title', 'description']);
+        $this->addOrderBy('ListWebPage', 'permalink');
+        $this->addOrderBy('ListWebPage', 'title');
+        $this->addOrderBy('ListWebPage', 'ordernum');
+
+        /// Web blocks
+        $this->addView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
+        $this->addSearchFields('ListWebBlock', ['content']);
+        $this->addOrderBy('ListWebBlock', 'idblock', 'code');
+        $this->addOrderBy('ListWebBlock', 'idpage');
+        $this->addOrderBy('ListWebBlock', 'ordernum');
+
+        /// Web clusters
+        $this->addView('WebCluster', 'ListWebCluster', 'clusters', 'fa-newspaper-o');
+        $this->addSearchFields('ListWebCluster', ['title', 'description']);
+        $this->addOrderBy('ListWebCluster', 'title');
     }
 
     protected function execAfterAction($action)
@@ -74,7 +74,7 @@ class ListWebPage extends ExtendedController\ListController
             $appSettings->set('default', 'homepage', 'PortalHome');
             $appSettings->save();
         }
-        
+
         /// set portal home page
         if ($appSettings->get('webportal', 'homepage') === null) {
             $appSettings->set('webportal', 'homepage', 1);
