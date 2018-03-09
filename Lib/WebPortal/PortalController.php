@@ -29,12 +29,17 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Description of PortalController
+ * Description of PortalController class
  *
  * @author Carlos García Gómez
  */
 class PortalController extends Controller
 {
+
+    /**
+     * Public cookie expiration = 1 year.
+     */
+    const PUBLIC_COOKIIES_EXPIRE = 31536000;
 
     /**
      *
@@ -92,7 +97,7 @@ class PortalController extends Controller
         /// cookie check
         $this->showCookiesPolicy = true;
         if ('TRUE' === $this->request->query->get('okCookies', '')) {
-            $expire = time() + FS_COOKIES_EXPIRE;
+            $expire = time() + self::PUBLIC_COOKIIES_EXPIRE;
             $this->response->headers->setCookie(new Cookie('okCookies', time(), $expire));
             $this->showCookiesPolicy = false;
         } elseif ('' !== $this->request->cookies->get('okCookies', '')) {

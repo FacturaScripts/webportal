@@ -28,11 +28,12 @@
             <column name="type" numcolumns="12" order="110">
                 <widget type="select" fieldname="type">
                     <values title="body">body</values>
-                    <values title="body-container">body-container</values>
-                    <values title="body-cluster">body-cluster</values>
+                    <values title="bodyContainer">bodyContainer</values>
+                    <values title="bodyCluster">bodyCluster</values>
                     <values title="meta">meta</values>
                     <values title="css">css</values>
                     <values title="javascript">javascript</values>
+                    <values title="javascriptWithCookies">javascriptWithCookies</values>
                     <values title="footer">footer</values>
                 </widget>
             </column>

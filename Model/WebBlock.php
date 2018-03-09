@@ -81,7 +81,7 @@ class WebBlock extends Base\ModelClass
         parent::clear();
         $this->content = 'Hello world!';
         $this->ordernum = 100;
-        $this->type = 'body-container';
+        $this->type = 'bodyContainer';
     }
 
     public function test()

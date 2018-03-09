@@ -91,11 +91,13 @@ class PageComposer
     {
         switch ($block->type) {
             case 'body-cluster':
+            case 'bodyCluster':
                 $block->type = 'body';
                 $block->content = $this->getClusterHtml($block->content, $page);
                 break;
 
             case 'body-container':
+            case 'bodyContainer':
                 $block->type = 'body';
                 $block->content = $this->getHtmlContainer($block->content);
                 break;
@@ -124,7 +126,7 @@ class PageComposer
         } else {
             $emptyBlock = new WebBlock();
             $emptyBlock->idpage = $page->idpage;
-            $emptyBlock->type = 'body-container';
+            $emptyBlock->type = 'bodyContainer';
             $emptyBlock->content = '<h1>' . $page->title . '</h1><p>' . $page->description . '</p>';
             $this->addBlock($emptyBlock, $page);
         }

@@ -86,8 +86,8 @@
                         {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
-                        {{ Macros.message(log, ['info'], '') }}
-                        {% if fsc.showCookiesPolicy %}<div class="toast toast-warning">{{ fsc.cookiesPolicy() | raw }}</div>{% endif %}
+                        {{ Macros.message(log, ['info'], 'primary') }}
+                        {% if fsc.showCookiesPolicy %}<div class="toast toast-primary">{{ fsc.cookiesPolicy() | raw }}</div>{% endif %}
                     </div>
                 </div>
             </div>
@@ -168,5 +168,12 @@
                 {{ block.content() | raw }}
             {% endfor %}
         {% endblock %}
+        {% if fsc.showCookiesPolicy == false %}
+            {% block javascriptWithCookies %}
+                {% for block in fsc.pageComposer.getBlocks('javascriptWithCookies') %}
+                    {{ block.content() | raw }}
+                {% endfor %}
+            {% endblock %}
+        {% endif %}
     </body>
 </html>
