@@ -1,6 +1,7 @@
 /.idea/
 /nbproject/
 /node_modules/
+/vendor/
 .DS_Store
 .htaccess
 package-lock.json

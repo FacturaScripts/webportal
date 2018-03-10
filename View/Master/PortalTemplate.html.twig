@@ -69,6 +69,11 @@
                                 <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
                             </a>
                         </div>
+                    {% elseif fsc.contact %}
+                        <a class="btn btn-success" href="#" onclick="return showModal('logoutModal')">
+                            <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <span>{{ fsc.contact.nombre }}</span>
+                        </a>
                     {% else %}
                         <a class="btn" href="#" onclick="return showModal('loginModal')">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
@@ -78,11 +83,11 @@
             </header>
             <div class="divider text-center" data-content="{{ webTitle }}"></div>
         {% endblock %}
+        {% import 'Macro/PortalTemplate.html.twig' as Macros %}
         {% block messages %}
             <div class="container grid-lg">
                 <div class="columns">
                     <div class="col-12">
-                        {% import 'Macro/PortalTemplate.html.twig' as Macros %}
                         {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
@@ -100,43 +105,11 @@
             </div>
         {% endblock %}
         <br/><br/><br/>
-        <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
-            <div class="modal modal-sm" id="loginModal">
-                <a href="#close" class="modal-overlay" aria-label="Close"></a>
-                <div class="modal-container">
-                    <div class="modal-header">
-                        <a href="#close" onclick="return hideModal('loginModal')" class="btn btn-clear float-right" aria-label="Close"></a>
-                        <div class="modal-title h5">{{ i18n.trans('login') }}</div>
-                        <p>{{ i18n.trans('login-text') }}</p>
-                    </div>
-                    <div class="modal-body">
-                        <div class="content">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-                                    </span>
-                                    <input type="text" name="fsNick" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('user') }}" required="" autocomplete="off"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i>
-                                    </span>
-                                    <input type="password" name="fsPassword" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">
-                            {{ i18n.trans('login') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+        {% if fsc.contact %}
+            {{ Macros.logoutModal(i18n, fsc) }}
+        {% elseif fsc.user == false %}
+            {{ Macros.loginModal(i18n) }}
+        {% endif %}
         {% block footer %}
             <div class="footer-section">
                 <div class="divider text-center" data-content="{{ webCopyright }}"></div>

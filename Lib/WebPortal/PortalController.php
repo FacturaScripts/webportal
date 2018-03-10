@@ -22,7 +22,8 @@ use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Model\User;
+use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PageComposer;
 use FacturaScripts\Plugins\webportal\Model;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -39,7 +40,18 @@ class PortalController extends Controller
     /**
      * Public cookie expiration = 1 year.
      */
-    const PUBLIC_COOKIIES_EXPIRE = 31536000;
+    const PUBLIC_COOKIES_EXPIRE = 31536000;
+
+    /**
+     * Period to update contact activity and cookies = 1 hour.
+     */
+    const PUBLIC_UPDATE_ACTIVITY_PERIOD = 3600;
+
+    /**
+     *
+     * @var Contacto
+     */
+    public $contact;
 
     /**
      *
@@ -92,12 +104,13 @@ class PortalController extends Controller
     public function publicCore(&$response)
     {
         parent::publicCore($response);
+        $this->contactAuth();
         $this->processWebPage();
 
-        /// cookie check
+        /// cookie policy check
         $this->showCookiesPolicy = true;
         if ('TRUE' === $this->request->query->get('okCookies', '')) {
-            $expire = time() + self::PUBLIC_COOKIIES_EXPIRE;
+            $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
             $this->response->headers->setCookie(new Cookie('okCookies', time(), $expire));
             $this->showCookiesPolicy = false;
         } elseif ('' !== $this->request->cookies->get('okCookies', '')) {
@@ -115,6 +128,37 @@ class PortalController extends Controller
     {
         parent::privateCore($response, $user, $permissions);
         $this->processWebPage();
+    }
+
+    private function contactAuth()
+    {
+        if ('TRUE' === $this->request->query->get('public_logout')) {
+            $this->response->headers->clearCookie('fsIdcontacto');
+            $this->response->headers->clearCookie('fsLogkey');
+            $this->contact = null;
+            return;
+        }
+
+        $idcontacto = $this->request->cookies->get('fsIdcontacto', '');
+        if ($idcontacto === '') {
+            return false;
+        }
+
+        $contacto = new Contacto();
+        if ($contacto->loadFromCode($idcontacto)) {
+            if ($contacto->verifyLogkey($this->request->cookies->get('fsLogkey'))) {
+                $this->contact = $contacto;
+                $this->updateCookies($this->contact);
+                return;
+            }
+
+            $this->miniLog->alert($this->i18n->trans('login-cookie-fail'));
+            $this->response->headers->clearCookie('fsIdcontacto');
+            return;
+        }
+
+        $this->miniLog->alert($this->i18n->trans('login-contact-not-found'));
+        return;
     }
 
     private function getAuxMenu($where)
@@ -148,5 +192,17 @@ class PortalController extends Controller
         $this->webPage = $this->getWebPage();
 
         $this->pageComposer->set($this->webPage);
+    }
+
+    protected function updateCookies(Contacto &$contact, bool $force = false)
+    {
+        if ($force || \time() - \strtotime($contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
+            $contact->newLogkey($this->request->getClientIp());
+            $contact->save();
+
+            $expire = time() + FS_COOKIES_EXPIRE;
+            $this->response->headers->setCookie(new Cookie('fsIdcontacto', $contact->idcontacto, $expire));
+            $this->response->headers->setCookie(new Cookie('fsLogkey', $contact->logkey, $expire));
+        }
     }
 }

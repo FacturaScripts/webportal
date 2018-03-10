@@ -32,12 +32,23 @@
                 <widget type="text" fieldname="url"/>
             </column>
             <column name="homepage" numcolumns="3" order="120">
-                <widget type="select" fieldname="homepage">
+                <widget type="select" fieldname="homepage" required="true">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
                 </widget>
             </column>
             <column name="copyright" title="copyright-text" numcolumns="12" order="130">
                 <widget type="textarea" fieldname="copyright"/>
+            </column>
+        </group>
+        <group name="facebook-login" title="facebook-login" icon="fa-facebook" numcolumns="12">
+            <column name="app-id" numcolumns="12" order="100">
+                <widget type="text" fieldname="fbappid"/>
+            </column>
+            <column name="app-secret" numcolumns="12" order="110">
+                <widget type="text" fieldname="fbappsecret"/>
+            </column>
+            <column name="access-token" numcolumns="12" order="120">
+                <widget type="text" fieldname="fbaccesstoken"/>
             </column>
         </group>
     </columns>
