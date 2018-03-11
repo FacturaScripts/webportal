@@ -54,17 +54,23 @@ class FacebookLogin extends PortalController
             session_start();
         }
 
+        if (empty(AppSettings::get('webportal', 'fbappid'))) {
+            $this->miniLog->alert($this->i18n->trans('no-facebook-appid'));
+        } elseif (empty(AppSettings::get('webportal', 'url'))) {
+            $this->miniLog->alert($this->i18n->trans('no-webportal-url'));
+        } else {
+            $this->login();
+        }
+    }
+
+    private function login()
+    {
         $this->facebook = new Facebook([
             'app_id' => AppSettings::get('webportal', 'fbappid'),
             'app_secret' => AppSettings::get('webportal', 'fbappsecret'),
             'default_graph_version' => 'v2.12',
         ]);
 
-        $this->login();
-    }
-
-    private function login()
-    {
         $helper = $this->facebook->getRedirectLoginHelper();
 
         try {

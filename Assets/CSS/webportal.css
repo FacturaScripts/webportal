@@ -20,6 +20,10 @@
     Author     : Carlos García Gómez
 */
 
+.navbar-top {
+    padding: 10px 10px 0px 5px;
+}
+
 .body-section {
     min-height: 700px;
 }

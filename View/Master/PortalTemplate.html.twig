@@ -32,7 +32,7 @@
     </head>
     <body>
         {% block navbar %}
-            <header class="navbar">
+            <header class="navbar navbar-top">
                 <section class="navbar-section hide-xs">
                     {% for menuItem in fsc.getPublicMenu() %}
                         {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}

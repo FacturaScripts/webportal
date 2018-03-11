@@ -107,6 +107,7 @@ class FacebookCallback extends PortalController
         if ($contact->save()) {
             $this->contact = $contact;
             $this->updateCookies($this->contact, true);
+            $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url'));
         }
     }
 }

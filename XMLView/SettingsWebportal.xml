@@ -41,14 +41,11 @@
             </column>
         </group>
         <group name="facebook-login" title="facebook-login" icon="fa-facebook" numcolumns="12">
-            <column name="app-id" numcolumns="12" order="100">
+            <column name="app-id" numcolumns="6" order="100">
                 <widget type="text" fieldname="fbappid"/>
             </column>
-            <column name="app-secret" numcolumns="12" order="110">
+            <column name="app-secret" numcolumns="6" order="110">
                 <widget type="text" fieldname="fbappsecret"/>
-            </column>
-            <column name="access-token" numcolumns="12" order="120">
-                <widget type="text" fieldname="fbaccesstoken"/>
             </column>
         </group>
     </columns>
