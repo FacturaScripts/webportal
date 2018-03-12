@@ -33,7 +33,7 @@ class Sitemap extends Controller
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'sitemap';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
 
         return $pageData;

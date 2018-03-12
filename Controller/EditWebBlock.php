@@ -43,7 +43,7 @@ class EditWebBlock extends ExtendedController\EditController
     {
         $pagedata = parent::getPageData();
         $pagedata['title'] = 'web-block';
-        $pagedata['menu'] = 'admin';
+        $pagedata['menu'] = 'web';
         $pagedata['icon'] = 'fa-code';
         $pagedata['showonmenu'] = false;
 

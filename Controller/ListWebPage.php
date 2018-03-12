@@ -33,7 +33,7 @@ class ListWebPage extends ExtendedController\ListController
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'pages';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['icon'] = 'fa-globe';
 
         return $pageData;
@@ -47,6 +47,7 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'ordernum');
+        $this->addFilterSelect('ListWebPage', 'langcode', 'webpages', 'langcode', 'langcode');
 
         /// Web blocks
         $this->addView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
@@ -54,6 +55,7 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebBlock', 'idblock', 'code');
         $this->addOrderBy('ListWebBlock', 'idpage');
         $this->addOrderBy('ListWebBlock', 'ordernum');
+        $this->addFilterSelect('ListWebBlock', 'type', 'webblocks', 'type', 'type');
 
         /// Web clusters
         $this->addView('WebCluster', 'ListWebCluster', 'clusters', 'fa-newspaper-o');

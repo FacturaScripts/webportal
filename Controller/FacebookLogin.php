@@ -40,7 +40,7 @@ class FacebookLogin extends PortalController
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'facebook-login';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
 
         return $pageData;

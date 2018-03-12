@@ -32,7 +32,7 @@ class PortalHome extends PortalController
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'webportal';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
 
         return $pageData;

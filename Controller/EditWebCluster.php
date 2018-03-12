@@ -33,7 +33,7 @@ class EditWebCluster extends ExtendedController\PanelController
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'cluster';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
         $pageData['icon'] = 'fa-newspaper-o';
 

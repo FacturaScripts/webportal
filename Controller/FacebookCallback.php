@@ -42,7 +42,7 @@ class FacebookCallback extends PortalController
     {
         $pageData = parent::getPageData();
         $pageData['title'] = 'facebook-callback';
-        $pageData['menu'] = 'admin';
+        $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
 
         return $pageData;
