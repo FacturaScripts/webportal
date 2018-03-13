@@ -35,8 +35,8 @@
             <header class="navbar navbar-top">
                 <section class="navbar-section hide-xs">
                     {% for menuItem in fsc.getPublicMenu() %}
-                        {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}
-                        <a class="btn btn-link{{ activeClass }}" href="{{ menuItem.link() | raw }}">
+                        {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+                        <a class="btn{{ activeClass }}" href="{{ menuItem.link() | raw }}">
                             {{ menuItem.shorttitle }}
                         </a>
                     {% endfor %}
@@ -48,9 +48,9 @@
                         </a>
                         <ul class="menu">
                             {% for menuItem in fsc.getPublicMenu() %}
-                                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? ' active' : '' %}
-                                <li>
-                                    <a class="btn btn-link{{ activeClass }}" href="{{ menuItem.link() | raw }}">
+                                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
+                                <li class="menu-item">
+                                    <a class="{{ activeClass }}" href="{{ menuItem.link() | raw }}">
                                         <i class="fa {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
                                     </a>
                                 </li>
@@ -119,7 +119,8 @@
                     {% endfor %}
                     {% for key, menuItem in fsc.getPublicFooter() %}
                         {% if key > 0 %}|{% endif %}
-                        <a href="{{ menuItem.link() | raw }}" class="btn btn-link">{{ menuItem.title }}</a>
+                        {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+                        <a href="{{ menuItem.link() | raw }}" class="btn{{ activeClass }}">{{ menuItem.title }}</a>
                     {% endfor %}
                 </div>
             </div>

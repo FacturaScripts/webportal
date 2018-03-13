@@ -73,6 +73,11 @@ class ChatBotMessage extends Base\ModelClass
         $this->ischatbot = false;
     }
 
+    public function date(): string
+    {
+        return date('d-m-Y H:i:s', $this->creationtime);
+    }
+
     public static function primaryColumn()
     {
         return 'idchat';

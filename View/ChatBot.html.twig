@@ -12,14 +12,21 @@
                             </h1>
                         </div>
                         <div class="panel-body">
-                            {% for msg in fsc.messages %}
-                                <div class="title">
-                                    <div class="title-content">
-                                        {% if msg.ischatbot %}<b>ChatBot</b>{% else %}{{ i18n.trans('you') }}{% endif %}:
-                                        {{ msg.content }}
-                                    </div>
-                                </div>
-                            {% endfor %}
+                            <table class="table table-striped">
+                                <tbody>
+                                    {% for msg in fsc.messages %}
+                                        <tr>
+                                            <td class="text-right">
+                                                {% if msg.ischatbot %}<b>ChatBot</b>{% else %}{{ i18n.trans('you') }}{% endif %}:
+                                            </td>
+                                            <td>{{ msg.content }}</td>
+                                            <td class="text-right">
+                                                <small>{{ msg.date() }}</small>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                         <div class="panel-footer">
                             <form action="{{ fsc.url() }}" method="post">
