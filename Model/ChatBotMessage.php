@@ -88,7 +88,7 @@ class ChatBotMessage extends Base\ModelClass
 
     public static function tableName()
     {
-        return 'chatbotmessages';
+        return 'chatbot_messages';
     }
 
     public function test()
