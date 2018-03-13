@@ -65,17 +65,20 @@ class ChatBotMessage extends Base\ModelClass
      * @var bool
      */
     public $ischatbot;
+    
+    /**
+     * To indentify unmatched messages. Messages with unknown response.
+     *
+     * @var bool
+     */
+    public $unmatched;
 
     public function clear()
     {
         parent::clear();
         $this->creationtime = time();
         $this->ischatbot = false;
-    }
-
-    public function date(): string
-    {
-        return date('d-m-Y H:i:s', $this->creationtime);
+        $this->unmatched = false;
     }
 
     public static function primaryColumn()
@@ -92,5 +95,29 @@ class ChatBotMessage extends Base\ModelClass
     {
         $this->content = Utils::noHtml($this->content);
         return true;
+    }
+
+    public function timesince(): string
+    {
+        $time = time() - $this->creationtime;
+        $finalTime = ($time < 1) ? 1 : $time;
+        $tokens = array(
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+
+        foreach ($tokens as $unit => $text) {
+            if ($finalTime < $unit) {
+                continue;
+            }
+
+            $numberOfUnits = floor($finalTime / $unit);
+            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+        }
     }
 }

@@ -32,6 +32,12 @@
         <null>NO</null>
         <default>false</default>
     </column>
+    <column>
+        <name>unmatched</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>false</default>
+    </column>
     <constraint>
         <name>chatbotmessages_pkey</name>
         <type>PRIMARY KEY (idchat)</type>

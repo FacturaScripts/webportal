@@ -5,36 +5,35 @@
         <div class="container grid-lg">
             <div class="row">
                 <div class="col-12">
+                    <h1 class="text-center">
+                        <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> ChatBot
+                    </h1>
                     <div class="panel">
                         <div class="panel-header">
-                            <h1 class="text-center">
-                                <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> ChatBot
-                            </h1>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <tbody>
-                                    {% for msg in fsc.messages %}
-                                        <tr>
-                                            <td class="text-right">
-                                                {% if msg.ischatbot %}<b>ChatBot</b>{% else %}{{ i18n.trans('you') }}{% endif %}:
-                                            </td>
-                                            <td>{{ msg.content }}</td>
-                                            <td class="text-right">
-                                                <small>{{ msg.date() }}</small>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="panel-footer">
                             <form action="{{ fsc.url() }}" method="post">
                                 <div class="input-group">
                                     <input name="question" type="text" class="form-input" autofocus="">
                                     <button class="btn btn-primary input-group-btn">{{ i18n.trans('send') }}</button>
                                 </div>
                             </form>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <tbody>
+                                    {% for msg in fsc.messages %}
+                                        {% set trClass = msg.unmatched ? 'text-error' : '' %}
+                                        <tr class="{{ trClass }}">
+                                            <td class="text-right">
+                                                {% if msg.ischatbot %}<b>ChatBot</b>{% else %}{{ i18n.trans('you') }}{% endif %}:
+                                            </td>
+                                            <td>{{ msg.content }}</td>
+                                            <td class="text-right">
+                                                <small>{{ msg.timesince() }}</small>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

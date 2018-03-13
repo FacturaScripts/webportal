@@ -41,11 +41,16 @@
             </column>
         </group>
         <group name="facebook-login" title="facebook-login" icon="fa-facebook" numcolumns="12">
-            <column name="app-id" numcolumns="6" order="100">
+            <column name="fb-app-id" title="app-id" numcolumns="6" order="100">
                 <widget type="text" fieldname="fbappid"/>
             </column>
-            <column name="app-secret" numcolumns="6" order="110">
-                <widget type="text" fieldname="fbappsecret"/>
+            <column name="fb-app-secret" title="app-secret" numcolumns="6" order="110">
+                <widget type="password" fieldname="fbappsecret"/>
+            </column>
+        </group>
+        <group name="dialogflow" title="dialogflow" icon="fa-commenting-o" numcolumns="12">
+            <column name="df-cli-token" title="client-access-token" numcolumns="12" order="100">
+                <widget type="password" fieldname="dfclitoken"/>
             </column>
         </group>
     </columns>

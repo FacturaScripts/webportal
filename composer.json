@@ -8,6 +8,7 @@
         }
     ],
     "require": {
-        "facebook/graph-sdk": "5.6.2"
+        "facebook/graph-sdk": "5.6.2",
+        "iboldurev/dialogflow": "dev-master"
     }
 }

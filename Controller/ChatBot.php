@@ -18,6 +18,10 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use DialogFlow\Client;
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use FacturaScripts\Plugins\webportal\Model\ChatBotMessage;
@@ -79,24 +83,47 @@ class ChatBot extends PortalController
     {
         $chatBotMessage = new ChatBotMessage();
         $where = [new DataBaseWhere('humanid', $this->getHumanid())];
-        $this->messages = $chatBotMessage->all($where, ['creationtime' => 'ASC']);
+        $this->messages = $chatBotMessage->all($where, ['creationtime' => 'DESC']);
     }
 
-    private function newChatMessage($content, $isChatbot = false)
+    private function newChatMessage(string $content, bool $unmatched = false, bool $isChatbot = false)
     {
         $chatBotMessage = new ChatBotMessage();
         $chatBotMessage->content = $content;
         $chatBotMessage->humanid = $this->getHumanid();
         $chatBotMessage->ischatbot = $isChatbot;
+        $chatBotMessage->unmatched = $unmatched;
+
+        if ($isChatbot) {
+            $chatBotMessage->creationtime++;
+        }
+
         $chatBotMessage->save();
     }
 
     private function processChat()
     {
         $userInput = $this->request->request->get('question', '');
-        if ('' !== $userInput) {
-            $this->newChatMessage($userInput);
+        if ('' === $userInput) {
+            return;
+        }
+
+        try {
+            $client = new Client(AppSettings::get('webportal', 'dfclitoken'));
+            $query = $client->get('query', [
+                'query' => $userInput,
+                'sessionId' => time()
+            ]);
+
+            $response = json_decode((string) $query->getBody(), true);
+            $botMessage = isset($response['result']['fulfillment']['speech']) ? $response['result']['fulfillment']['speech'] : '-';
+            $unmatched = ($response['result']['action'] === 'input.unknown');
+            $this->newChatMessage($userInput, $unmatched);
+            $this->newChatMessage($botMessage, $unmatched, true);
+        } catch (\Exception $error) {
             $this->newChatMessage($userInput, true);
+            $this->newChatMessage($error->getMessage(), true, true);
+            $this->miniLog->alert($error->getMessage());
         }
     }
 }
