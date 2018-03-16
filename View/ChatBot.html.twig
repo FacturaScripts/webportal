@@ -2,6 +2,7 @@
 
 {% block body %}
     <div class="body-section">
+        <br/>
         <div class="container grid-lg">
             <div class="row">
                 <div class="col-12">
@@ -12,7 +13,7 @@
                         <div class="panel-header">
                             <form action="{{ fsc.url() }}" method="post">
                                 <div class="input-group">
-                                    <input name="question" type="text" class="form-input" autofocus="">
+                                    <input name="question" type="text" class="form-input" autocomplete="off" autofocus=""/>
                                     <button class="btn btn-primary input-group-btn">{{ i18n.trans('send') }}</button>
                                 </div>
                             </form>
@@ -26,8 +27,8 @@
                                             <td class="text-right">
                                                 {% if msg.ischatbot %}<b>ChatBot</b>{% else %}{{ i18n.trans('you') }}{% endif %}:
                                             </td>
-                                            <td>{{ msg.content }}</td>
-                                            <td class="text-right">
+                                            <td>{{ msg.content|raw }}</td>
+                                            <td class="text-right hide-xs">
                                                 <small>{{ msg.timesince() }}</small>
                                             </td>
                                         </tr>
