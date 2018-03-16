@@ -28,6 +28,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class ListChatBotMessage extends ExtendedController\ListController
 {
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -38,6 +43,9 @@ class ListChatBotMessage extends ExtendedController\ListController
         return $pageData;
     }
 
+    /**
+     * TODO
+     */
     protected function createViews()
     {
         $this->addView('ChatBotMessage', 'ListChatBotMessage', 'chat-messages', 'fa-comments-o');

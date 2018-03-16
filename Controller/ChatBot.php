@@ -40,6 +40,11 @@ class ChatBot extends PortalController
      */
     public $messages = [];
 
+    /**
+     * TODO
+     *
+     * @return null|string
+     */
     public function getHumanid()
     {
         if ($this->user) {
@@ -53,6 +58,11 @@ class ChatBot extends PortalController
         return $this->request->getClientIp();
     }
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -63,6 +73,13 @@ class ChatBot extends PortalController
         return $pageData;
     }
 
+    /**
+     * TODO
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \FacturaScripts\Dinamic\Model\User $user
+     * @param \FacturaScripts\Core\Base\ControllerPermissions $permissions
+     */
     public function privateCore(&$response, $user, $permissions)
     {
         parent::privateCore($response, $user, $permissions);
@@ -71,6 +88,11 @@ class ChatBot extends PortalController
         $this->getChatMessages();
     }
 
+    /**
+     * TODO
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
@@ -79,6 +101,9 @@ class ChatBot extends PortalController
         $this->getChatMessages();
     }
 
+    /**
+     * TODO
+     */
     private function getChatMessages()
     {
         $chatBotMessage = new ChatBotMessage();
@@ -86,6 +111,13 @@ class ChatBot extends PortalController
         $this->messages = $chatBotMessage->all($where, ['creationtime' => 'DESC']);
     }
 
+    /**
+     * TODO
+     *
+     * @param string $content
+     * @param bool $unmatched
+     * @param bool $isChatbot
+     */
     private function newChatMessage(string $content, bool $unmatched = false, bool $isChatbot = false)
     {
         $chatBotMessage = new ChatBotMessage();
@@ -101,6 +133,9 @@ class ChatBot extends PortalController
         $chatBotMessage->save();
     }
 
+    /**
+     * TODO
+     */
     private function processChat()
     {
         $userInput = $this->request->request->get('question', '');

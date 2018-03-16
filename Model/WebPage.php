@@ -43,15 +43,15 @@ class WebPage extends Base\ModelClass
 
     /**
      * Custom controller to redir when clic on this link.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $customcontroller;
 
     /**
      * Page description.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $description;
 
@@ -64,14 +64,14 @@ class WebPage extends Base\ModelClass
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idpage;
 
     /**
      * Language code, in 2 characters,
-     * 
+     *
      * @var string
      */
     public $langcode;
@@ -92,56 +92,71 @@ class WebPage extends Base\ModelClass
 
     /**
      * Position number.
-     * 
+     *
      * @var int
      */
     public $ordernum;
 
     /**
      * Permanent link.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $permalink;
 
     /**
      * Short tittle to show on menu.
-     * 
+     *
      * @var string
      */
     public $shorttitle;
 
     /**
      * Show link on menu.
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $showonmenu;
 
     /**
      * Show link on footer.
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $showonfooter;
 
     /**
      * Page title.
-     * 
+     *
      * @var string
      */
     public $title;
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'webpages';
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idpage';
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public function primaryDescriptionColumn()
     {
         return 'permalink';
@@ -163,6 +178,9 @@ class WebPage extends Base\ModelClass
             . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
     }
 
+    /**
+     * TODO
+     */
     public function clear()
     {
         parent::clear();
@@ -175,6 +193,11 @@ class WebPage extends Base\ModelClass
         $this->showonfooter = true;
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public function link()
     {
         if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
@@ -184,6 +207,11 @@ class WebPage extends Base\ModelClass
         return FS_ROUTE . $this->permalink;
     }
 
+    /**
+     * TODO
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->cluster = Utils::noHtml($this->cluster);
@@ -195,7 +223,7 @@ class WebPage extends Base\ModelClass
 
         if ($this->langcode !== substr(FS_LANG, 0, 2) && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
             $this->permalink = '/' . $this->langcode . '/' . $this->permalink;
-        } elseif (substr($this->permalink, 0, 1) !== '/') {
+        } elseif ($this->permalink[0] !== '/') {
             $this->permalink = '/' . $this->permalink;
         }
 

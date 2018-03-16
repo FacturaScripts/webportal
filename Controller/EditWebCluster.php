@@ -29,6 +29,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditWebCluster extends ExtendedController\PanelController
 {
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -40,12 +45,21 @@ class EditWebCluster extends ExtendedController\PanelController
         return $pageData;
     }
 
+    /**
+     * TODO
+     */
     protected function createViews()
     {
         $this->addEditView('WebCluster', 'EditWebCluster', 'cluster', 'fa-newspaper-o');
         $this->addListView('WebPage', 'ListWebPage', 'pages', 'fa-globe');
     }
 
+    /**
+     * TODO
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
     protected function loadData($keyView, $view)
     {
         switch ($keyView) {

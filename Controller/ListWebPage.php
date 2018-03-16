@@ -29,6 +29,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class ListWebPage extends ExtendedController\ListController
 {
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -39,6 +44,9 @@ class ListWebPage extends ExtendedController\ListController
         return $pageData;
     }
 
+    /**
+     * TODO
+     */
     protected function createViews()
     {
         /// Web pages
@@ -63,12 +71,20 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebCluster', 'title');
     }
 
+    /**
+     * TODO
+     *
+     * @param string $action
+     */
     protected function execAfterAction($action)
     {
         $this->setPortalAsHome();
         parent::execAfterAction($action);
     }
 
+    /**
+     * TODO
+     */
     private function setPortalAsHome()
     {
         $appSettings = new AppSettings();

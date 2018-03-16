@@ -28,6 +28,11 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 class PortalHome extends PortalController
 {
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();

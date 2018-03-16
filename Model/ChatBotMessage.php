@@ -40,28 +40,28 @@ class ChatBotMessage extends Base\ModelClass
 
     /**
      * Creation time, in seconds.
-     * 
+     *
      * @var int
      */
     public $creationtime;
 
     /**
      * Human identification.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $humanid;
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idchat;
 
     /**
      * To identify chatbot messages,
-     * 
+     *
      * @var bool
      */
     public $ischatbot;
@@ -73,6 +73,9 @@ class ChatBotMessage extends Base\ModelClass
      */
     public $unmatched;
 
+    /**
+     * TODO
+     */
     public function clear()
     {
         parent::clear();
@@ -81,22 +84,42 @@ class ChatBotMessage extends Base\ModelClass
         $this->unmatched = false;
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idchat';
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'chatbot_messages';
     }
 
+    /**
+     * TODO
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->content = Utils::noHtml($this->content);
         return true;
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public function timesince(): string
     {
         $time = time() - $this->creationtime;

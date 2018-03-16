@@ -33,42 +33,65 @@ class WebCluster extends Base\ModelClass
 
     /**
      * Page description.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $description;
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idcluster;
 
     /**
      * Page title.
-     * 
+     *
      * @var string
      */
     public $title;
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'webclusters';
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idcluster';
     }
 
+    /**
+     * TODO
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
         $this->title = Utils::noHtml($this->title);
         return true;
     }
-    
+
+    /**
+     * TODO
+     *
+     * @param string $type
+     * @param string $list
+     *
+     * @return string
+     */
     public function url($type = 'auto', $list = 'List')
     {
         return parent::url($type, 'ListWebPage?active=List');

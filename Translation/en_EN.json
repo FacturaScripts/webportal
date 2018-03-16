@@ -1,0 +1,22 @@
+{
+    "chat-messages": "Chat messages",
+    "chatbot": "ChatBot",
+    "permalink": "Permalink",
+    "ordernum": "Order num.",
+    "blocks": "Blocks",
+    "idpage": "Page Id",
+    "clusters": "Clusters",
+    "showonmenu": "Show on menu",
+    "showonfooter": "Show on footer",
+    "content": "Content",
+    "noindex": "No index",
+    "short-title": "Short title",
+    "custom-controller": "Custom controller",
+    "cluster": "Cluster",
+    "icon": "Icon",
+    "preview": "Preview",
+    "web-block": "Web block",
+    "unmatched": "Unmatched",
+    "is-chatbot": "Is chatbot",
+    "humanid": "Human id"
+}

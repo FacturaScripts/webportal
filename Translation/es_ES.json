@@ -1,0 +1,22 @@
+{
+    "chat-messages": "Mensajes de chat",
+    "chatbot": "ChatBot",
+    "permalink": "Enlace",
+    "ordernum": "Núm. orden",
+    "blocks": "Bloques",
+    "idpage": "Id. página",
+    "clusters": "Clusters",
+    "showonmenu": "Mostrar en menú",
+    "showonfooter": "Mostrar en pié",
+    "content": "Contenido",
+    "noindex": "No indexar",
+    "short-title": "Título corto",
+    "custom-controller": "Controlador personalizado",
+    "cluster": "Cluster",
+    "icon": "Icono",
+    "preview": "Previsualizar",
+    "web-block": "Bloque web",
+    "unmatched": "Sin coincidencia",
+    "is-chatbot": "Es chatbot",
+    "humanid": "Id. humano"
+}

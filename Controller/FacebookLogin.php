@@ -36,6 +36,11 @@ class FacebookLogin extends PortalController
 
     private $facebook;
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -46,6 +51,11 @@ class FacebookLogin extends PortalController
         return $pageData;
     }
 
+    /**
+     * TODO
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
@@ -63,6 +73,9 @@ class FacebookLogin extends PortalController
         }
     }
 
+    /**
+     * TODO
+     */
     private function login()
     {
         $this->facebook = new Facebook([

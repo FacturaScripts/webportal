@@ -30,6 +30,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditWebPage extends ExtendedController\PanelController
 {
 
+    /**
+     * TODO
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -41,12 +46,21 @@ class EditWebPage extends ExtendedController\PanelController
         return $pageData;
     }
 
+    /**
+     * TODO
+     */
     protected function createViews()
     {
         $this->addEditView('WebPage', 'EditWebPage', 'page', 'fa-globe');
         $this->addListView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
     }
 
+    /**
+     * TODO
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
     protected function loadData($keyView, $view)
     {
         switch ($keyView) {
@@ -62,6 +76,14 @@ class EditWebPage extends ExtendedController\PanelController
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param ExtendedController\BaseView $view
+     * @param string $action
+     *
+     * @return bool
+     */
     protected function execPreviousAction($view, $action)
     {
         if ($action === 'save') {
@@ -71,6 +93,12 @@ class EditWebPage extends ExtendedController\PanelController
         return parent::execPreviousAction($view, $action);
     }
 
+    /**
+     * TODO
+     *
+     * @param ExtendedController\EditView $view
+     * @param string $action
+     */
     protected function execAfterAction($view, $action)
     {
         switch ($action) {
@@ -91,6 +119,9 @@ class EditWebPage extends ExtendedController\PanelController
         }
     }
 
+    /**
+     * TODO
+     */
     private function setRoutes()
     {
         $appRouter = new AppRouter();

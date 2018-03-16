@@ -33,49 +33,62 @@ class WebBlock extends Base\ModelClass
 
     /**
      * Block content.
-     * 
+     *
      * @var string
      */
     public $content;
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idblock;
 
     /**
      * Page related.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idpage;
 
     /**
      * Position number.
-     * 
+     *
      * @var int
      */
     public $ordernum;
 
     /**
      * Block type: body, meta, css, javascript, footer.
-     * 
+     *
      * @var string
      */
     public $type;
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'webblocks';
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idblock';
     }
 
+    /**
+     * TODO
+     */
     public function clear()
     {
         parent::clear();
@@ -84,6 +97,11 @@ class WebBlock extends Base\ModelClass
         $this->type = 'bodyContainer';
     }
 
+    /**
+     * TODO
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->content = Utils::noHtml($this->content);
@@ -91,11 +109,24 @@ class WebBlock extends Base\ModelClass
         return true;
     }
 
+    /**
+     * TODO
+     *
+     * @return string
+     */
     public function content()
     {
         return Utils::fixHtml($this->content);
     }
-    
+
+    /**
+     * TODO
+     *
+     * @param string $type
+     * @param string $list
+     *
+     * @return string
+     */
     public function url($type = 'auto', $list = 'List')
     {
         return parent::url($type, 'ListWebPage?active=List');
