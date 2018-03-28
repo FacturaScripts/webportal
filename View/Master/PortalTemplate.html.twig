@@ -22,9 +22,8 @@
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
         {% endblock %}
         {% block css %}
-            <link rel="stylesheet" href="{{ asset('Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css') }}" />
-            <link rel="stylesheet" href="{{ asset('node_modules/font-awesome/css/font-awesome.min.css') }}" />
-            <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/webportal.css') }}" />
+            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css',
+'node_modules/font-awesome/css/font-awesome.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}

@@ -21,11 +21,11 @@
 
 <view>
     <columns>
-        <group name="data" numcolumns="3">
+        <group name="data" numcolumns="12">
             <column name="code" display="none" order="100">
                 <widget type="text" fieldname="idblock" required="true" />
             </column>
-            <column name="type" numcolumns="12" order="110">
+            <column name="type" numcolumns="4" order="110">
                 <widget type="select" fieldname="type">
                     <values title="body">body</values>
                     <values title="bodyContainer">bodyContainer</values>
@@ -37,17 +37,17 @@
                     <values title="footer">footer</values>
                 </widget>
             </column>
-            <column name="idpage" numcolumns="12" order="120">
+            <column name="idpage" title="page" numcolumns="4" order="120">
                 <widget type="select" fieldname="idpage">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
                 </widget>
             </column>
-            <column name="sort" numcolumns="12" order="130">
+            <column name="sort" numcolumns="4" order="130">
                 <widget type="number" fieldname="ordernum" />
             </column>
         </group>
-        <group name="content" numcolumns="9">
-            <column name="content" numcolumns="12" order="140">
+        <group name="content" numcolumns="12">
+            <column name="content" title="content" numcolumns="12" order="140">
                 <widget type="html" fieldname="content" />
             </column>
         </group>

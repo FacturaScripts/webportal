@@ -51,7 +51,7 @@ class ListChatBotMessage extends ExtendedController\ListController
         $this->addView('ChatBotMessage', 'ListChatBotMessage', 'chat-messages', 'fa-comments-o');
         $this->addSearchFields('ListChatBotMessage', ['content', 'humanid']);
         $this->addOrderBy('ListChatBotMessage', 'idchat', 'code');
-        $this->addOrderBy('ListChatBotMessage', 'creationdate', 'date');
+        $this->addOrderBy('ListChatBotMessage', 'creationtime', 'date', 2);
         $this->addFilterAutocomplete('ListChatBotMessage', 'humanid', 'chatbot_messages', 'humanid', 'humanid');
         $this->addFilterCheckbox('ListChatBotMessage', 'unmatched', 'unmatched');
         $this->addFilterCheckbox('ListChatBotMessage', 'ischatbot', 'is-chatbot');
