@@ -37,7 +37,7 @@ class FacebookLogin extends PortalController
     private $facebook;
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -52,7 +52,7 @@ class FacebookLogin extends PortalController
     }
 
     /**
-     * TODO
+     * Execute the public part of the controller.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      */
@@ -74,7 +74,7 @@ class FacebookLogin extends PortalController
     }
 
     /**
-     * TODO
+     * Login with Facebook.
      */
     private function login()
     {

@@ -29,7 +29,7 @@ class PortalHome extends PortalController
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */

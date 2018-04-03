@@ -133,7 +133,7 @@ class WebPage extends Base\ModelClass
     public $title;
 
     /**
-     * TODO
+     * Returns the name of the table that uses this model.
      *
      * @return string
      */
@@ -143,7 +143,7 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the column that is the primary key of the model.
      *
      * @return string
      */
@@ -153,7 +153,7 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the column that describes the model, such as name, description...
      *
      * @return string
      */
@@ -179,7 +179,7 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Reset the values of all model properties.
      */
     public function clear()
     {
@@ -194,7 +194,7 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Return default homepage link or permalink.
      *
      * @return string
      */
@@ -208,7 +208,7 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns True if there is no errors on properties values.
      *
      * @return bool
      */

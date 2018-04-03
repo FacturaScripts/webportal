@@ -30,7 +30,7 @@ class EditChatBotMessage extends ExtendedController\PanelController
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -46,7 +46,7 @@ class EditChatBotMessage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Load views
      */
     protected function createViews()
     {
@@ -57,7 +57,7 @@ class EditChatBotMessage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Load data view procedure
      *
      * @param string $keyView
      * @param ExtendedController\BaseView $view

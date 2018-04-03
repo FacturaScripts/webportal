@@ -31,7 +31,7 @@ class EditWebPage extends ExtendedController\PanelController
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -47,7 +47,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Load views
      */
     protected function createViews()
     {
@@ -56,7 +56,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Load data view procedure
      *
      * @param string $keyView
      * @param ExtendedController\BaseView $view
@@ -77,7 +77,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Run the actions that alter data before reading it
      *
      * @param ExtendedController\BaseView $view
      * @param string $action
@@ -94,7 +94,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Run the controller after actions
      *
      * @param ExtendedController\EditView $view
      * @param string $action
@@ -108,7 +108,7 @@ class EditWebPage extends ExtendedController\PanelController
                     $this->response->headers->set('Refresh', '0; ' . $model->link());
                     $this->setRoutes();
                 }
-                if($this->user->homepage !== 'PortalHome') {
+                if ($this->user->homepage !== 'PortalHome') {
                     $this->user->homepage = 'PortalHome';
                     $this->user->save();
                 }
@@ -120,7 +120,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * TODO
+     * Set routes from model WebPage.
      */
     private function setRoutes()
     {

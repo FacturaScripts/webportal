@@ -30,7 +30,7 @@ class EditWebBlock extends ExtendedController\EditController
 {
 
     /**
-     * TODO
+     * Returns the model name
      *
      * @return string
      */
@@ -56,7 +56,7 @@ class EditWebBlock extends ExtendedController\EditController
     }
 
     /**
-     * TODO
+     * Run the controller after actions
      *
      * @param ExtendedController\EditView $view
      * @param string $action

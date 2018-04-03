@@ -67,7 +67,7 @@ class WebBlock extends Base\ModelClass
     public $type;
 
     /**
-     * TODO
+     * Returns the name of the table that uses this model.
      *
      * @return string
      */
@@ -77,7 +77,7 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the column that is the primary key of the model.
      *
      * @return string
      */
@@ -87,7 +87,7 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Reset the values of all model properties.
      */
     public function clear()
     {
@@ -98,7 +98,7 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns True if there is no errors on properties values.
      *
      * @return bool
      */
@@ -110,7 +110,7 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Return content
      *
      * @return string
      */
@@ -120,7 +120,7 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the url where to see / modify the data.
      *
      * @param string $type
      * @param string $list

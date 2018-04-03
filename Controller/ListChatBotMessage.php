@@ -29,7 +29,7 @@ class ListChatBotMessage extends ExtendedController\ListController
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -44,7 +44,7 @@ class ListChatBotMessage extends ExtendedController\ListController
     }
 
     /**
-     * TODO
+     * Load views
      */
     protected function createViews()
     {

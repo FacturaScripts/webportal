@@ -39,7 +39,7 @@ class FacebookCallback extends PortalController
     private $facebook;
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -54,7 +54,7 @@ class FacebookCallback extends PortalController
     }
 
     /**
-     * TODO
+     * Execute the public part of the controller.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      */
@@ -81,7 +81,7 @@ class FacebookCallback extends PortalController
     }
 
     /**
-     * TODO
+     * Return facebook callback url.
      */
     private function getFacebookCallback()
     {
@@ -103,7 +103,7 @@ class FacebookCallback extends PortalController
     }
 
     /**
-     * TODO
+     * Chek contact data and update if needed.
      *
      * @param $data
      */

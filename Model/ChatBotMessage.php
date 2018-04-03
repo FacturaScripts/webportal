@@ -74,7 +74,7 @@ class ChatBotMessage extends Base\ModelClass
     public $unmatched;
 
     /**
-     * TODO
+     * Reset the values of all model properties.
      */
     public function clear()
     {
@@ -85,7 +85,7 @@ class ChatBotMessage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the column that is the primary key of the model.
      *
      * @return string
      */
@@ -95,7 +95,7 @@ class ChatBotMessage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the table that uses this model.
      *
      * @return string
      */
@@ -105,7 +105,7 @@ class ChatBotMessage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns True if there is no errors on properties values.
      *
      * @return bool
      */
@@ -116,7 +116,7 @@ class ChatBotMessage extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Return time since now.
      *
      * @return string
      */

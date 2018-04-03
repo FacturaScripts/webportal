@@ -53,7 +53,7 @@ class WebCluster extends Base\ModelClass
     public $title;
 
     /**
-     * TODO
+     * Returns the name of the table that uses this model.
      *
      * @return string
      */
@@ -63,7 +63,7 @@ class WebCluster extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the name of the column that is the primary key of the model.
      *
      * @return string
      */
@@ -73,7 +73,7 @@ class WebCluster extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns True if there is no errors on properties values.
      *
      * @return bool
      */
@@ -85,7 +85,7 @@ class WebCluster extends Base\ModelClass
     }
 
     /**
-     * TODO
+     * Returns the url where to see / modify the data.
      *
      * @param string $type
      * @param string $list

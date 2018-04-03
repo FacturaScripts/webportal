@@ -30,7 +30,7 @@ class Sitemap extends Controller
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -45,7 +45,7 @@ class Sitemap extends Controller
     }
 
     /**
-     * TODO
+     * Execute the public part of the controller.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      */
@@ -56,7 +56,7 @@ class Sitemap extends Controller
     }
 
     /**
-     * TODO
+     * Runs the controller's private logic.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      * @param \FacturaScripts\Core\Model\User $user
@@ -69,7 +69,7 @@ class Sitemap extends Controller
     }
 
     /**
-     * TODO
+     * Generate sitemap.
      */
     private function generateSitemap()
     {
@@ -90,7 +90,7 @@ class Sitemap extends Controller
     }
 
     /**
-     * TODO
+     * Return sitemap items.
      *
      * @return array
      */
@@ -100,7 +100,7 @@ class Sitemap extends Controller
 
         $webpageModel = new WebPage();
         foreach ($webpageModel->all([], [], 0, 0) as $wpage) {
-            if($wpage->noindex) {
+            if ($wpage->noindex) {
                 continue;
             }
             

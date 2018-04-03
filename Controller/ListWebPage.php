@@ -30,7 +30,7 @@ class ListWebPage extends ExtendedController\ListController
 {
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -45,7 +45,7 @@ class ListWebPage extends ExtendedController\ListController
     }
 
     /**
-     * TODO
+     * Load views
      */
     protected function createViews()
     {
@@ -72,7 +72,7 @@ class ListWebPage extends ExtendedController\ListController
     }
 
     /**
-     * TODO
+     * Runs the controller actions
      *
      * @param string $action
      */
@@ -83,7 +83,7 @@ class ListWebPage extends ExtendedController\ListController
     }
 
     /**
-     * TODO
+     * Sets PortalHome as default homepage.
      */
     private function setPortalAsHome()
     {

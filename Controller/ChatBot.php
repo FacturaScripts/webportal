@@ -35,17 +35,17 @@ class ChatBot extends PortalController
 {
 
     /**
-     *
+     * All messages with ChatBot.
      * @var ChatBotMessage[]
      */
     public $messages = [];
 
     /**
-     * TODO
+     * Returns a human identifier.
      *
      * @return null|string
      */
-    public function getHumanid()
+    public function getHumanId()
     {
         if ($this->user) {
             return $this->user->nick;
@@ -59,7 +59,7 @@ class ChatBot extends PortalController
     }
 
     /**
-     * TODO
+     * Returns basic page attributes
      *
      * @return array
      */
@@ -74,7 +74,7 @@ class ChatBot extends PortalController
     }
 
     /**
-     * TODO
+     * Runs the controller's private logic.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      * @param \FacturaScripts\Dinamic\Model\User $user
@@ -89,7 +89,7 @@ class ChatBot extends PortalController
     }
 
     /**
-     * TODO
+     * Execute the public part of the controller.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
      */
@@ -102,17 +102,17 @@ class ChatBot extends PortalController
     }
 
     /**
-     * TODO
+     * Return all chat messages with this user.
      */
     private function getChatMessages()
     {
         $chatBotMessage = new ChatBotMessage();
-        $where = [new DataBaseWhere('humanid', $this->getHumanid())];
+        $where = [new DataBaseWhere('humanid', $this->getHumanId())];
         $this->messages = $chatBotMessage->all($where, ['creationtime' => 'DESC']);
     }
 
     /**
-     * TODO
+     * Saves new chat message (answer or reply).
      *
      * @param string $content
      * @param bool $unmatched
@@ -122,7 +122,7 @@ class ChatBot extends PortalController
     {
         $chatBotMessage = new ChatBotMessage();
         $chatBotMessage->content = $content;
-        $chatBotMessage->humanid = $this->getHumanid();
+        $chatBotMessage->humanid = $this->getHumanId();
         $chatBotMessage->ischatbot = $isChatbot;
         $chatBotMessage->unmatched = $unmatched;
 
@@ -134,7 +134,7 @@ class ChatBot extends PortalController
     }
 
     /**
-     * TODO
+     * Process answer and reply.
      */
     private function processChat()
     {
@@ -151,7 +151,8 @@ class ChatBot extends PortalController
             ]);
 
             $response = json_decode((string) $query->getBody(), true);
-            $botMessage = isset($response['result']['fulfillment']['speech']) ? $response['result']['fulfillment']['speech'] : '-';
+            $speech = $response['result']['fulfillment']['speech'];
+            $botMessage = $speech ?? '-';
             $unmatched = ($response['result']['action'] === 'input.unknown');
             $this->newChatMessage($userInput, $unmatched);
             $this->newChatMessage($botMessage, $unmatched, true);
