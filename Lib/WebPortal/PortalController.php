@@ -143,7 +143,6 @@ class PortalController extends Controller
     public function privateCore(&$response, $user, $permissions)
     {
         parent::privateCore($response, $user, $permissions);
-        $this->contactAuth();
         $this->processWebPage();
     }
 

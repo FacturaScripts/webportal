@@ -151,8 +151,7 @@ class ChatBot extends PortalController
             ]);
 
             $response = json_decode((string) $query->getBody(), true);
-            $speech = $response['result']['fulfillment']['speech'];
-            $botMessage = $speech ?? '-';
+            $botMessage = isset($response['result']['fulfillment']['speech']) ? $response['result']['fulfillment']['speech'] : '-';
             $unmatched = ($response['result']['action'] === 'input.unknown');
             $this->newChatMessage($userInput, $unmatched);
             $this->newChatMessage($botMessage, $unmatched, true);
