@@ -79,27 +79,25 @@ class EditWebPage extends ExtendedController\PanelController
     /**
      * Run the actions that alter data before reading it
      *
-     * @param ExtendedController\BaseView $view
      * @param string $action
      *
      * @return bool
      */
-    protected function execPreviousAction($view, $action)
+    protected function execPreviousAction($action)
     {
         if ($action === 'save') {
             $this->setRoutes();
         }
 
-        return parent::execPreviousAction($view, $action);
+        return parent::execPreviousAction($action);
     }
 
     /**
      * Run the controller after actions
      *
-     * @param ExtendedController\EditView $view
      * @param string $action
      */
-    protected function execAfterAction($view, $action)
+    protected function execAfterAction($action)
     {
         switch ($action) {
             case 'preview':
@@ -115,7 +113,7 @@ class EditWebPage extends ExtendedController\PanelController
                 break;
 
             default:
-                parent::execAfterAction($view, $action);
+                parent::execAfterAction($action);
         }
     }
 

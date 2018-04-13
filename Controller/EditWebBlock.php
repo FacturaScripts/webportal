@@ -58,10 +58,9 @@ class EditWebBlock extends ExtendedController\EditController
     /**
      * Run the controller after actions
      *
-     * @param ExtendedController\EditView $view
      * @param string $action
      */
-    protected function execAfterAction($view, $action)
+    protected function execAfterAction($action)
     {
         switch ($action) {
             case 'preview':
@@ -74,7 +73,7 @@ class EditWebBlock extends ExtendedController\EditController
                 break;
 
             default:
-                parent::execAfterAction($view, $action);
+                parent::execAfterAction($action);
         }
     }
 }
