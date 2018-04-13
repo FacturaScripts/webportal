@@ -120,7 +120,7 @@ class ChatBotMessage extends Base\ModelClass
      *
      * @return string
      */
-    public function timesince(): string
+    public function timesince()
     {
         $time = time() - $this->creationtime;
         $finalTime = ($time < 1) ? 1 : $time;

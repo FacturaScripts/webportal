@@ -18,5 +18,13 @@
     "web-block": "Web block",
     "unmatched": "Unmatched",
     "is-chatbot": "Is chatbot",
-    "humanid": "Human id"
+    "humanid": "Human id",
+    "webportal": "WebPortal",
+    "copyright-text": "Texto de Copyright",
+    "facebook-login": "Facebook login",
+    "app-id": "Application Id",
+    "app-secret": "Application Secret",
+    "dev-api-key": "Developer API Key",
+    "dialogflow": "DialogFlow",
+    "client-access-token": "Client Access Token"
 }
