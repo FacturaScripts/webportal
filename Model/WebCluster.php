@@ -92,7 +92,7 @@ class WebCluster extends Base\ModelClass
      *
      * @return string
      */
-    public function url($type = 'auto', $list = 'List')
+    public function url(string $type = 'auto', string $list = 'List')
     {
         return parent::url($type, 'ListWebPage?active=List');
     }
