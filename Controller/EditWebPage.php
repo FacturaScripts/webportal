@@ -51,8 +51,8 @@ class EditWebPage extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('WebPage', 'EditWebPage', 'page', 'fa-globe');
-        $this->addListView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
+        $this->addEditView('EditWebPage', 'WebPage', 'page', 'fa-globe');
+        $this->addListView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
     }
 
     /**

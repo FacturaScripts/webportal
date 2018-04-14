@@ -50,8 +50,8 @@ class EditChatBotMessage extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('ChatBotMessage', 'EditChatBotMessage', 'chat-message', 'fa-commenting-o');
-        $this->addListView('ChatBotMessage', 'ListChatBotMessage', 'chat-messages', 'fa-comments');
+        $this->addEditView('EditChatBotMessage', 'ChatBotMessage', 'chat-message', 'fa-commenting-o');
+        $this->addListView('ListChatBotMessage', 'ChatBotMessage', 'chat-messages', 'fa-comments');
         
         $this->views['ListChatBotMessage']->disableColumn('humanid', true);
     }

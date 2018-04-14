@@ -50,8 +50,8 @@ class EditWebCluster extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('WebCluster', 'EditWebCluster', 'cluster', 'fa-newspaper-o');
-        $this->addListView('WebPage', 'ListWebPage', 'pages', 'fa-globe');
+        $this->addEditView('EditWebCluster', 'WebCluster', 'cluster', 'fa-newspaper-o');
+        $this->addListView('ListWebPage', 'WebPage', 'pages', 'fa-globe');
     }
 
     /**
