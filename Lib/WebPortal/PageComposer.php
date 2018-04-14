@@ -32,23 +32,26 @@ class PageComposer
 {
 
     /**
-     *
+     * List of web blocks.
      * @var WebBlock[]
      */
     private $blocks;
 
     /**
-     *
+     * A web block.
      * @var WebBlock
      */
     private $webBlock;
 
     /**
-     *
+     * A web cluster.
      * @var WebCluster
      */
     private $webCluster;
 
+    /**
+     * PageComposer constructor.
+     */
     public function __construct()
     {
         $this->blocks = [];
@@ -56,6 +59,13 @@ class PageComposer
         $this->webCluster = new WebCluster();
     }
 
+    /**
+     * Return blocks for a specific type.
+     *
+     * @param $type
+     *
+     * @return array
+     */
     public function getBlocks($type)
     {
         $blocks = [];
@@ -68,6 +78,11 @@ class PageComposer
         return $blocks;
     }
 
+    /**
+     * Set a page to blocks.
+     *
+     * @param WebPage $page
+     */
     public function set(WebPage &$page)
     {
         $this->blocks = [];
@@ -87,6 +102,12 @@ class PageComposer
         $this->checkBody($page);
     }
 
+    /**
+     * Add blocks to a page.
+     *
+     * @param WebBlock $block
+     * @param WebPage $page
+     */
     private function addBlock(WebBlock $block, WebPage $page)
     {
         switch ($block->type) {
@@ -106,6 +127,11 @@ class PageComposer
         $this->blocks[] = $block;
     }
 
+    /**
+     * Check body of a page.
+     *
+     * @param WebPage $page
+     */
     private function checkBody(WebPage &$page)
     {
         $bodyFound = false;
@@ -132,6 +158,14 @@ class PageComposer
         }
     }
 
+    /**
+     * Returns a cluster of html page.
+     *
+     * @param $idcluster
+     * @param WebPage $page
+     *
+     * @return string
+     */
     private function getClusterHtml($idcluster, WebPage $page)
     {
         $cluster = $this->webCluster->get($idcluster);
@@ -157,12 +191,26 @@ class PageComposer
         return $html;
     }
 
+    /**
+     * Returns the color class.
+     *
+     * @param int $key
+     *
+     * @return mixed
+     */
     private function getColorClass($key = 0)
     {
         $classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
         return $classes[$key];
     }
 
+    /**
+     * Returns the H1 title for the content.
+     *
+     * @param $content
+     *
+     * @return string
+     */
     private function getH1Ttitle($content)
     {
         $matches = [];
@@ -170,6 +218,14 @@ class PageComposer
         return isset($matches[1][0]) ? $matches[1][0] : '';
     }
 
+    /**
+     * Returns the HTML container.
+     *
+     * @param $content
+     * @param string $containerClass
+     *
+     * @return string
+     */
     private function getHtmlContainer($content, $containerClass = 'container grid-lg')
     {
         return '<br/><div class="' . $containerClass . '"><div class="row"><div class="col-12">'

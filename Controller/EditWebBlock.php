@@ -29,6 +29,11 @@ use FacturaScripts\Plugins\webportal\Model\WebPage;
 class EditWebBlock extends ExtendedController\EditController
 {
 
+    /**
+     * Returns the model name
+     *
+     * @return string
+     */
     public function getModelClassName()
     {
         return 'WebBlock';
@@ -50,7 +55,12 @@ class EditWebBlock extends ExtendedController\EditController
         return $pagedata;
     }
 
-    protected function execAfterAction($view, $action)
+    /**
+     * Run the controller after actions
+     *
+     * @param string $action
+     */
+    protected function execAfterAction($action)
     {
         switch ($action) {
             case 'preview':
@@ -63,7 +73,7 @@ class EditWebBlock extends ExtendedController\EditController
                 break;
 
             default:
-                parent::execAfterAction($view, $action);
+                parent::execAfterAction($action);
         }
     }
 }

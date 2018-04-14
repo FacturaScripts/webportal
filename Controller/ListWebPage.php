@@ -29,6 +29,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class ListWebPage extends ExtendedController\ListController
 {
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -39,36 +44,47 @@ class ListWebPage extends ExtendedController\ListController
         return $pageData;
     }
 
+    /**
+     * Load views
+     */
     protected function createViews()
     {
         /// Web pages
-        $this->addView('WebPage', 'ListWebPage', 'pages', 'fa-globe');
+        $this->addView('ListWebPage', 'WebPage', 'pages', 'fa-globe');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'ordernum');
-        $this->addFilterSelect('ListWebPage', 'langcode', 'webpages', 'langcode', 'langcode');
+        $this->addFilterSelect('ListWebPage', 'langcode', 'webpages', 'langcode');
 
         /// Web blocks
-        $this->addView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
+        $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
         $this->addSearchFields('ListWebBlock', ['content']);
         $this->addOrderBy('ListWebBlock', 'idblock', 'code');
         $this->addOrderBy('ListWebBlock', 'idpage');
         $this->addOrderBy('ListWebBlock', 'ordernum');
-        $this->addFilterSelect('ListWebBlock', 'type', 'webblocks', 'type', 'type');
+        $this->addFilterSelect('ListWebBlock', 'type', 'webblocks', 'type');
 
         /// Web clusters
-        $this->addView('WebCluster', 'ListWebCluster', 'clusters', 'fa-newspaper-o');
+        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper-o');
         $this->addSearchFields('ListWebCluster', ['title', 'description']);
         $this->addOrderBy('ListWebCluster', 'title');
     }
 
+    /**
+     * Runs the controller actions
+     *
+     * @param string $action
+     */
     protected function execAfterAction($action)
     {
         $this->setPortalAsHome();
         parent::execAfterAction($action);
     }
 
+    /**
+     * Sets PortalHome as default homepage.
+     */
     private function setPortalAsHome()
     {
         $appSettings = new AppSettings();

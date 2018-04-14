@@ -29,6 +29,11 @@ use FacturaScripts\Plugins\webportal\Model\WebPage;
 class Sitemap extends Controller
 {
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -39,18 +44,33 @@ class Sitemap extends Controller
         return $pageData;
     }
 
+    /**
+     * Execute the public part of the controller.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
         $this->generateSitemap();
     }
 
+    /**
+     * Runs the controller's private logic.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \FacturaScripts\Core\Model\User $user
+     * @param \FacturaScripts\Core\Base\ControllerPermissions $permissions
+     */
     public function privateCore(&$response, $user, $permissions)
     {
         parent::privateCore($response, $user, $permissions);
         $this->generateSitemap();
     }
 
+    /**
+     * Generate sitemap.
+     */
     private function generateSitemap()
     {
         $this->setTemplate(false);
@@ -69,13 +89,18 @@ class Sitemap extends Controller
         $this->response->setContent($xml);
     }
 
+    /**
+     * Return sitemap items.
+     *
+     * @return array
+     */
     private function getSitemapItems()
     {
         $items = [];
 
         $webpageModel = new WebPage();
         foreach ($webpageModel->all([], [], 0, 0) as $wpage) {
-            if($wpage->noindex) {
+            if ($wpage->noindex) {
                 continue;
             }
             

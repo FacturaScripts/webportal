@@ -30,6 +30,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditWebPage extends ExtendedController\PanelController
 {
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -41,12 +46,21 @@ class EditWebPage extends ExtendedController\PanelController
         return $pageData;
     }
 
+    /**
+     * Load views
+     */
     protected function createViews()
     {
         $this->addEditView('WebPage', 'EditWebPage', 'page', 'fa-globe');
         $this->addListView('WebBlock', 'ListWebBlock', 'blocks', 'fa-code');
     }
 
+    /**
+     * Load data view procedure
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
     protected function loadData($keyView, $view)
     {
         switch ($keyView) {
@@ -62,16 +76,28 @@ class EditWebPage extends ExtendedController\PanelController
         }
     }
 
-    protected function execPreviousAction($view, $action)
+    /**
+     * Run the actions that alter data before reading it
+     *
+     * @param string $action
+     *
+     * @return bool
+     */
+    protected function execPreviousAction($action)
     {
         if ($action === 'save') {
             $this->setRoutes();
         }
 
-        return parent::execPreviousAction($view, $action);
+        return parent::execPreviousAction($action);
     }
 
-    protected function execAfterAction($view, $action)
+    /**
+     * Run the controller after actions
+     *
+     * @param string $action
+     */
+    protected function execAfterAction($action)
     {
         switch ($action) {
             case 'preview':
@@ -80,17 +106,20 @@ class EditWebPage extends ExtendedController\PanelController
                     $this->response->headers->set('Refresh', '0; ' . $model->link());
                     $this->setRoutes();
                 }
-                if($this->user->homepage !== 'PortalHome') {
+                if ($this->user->homepage !== 'PortalHome') {
                     $this->user->homepage = 'PortalHome';
                     $this->user->save();
                 }
                 break;
 
             default:
-                parent::execAfterAction($view, $action);
+                parent::execAfterAction($action);
         }
     }
 
+    /**
+     * Set routes from model WebPage.
+     */
     private function setRoutes()
     {
         $appRouter = new AppRouter();

@@ -33,49 +33,62 @@ class WebBlock extends Base\ModelClass
 
     /**
      * Block content.
-     * 
+     *
      * @var string
      */
     public $content;
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idblock;
 
     /**
      * Page related.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idpage;
 
     /**
      * Position number.
-     * 
+     *
      * @var int
      */
     public $ordernum;
 
     /**
      * Block type: body, meta, css, javascript, footer.
-     * 
+     *
      * @var string
      */
     public $type;
 
+    /**
+     * Returns the name of the table that uses this model.
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'webblocks';
     }
 
+    /**
+     * Returns the name of the column that is the primary key of the model.
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idblock';
     }
 
+    /**
+     * Reset the values of all model properties.
+     */
     public function clear()
     {
         parent::clear();
@@ -84,6 +97,11 @@ class WebBlock extends Base\ModelClass
         $this->type = 'bodyContainer';
     }
 
+    /**
+     * Returns True if there is no errors on properties values.
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->content = Utils::noHtml($this->content);
@@ -91,12 +109,25 @@ class WebBlock extends Base\ModelClass
         return true;
     }
 
+    /**
+     * Return content
+     *
+     * @return string
+     */
     public function content()
     {
         return Utils::fixHtml($this->content);
     }
-    
-    public function url($type = 'auto', $list = 'List')
+
+    /**
+     * Returns the url where to see / modify the data.
+     *
+     * @param string $type
+     * @param string $list
+     *
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'List')
     {
         return parent::url($type, 'ListWebPage?active=List');
     }

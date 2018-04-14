@@ -29,6 +29,11 @@ use FacturaScripts\Core\Lib\ExtendedController;
 class EditChatBotMessage extends ExtendedController\PanelController
 {
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -40,6 +45,9 @@ class EditChatBotMessage extends ExtendedController\PanelController
         return $pageData;
     }
 
+    /**
+     * Load views
+     */
     protected function createViews()
     {
         $this->addEditView('ChatBotMessage', 'EditChatBotMessage', 'chat-message', 'fa-commenting-o');
@@ -48,6 +56,12 @@ class EditChatBotMessage extends ExtendedController\PanelController
         $this->views['ListChatBotMessage']->disableColumn('humanid', true);
     }
 
+    /**
+     * Load data view procedure
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
     protected function loadData($keyView, $view)
     {
         switch ($keyView) {

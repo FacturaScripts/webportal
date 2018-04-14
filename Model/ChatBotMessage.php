@@ -40,28 +40,28 @@ class ChatBotMessage extends Base\ModelClass
 
     /**
      * Creation time, in seconds.
-     * 
+     *
      * @var int
      */
     public $creationtime;
 
     /**
      * Human identification.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $humanid;
 
     /**
      * Primary key.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     public $idchat;
 
     /**
      * To identify chatbot messages,
-     * 
+     *
      * @var bool
      */
     public $ischatbot;
@@ -73,6 +73,9 @@ class ChatBotMessage extends Base\ModelClass
      */
     public $unmatched;
 
+    /**
+     * Reset the values of all model properties.
+     */
     public function clear()
     {
         parent::clear();
@@ -81,23 +84,43 @@ class ChatBotMessage extends Base\ModelClass
         $this->unmatched = false;
     }
 
+    /**
+     * Returns the name of the column that is the primary key of the model.
+     *
+     * @return string
+     */
     public static function primaryColumn()
     {
         return 'idchat';
     }
 
+    /**
+     * Returns the name of the table that uses this model.
+     *
+     * @return string
+     */
     public static function tableName()
     {
         return 'chatbot_messages';
     }
 
+    /**
+     * Returns True if there is no errors on properties values.
+     *
+     * @return bool
+     */
     public function test()
     {
         $this->content = Utils::noHtml($this->content);
         return true;
     }
 
-    public function timesince(): string
+    /**
+     * Return time since now.
+     *
+     * @return string
+     */
+    public function timesince()
     {
         $time = time() - $this->creationtime;
         $finalTime = ($time < 1) ? 1 : $time;

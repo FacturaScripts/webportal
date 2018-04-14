@@ -38,6 +38,11 @@ class FacebookCallback extends PortalController
 
     private $facebook;
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -48,6 +53,11 @@ class FacebookCallback extends PortalController
         return $pageData;
     }
 
+    /**
+     * Execute the public part of the controller.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
@@ -70,6 +80,9 @@ class FacebookCallback extends PortalController
         }
     }
 
+    /**
+     * Return facebook callback url.
+     */
     private function getFacebookCallback()
     {
         $helper = $this->facebook->getRedirectLoginHelper();
@@ -89,6 +102,11 @@ class FacebookCallback extends PortalController
         $this->checkContact($userData);
     }
 
+    /**
+     * Chek contact data and update if needed.
+     *
+     * @param $data
+     */
     private function checkContact($data)
     {
         if (!isset($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {

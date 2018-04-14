@@ -48,42 +48,56 @@ class PortalController extends Controller
     const PUBLIC_UPDATE_ACTIVITY_PERIOD = 3600;
 
     /**
-     *
+     * The associated contact.
      * @var Contacto
      */
     public $contact;
 
     /**
-     *
+     * The page composer.
      * @var PageComposer
      */
     public $pageComposer;
 
     /**
-     *
+     * If cookies policy needs to be showed to the user.
      * @var bool
      */
     public $showCookiesPolicy = false;
 
     /**
      * The web page object.
-     * 
-     * @var Model\WebPage 
+     * @var Model\WebPage
      */
     public $webPage;
 
+    /**
+     * Return public footer.
+     *
+     * @return array
+     */
     public function getPublicFooter()
     {
         $where = [new DataBaseWhere('showonfooter', true)];
         return $this->getAuxMenu($where);
     }
 
+    /**
+     * Return public menu.
+     *
+     * @return array
+     */
     public function getPublicMenu()
     {
         $where = [new DataBaseWhere('showonmenu', true)];
         return $this->getAuxMenu($where);
     }
 
+    /**
+     * Return cookies policy message.
+     *
+     * @return string
+     */
     public function cookiesPolicy()
     {
         $html = '';
@@ -98,7 +112,8 @@ class PortalController extends Controller
     }
 
     /**
-     * 
+     * Execute the public part of the controller.
+     *
      * @param Response $response
      */
     public function publicCore(&$response)
@@ -119,7 +134,8 @@ class PortalController extends Controller
     }
 
     /**
-     * 
+     * Runs the controller's private logic.
+     *
      * @param Response              $response
      * @param User                  $user
      * @param ControllerPermissions $permissions
@@ -130,6 +146,11 @@ class PortalController extends Controller
         $this->processWebPage();
     }
 
+    /**
+     * Authenticate the contact.
+     *
+     * @return bool|void
+     */
     private function contactAuth()
     {
         if ('TRUE' === $this->request->query->get('public_logout')) {
@@ -161,6 +182,13 @@ class PortalController extends Controller
         return;
     }
 
+    /**
+     * Return auxiliar menu.
+     *
+     * @param $where
+     *
+     * @return array
+     */
     private function getAuxMenu($where)
     {
         if ($this->webPage) {
@@ -171,6 +199,11 @@ class PortalController extends Controller
         return $webPageModel->all($where, ['ordernum' => 'ASC', 'shorttitle' => 'ASC']);
     }
 
+    /**
+     * Returns the webpage.
+     *
+     * @return Model\WebPage
+     */
     private function getWebPage()
     {
         $webPage = new Model\WebPage();
@@ -185,6 +218,9 @@ class PortalController extends Controller
         return $webPage;
     }
 
+    /**
+     * Process the web page.
+     */
     private function processWebPage()
     {
         $this->setTemplate('Master/PortalTemplate');
@@ -194,6 +230,12 @@ class PortalController extends Controller
         $this->pageComposer->set($this->webPage);
     }
 
+    /**
+     * Update contact cookies.
+     *
+     * @param Contacto $contact
+     * @param bool $force
+     */
     protected function updateCookies(Contacto &$contact, bool $force = false)
     {
         if ($force || \time() - \strtotime($contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
