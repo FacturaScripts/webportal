@@ -13,20 +13,32 @@
     {% endif %}
 {% endmacro %}
 
-{% macro loginModal(i18n) %}
+{% macro loginModal(i18n, appSettings) %}
     <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
         <div class="modal modal-sm" id="loginModal">
             <a href="#close" class="modal-overlay" aria-label="Close"></a>
             <div class="modal-container">
                 <div class="modal-header">
-                    <a href="#close" onclick="return hideModal('loginModal')" class="btn btn-clear float-right" aria-label="Close"></a>
+                    <a href="#close" onclick="return hideModal('loginModal');" class="btn btn-clear float-right" aria-label="Close"></a>
                     <div class="modal-title h5">{{ i18n.trans('login') }}</div>
                 </div>
                 <div class="modal-body">
                     <div class="content">
-                        <a href="{{ constant('FS_ROUTE') }}/FacebookLogin" class="btn btn-block">
-                            <i class="fa fa-facebook fa-fw" aria-hidden="true"></i> facebook
-                        </a>
+                        {% if appSettings.get('webportal','fbappid','') != '' %}
+                            <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook" class="btn btn-block">
+                                <i class="fa fa-facebook fa-fw" aria-hidden="true"></i> facebook
+                            </a>
+                        {% endif %}
+                        {% if appSettings.get('webportal','googleappid','') != '' %}
+                            <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google" class="btn btn-block">
+                                <i class="fa fa-google fa-fw" aria-hidden="true"></i> google
+                            </a>
+                        {% endif %}
+                        {% if appSettings.get('webportal','twitterappid','') != '' %}
+                            <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter" class="btn btn-block">
+                                <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                            </a>
+                        {% endif %}
                         <div class="divider text-center" data-content="OR"></div>
                         <div class="form-group">
                             <div class="input-group">

@@ -55,7 +55,9 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'ordernum');
-        $this->addFilterSelect('ListWebPage', 'langcode', 'webpages', 'langcode');
+
+        $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
+        $this->addFilterSelect('ListWebPage', 'langcode', 'language', 'langcode', $langValues);
 
         /// Web blocks
         $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
@@ -63,7 +65,9 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebBlock', 'idblock', 'code');
         $this->addOrderBy('ListWebBlock', 'idpage');
         $this->addOrderBy('ListWebBlock', 'ordernum');
-        $this->addFilterSelect('ListWebBlock', 'type', 'webblocks', 'type');
+
+        $blockTypes = $this->codeModel->all('webblocks', 'type', 'type');
+        $this->addFilterSelect('ListWebBlock', 'type', 'type', 'type', $blockTypes);
 
         /// Web clusters
         $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper-o');

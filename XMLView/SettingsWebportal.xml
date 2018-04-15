@@ -48,6 +48,22 @@
                 <widget type="password" fieldname="fbappsecret"/>
             </column>
         </group>
+        <group name="google-login" title="google-login" icon="fa-google" numcolumns="12">
+            <column name="goole-app-id" title="app-id" numcolumns="6" order="100">
+                <widget type="text" fieldname="googleappid"/>
+            </column>
+            <column name="google-app-secret" title="app-secret" numcolumns="6" order="110">
+                <widget type="password" fieldname="googleappsecret"/>
+            </column>
+        </group>
+        <group name="twitter-login" title="twitter-login" icon="fa-twitter" numcolumns="12">
+            <column name="twitter-app-id" title="app-id" numcolumns="6" order="100">
+                <widget type="text" fieldname="twitterappid"/>
+            </column>
+            <column name="twitter-app-secret" title="app-secret" numcolumns="6" order="110">
+                <widget type="password" fieldname="twitterappsecret"/>
+            </column>
+        </group>
         <group name="dialogflow" title="dialogflow" icon="fa-commenting-o" numcolumns="12">
             <column name="df-cli-token" title="client-access-token" numcolumns="12" order="100">
                 <widget type="password" fieldname="dfclitoken"/>
