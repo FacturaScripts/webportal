@@ -33,14 +33,17 @@
         <column name="lang-code" display="center" order="125">
             <widget type="text" fieldname="langcode" />
         </column>
-        <column name="showonmenu" display="center" order="130">
+        <column name="showonmenu" title="show-on-menu" display="center" order="130">
             <widget type="checkbox" fieldname="showonmenu" />
         </column>
-        <column name="showonfooter" display="center" order="140">
+        <column name="showonfooter" title="show-on-footer" display="center" order="140">
             <widget type="checkbox" fieldname="showonfooter" />
         </column>
         <column name="sort" display="right" order="150">
             <widget type="number" fieldname="ordernum" />
+        </column>
+        <column name="visitcount" display="right" order="160">
+            <widget type="number" fieldname="visitcount" />
         </column>
     </columns>
 </view>

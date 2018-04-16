@@ -39,13 +39,13 @@
             </column>
         </group>
         <group name="visibility" numcolumns="3">
-            <column name="showonmenu" numcolumns="12" order="100">
+            <column name="showonmenu" title="show-on-menu" numcolumns="12" order="100">
                 <widget type="checkbox" fieldname="showonmenu" />
             </column>
-            <column name="showonfooter" numcolumns="12" order="110">
+            <column name="showonfooter" title="show-on-footer" numcolumns="12" order="110">
                 <widget type="checkbox" fieldname="showonfooter" />
             </column>
-            <column name="noindex" numcolumns="12" order="120">
+            <column name="noindex" title="no-index" numcolumns="12" order="120">
                 <widget type="checkbox" fieldname="noindex" />
             </column>
         </group>

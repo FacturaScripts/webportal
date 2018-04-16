@@ -55,9 +55,13 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'ordernum');
+        $this->addOrderBy('ListWebPage', 'visitcount');
 
         $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
         $this->addFilterSelect('ListWebPage', 'langcode', 'language', 'langcode', $langValues);
+        $this->addFilterCheckbox('ListWebPage', 'showonmenu', 'show-on-menu', 'showonmenu');
+        $this->addFilterCheckbox('ListWebPage', 'showonfooter', 'show-on-footer', 'showonfooter');
+        $this->addFilterCheckbox('ListWebPage', 'noindex', 'no-index', 'noindex');
 
         /// Web blocks
         $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');

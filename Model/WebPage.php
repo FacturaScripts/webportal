@@ -35,13 +35,6 @@ class WebPage extends Base\ModelClass
     const DEFAULT_CONTROLLER = 'PortalHome';
 
     /**
-     * Cluster name to add this page.
-     *
-     * @var string
-     */
-    public $cluster;
-
-    /**
      * Custom controller to redir when clic on this link.
      *
      * @var string
@@ -61,6 +54,13 @@ class WebPage extends Base\ModelClass
      * @var string
      */
     public $icon;
+
+    /**
+     * Cluster id.
+     *
+     * @var int
+     */
+    public $idcluster;
 
     /**
      * Primary key.
@@ -112,18 +112,18 @@ class WebPage extends Base\ModelClass
     public $shorttitle;
 
     /**
-     * Show link on menu.
-     *
-     * @var bool
-     */
-    public $showonmenu;
-
-    /**
      * Show link on footer.
      *
      * @var bool
      */
     public $showonfooter;
+
+    /**
+     * Show link on menu.
+     *
+     * @var bool
+     */
+    public $showonmenu;
 
     /**
      * Page title.
@@ -133,13 +133,67 @@ class WebPage extends Base\ModelClass
     public $title;
 
     /**
-     * Returns the name of the table that uses this model.
+     * Visit counter.
+     *
+     * @var int
+     */
+    public $visitcount;
+
+    /**
+     * Reset the values of all model properties.
+     */
+    public function clear()
+    {
+        parent::clear();
+        $this->icon = 'fa-file-o';
+        $this->langcode = substr(FS_LANG, 0, 2);
+        $this->lastmod = date('d-m-Y');
+        $this->noindex = false;
+        $this->ordernum = 100;
+        $this->showonmenu = true;
+        $this->showonfooter = true;
+        $this->visitcount = 0;
+    }
+
+    /**
+     * Increase visit counter and save. To improve performancem this will only happen every 10 times.
+     */
+    public function increaseVisitCount()
+    {
+        if (mt_rand(0, 9) === 0) {
+            $this->visitcount += 10;
+            $this->save();
+        }
+    }
+
+    /**
+     * This function is called when creating the model table. Returns the SQL
+     * that will be executed after the creation of the table. Useful to insert values
+     * default.
      *
      * @return string
      */
-    public static function tableName()
+    public function install()
     {
-        return 'webpages';
+        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
+            . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
+            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
+            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o'),"
+            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
+    }
+
+    /**
+     * Return default homepage link or permalink.
+     *
+     * @return string
+     */
+    public function link()
+    {
+        if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
+            return FS_ROUTE . '/';
+        }
+
+        return FS_ROUTE . $this->permalink;
     }
 
     /**
@@ -163,48 +217,13 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * This function is called when creating the model table. Returns the SQL
-     * that will be executed after the creation of the table. Useful to insert values
-     * default.
+     * Returns the name of the table that uses this model.
      *
      * @return string
      */
-    public function install()
+    public static function tableName()
     {
-        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
-            . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
-            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
-            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o'),"
-            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
-    }
-
-    /**
-     * Reset the values of all model properties.
-     */
-    public function clear()
-    {
-        parent::clear();
-        $this->icon = 'fa-file-o';
-        $this->langcode = substr(FS_LANG, 0, 2);
-        $this->lastmod = date('d-m-Y');
-        $this->noindex = false;
-        $this->ordernum = 100;
-        $this->showonmenu = true;
-        $this->showonfooter = true;
-    }
-
-    /**
-     * Return default homepage link or permalink.
-     *
-     * @return string
-     */
-    public function link()
-    {
-        if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
-            return FS_ROUTE . '/';
-        }
-
-        return FS_ROUTE . $this->permalink;
+        return 'webpages';
     }
 
     /**
@@ -214,7 +233,6 @@ class WebPage extends Base\ModelClass
      */
     public function test()
     {
-        $this->cluster = Utils::noHtml($this->cluster);
         $this->description = str_replace("\n", ' ', $this->description);
         $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
         $this->permalink = Utils::noHtml($this->permalink);

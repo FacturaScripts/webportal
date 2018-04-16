@@ -226,6 +226,7 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
+        $this->webPage->increaseVisitCount();
 
         $this->pageComposer->set($this->webPage);
     }
