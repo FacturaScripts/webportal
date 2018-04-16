@@ -87,10 +87,12 @@ class PageComposer
     {
         $this->blocks = [];
 
-        /// Page blocks for this page
-        $where = [new DataBaseWhere('idpage', $page->idpage)];
-        foreach ($this->webBlock->all($where, ['ordernum' => 'ASC'], 0, 0) as $block) {
-            $this->addBlock($block, $page);
+        if (null !== $page) {
+            /// Page blocks for this page
+            $where = [new DataBaseWhere('idpage', $page->idpage)];
+            foreach ($this->webBlock->all($where, ['ordernum' => 'ASC'], 0, 0) as $block) {
+                $this->addBlock($block, $page);
+            }
         }
 
         /// Page blocks for all pages

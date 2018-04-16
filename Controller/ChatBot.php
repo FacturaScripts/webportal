@@ -23,8 +23,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use DialogFlow\Client;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use FacturaScripts\Plugins\webportal\Model\ChatBotMessage;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Description of ChatBot
@@ -36,9 +38,26 @@ class ChatBot extends PortalController
 
     /**
      * All messages with ChatBot.
+     * 
      * @var ChatBotMessage[]
      */
     public $messages = [];
+
+    public function getSessionId()
+    {
+        if ($this->showCookiesPolicy) {
+            return time();
+        }
+
+        if ('' !== $this->request->cookies->get('chatbotSessionId', '')) {
+            return $this->request->cookies->get('chatbotSessionId', '');
+        }
+
+        $sessionId = Utils::randomString();
+        $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
+        $this->response->headers->setCookie(new Cookie('chatbotSessionId', $sessionId, $expire));
+        return $sessionId;
+    }
 
     /**
      * Returns a human identifier.
@@ -76,8 +95,8 @@ class ChatBot extends PortalController
     /**
      * Runs the controller's private logic.
      *
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \FacturaScripts\Dinamic\Model\User $user
+     * @param \Symfony\Component\HttpFoundation\Response      $response
+     * @param \FacturaScripts\Dinamic\Model\User              $user
      * @param \FacturaScripts\Core\Base\ControllerPermissions $permissions
      */
     public function privateCore(&$response, $user, $permissions)
@@ -101,6 +120,27 @@ class ChatBot extends PortalController
         $this->getChatMessages();
     }
 
+    private function askDialogflow(string $token, string $userInput)
+    {
+        try {
+            $client = new Client($token);
+            $query = $client->get('query', [
+                'query' => $userInput,
+                'sessionId' => $this->getSessionId()
+            ]);
+
+            $response = json_decode((string) $query->getBody(), true);
+            $botMessage = $response['result']['fulfillment']['speech'] ?? '-';
+            $unmatched = ($response['result']['action'] === 'input.unknown');
+            $this->newChatMessage($userInput, $unmatched);
+            $this->newChatMessage($botMessage, $unmatched, true);
+        } catch (\Exception $error) {
+            $this->newChatMessage($userInput, true);
+            $this->newChatMessage($error->getMessage(), true, true);
+            $this->miniLog->alert($error->getMessage());
+        }
+    }
+
     /**
      * Return all chat messages with this user.
      */
@@ -115,8 +155,8 @@ class ChatBot extends PortalController
      * Saves new chat message (answer or reply).
      *
      * @param string $content
-     * @param bool $unmatched
-     * @param bool $isChatbot
+     * @param bool   $unmatched
+     * @param bool   $isChatbot
      */
     private function newChatMessage(string $content, bool $unmatched = false, bool $isChatbot = false)
     {
@@ -138,27 +178,12 @@ class ChatBot extends PortalController
      */
     private function processChat()
     {
+        $dfToken = AppSettings::get('webportal', 'dfclitoken', '');
         $userInput = $this->request->request->get('question', '');
-        if ('' === $userInput) {
+        if ('' === $dfToken || '' === $userInput) {
             return;
         }
 
-        try {
-            $client = new Client(AppSettings::get('webportal', 'dfclitoken'));
-            $query = $client->get('query', [
-                'query' => $userInput,
-                'sessionId' => time()
-            ]);
-
-            $response = json_decode((string) $query->getBody(), true);
-            $botMessage = $response['result']['fulfillment']['speech'] ?? '-';
-            $unmatched = ($response['result']['action'] === 'input.unknown');
-            $this->newChatMessage($userInput, $unmatched);
-            $this->newChatMessage($botMessage, $unmatched, true);
-        } catch (\Exception $error) {
-            $this->newChatMessage($userInput, true);
-            $this->newChatMessage($error->getMessage(), true, true);
-            $this->miniLog->alert($error->getMessage());
-        }
+        $this->askDialogflow($dfToken, $userInput);
     }
 }

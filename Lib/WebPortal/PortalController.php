@@ -72,6 +72,24 @@ class PortalController extends Controller
     public $webPage;
 
     /**
+     * Return cookies policy message.
+     *
+     * @return string
+     */
+    public function cookiesPolicy()
+    {
+        $html = '';
+        foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
+            $html = $cookiePage->description . ' <a href="' . $cookiePage->link() . '">'
+                . $this->i18n->trans('read-more') . '</a> | <a href="?okCookies=TRUE">'
+                . $this->i18n->trans('accept') . '</a>';
+            break;
+        }
+
+        return $html;
+    }
+
+    /**
      * Return public footer.
      *
      * @return array
@@ -91,24 +109,6 @@ class PortalController extends Controller
     {
         $where = [new DataBaseWhere('showonmenu', true)];
         return $this->getAuxMenu($where);
-    }
-
-    /**
-     * Return cookies policy message.
-     *
-     * @return string
-     */
-    public function cookiesPolicy()
-    {
-        $html = '';
-        foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
-            $html = $cookiePage->description . ' <a href="' . $cookiePage->link() . '">'
-                . $this->i18n->trans('read-more') . '</a> | <a href="?okCookies=TRUE">'
-                . $this->i18n->trans('accept') . '</a>';
-            break;
-        }
-
-        return $html;
     }
 
     /**
@@ -144,6 +144,7 @@ class PortalController extends Controller
     {
         parent::privateCore($response, $user, $permissions);
         $this->processWebPage();
+        $this->showCookiesPolicy = false;
     }
 
     /**
@@ -214,7 +215,11 @@ class PortalController extends Controller
             }
         }
 
-        $webPage->loadFromCode(false, [new DataBaseWhere('permalink', $this->uri)]);
+        if (!$webPage->loadFromCode('', [new DataBaseWhere('permalink', $this->uri)])) {
+            /// if no page found, then we use this page with noindex activated.
+            $webPage->noindex = true;
+        }
+
         return $webPage;
     }
 
@@ -226,7 +231,10 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
-        $this->webPage->increaseVisitCount();
+
+        if (null !== $this->webPage->idpage) {
+            $this->webPage->increaseVisitCount();
+        }
 
         $this->pageComposer->set($this->webPage);
     }
