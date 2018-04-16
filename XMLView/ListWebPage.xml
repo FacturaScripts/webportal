@@ -45,5 +45,8 @@
         <column name="visitcount" display="right" order="160">
             <widget type="number" fieldname="visitcount" />
         </column>
+        <column name="lastmod" title="last-update" display="right" order="170">
+            <widget type="date" fieldname="lastmod" />
+        </column>
     </columns>
 </view>

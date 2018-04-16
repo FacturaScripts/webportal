@@ -56,6 +56,7 @@ class ListWebPage extends ExtendedController\ListController
         $this->addOrderBy('ListWebPage', 'title');
         $this->addOrderBy('ListWebPage', 'ordernum');
         $this->addOrderBy('ListWebPage', 'visitcount');
+        $this->addOrderBy('ListWebPage', 'lastmod', 'last-update');
 
         $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
         $this->addFilterSelect('ListWebPage', 'langcode', 'language', 'langcode', $langValues);

@@ -147,7 +147,10 @@ class ChatBot extends PortalController
     private function getChatMessages()
     {
         $chatBotMessage = new ChatBotMessage();
-        $where = [new DataBaseWhere('humanid', $this->getHumanId())];
+        $where = [
+            new DataBaseWhere('humanid', $this->getHumanId()),
+            new DataBaseWhere('creationtime', time() - self::PUBLIC_COOKIES_EXPIRE, '>')
+        ];
         $this->messages = $chatBotMessage->all($where, ['creationtime' => 'DESC']);
     }
 
