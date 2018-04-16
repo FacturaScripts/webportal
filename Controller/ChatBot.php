@@ -103,8 +103,8 @@ class ChatBot extends PortalController
     {
         parent::privateCore($response, $user, $permissions);
         $this->setTemplate('ChatBot');
-        $this->processChat();
         $this->getChatMessages();
+        $this->processChat();
     }
 
     /**
@@ -116,8 +116,8 @@ class ChatBot extends PortalController
     {
         parent::publicCore($response);
         $this->setTemplate('ChatBot');
-        $this->processChat();
         $this->getChatMessages();
+        $this->processChat();
     }
 
     private function askDialogflow(string $token, string $userInput)
@@ -133,10 +133,10 @@ class ChatBot extends PortalController
             $botMessage = $response['result']['fulfillment']['speech'] ?? '-';
             $unmatched = ($response['result']['action'] === 'input.unknown');
             $this->newChatMessage($userInput, $unmatched);
-            $this->newChatMessage($botMessage, $unmatched, true);
+            $this->newChatMessage($botMessage, false, true);
         } catch (\Exception $error) {
             $this->newChatMessage($userInput, true);
-            $this->newChatMessage($error->getMessage(), true, true);
+            $this->newChatMessage($error->getMessage(), false, true);
             $this->miniLog->alert($error->getMessage());
         }
     }
@@ -173,7 +173,9 @@ class ChatBot extends PortalController
             $chatBotMessage->creationtime++;
         }
 
-        $chatBotMessage->save();
+        if ($chatBotMessage->save()) {
+            array_unshift($this->messages, $chatBotMessage);
+        }
     }
 
     /**
@@ -184,9 +186,22 @@ class ChatBot extends PortalController
         $dfToken = AppSettings::get('webportal', 'dfclitoken', '');
         $userInput = $this->request->request->get('question', '');
         if ('' === $dfToken || '' === $userInput) {
+            /// no token or message
             return;
         }
 
-        $this->askDialogflow($dfToken, $userInput);
+        if (null !== $this->contact || null !== $this->user) {
+            $this->askDialogflow($dfToken, $userInput);
+            return;
+        }
+
+        /// anonymous comment. We check message limits.
+        $maxAnonymousMsgs = AppSettings::get('webportal', 'dfmaxanonymous', '');
+        if ('' === $maxAnonymousMsgs || count($this->messages) < (int) $maxAnonymousMsgs) {
+            $this->askDialogflow($dfToken, $userInput);
+            return;
+        }
+
+        $this->setTemplate('Master/LoginToContinue');
     }
 }

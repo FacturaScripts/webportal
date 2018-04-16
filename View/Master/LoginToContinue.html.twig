@@ -1,0 +1,19 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    <div class="body-section">
+        <br/>
+        <div class="container grid-lg">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1>
+                        <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> {{ i18n.trans('login-to-continue') }}
+                    </h1>
+                    <a class="btn" href="#" onclick="return showModal('loginModal');">
+                        <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> {{ i18n.trans('login') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
