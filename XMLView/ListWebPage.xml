@@ -49,4 +49,10 @@
             <widget type="date" fieldname="lastmod" />
         </column>
     </columns>
+    <rows>
+        <row type="status" fieldname="noindex">
+            <option color="table-warning">1</option>
+            <option color="table-success">0</option>
+        </row>
+    </rows>
 </view>

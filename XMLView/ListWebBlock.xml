@@ -37,4 +37,15 @@
             <widget type="number" fieldname="ordernum" />
         </column>
     </columns>
+    <rows>
+        <row type="status" fieldname="type">
+            <option color="table-warning">meta</option>
+            <option color="table-warning">css</option>
+            <option color="table-warning">javascript</option>
+            <option color="table-warning">javascriptWithCookies</option>
+            <option color="table-success">body</option>
+            <option color="table-success">bodyContainer</option>
+            <option color="table-success">bodyCluster</option>
+        </row>
+    </rows>
 </view>
