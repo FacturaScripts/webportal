@@ -24,10 +24,10 @@
         <column name="code" display="none" order="100">
             <widget type="text" fieldname="idchat" onclick="EditChatBotMessage" />
         </column>
-        <column name="humanid" display="left" order="110">
+        <column name="humanid" order="110">
             <widget type="text" fieldname="humanid" />
         </column>
-        <column name="content" display="left" order="120">
+        <column name="content" order="120">
             <widget type="text" fieldname="content" />
         </column>
         <column name="unmatched" display="center" order="130">

@@ -24,13 +24,13 @@
         <column name="code" display="none" order="100">
             <widget type="text" fieldname="idblock" onclick="EditWebBlock" />
         </column>
-        <column name="type" display="left" order="110">
+        <column name="type" order="110">
             <widget type="text" fieldname="type" />
         </column>
-        <column name="page" display="left" order="120">
+        <column name="page" order="120">
             <widget type="text" fieldname="idpage" />
         </column>
-        <column name="content" display="left" order="130">
+        <column name="content" order="130">
             <widget type="text" fieldname="content" />
         </column>
         <column name="sort" display="right" order="150">

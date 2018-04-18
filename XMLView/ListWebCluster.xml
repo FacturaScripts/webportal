@@ -21,10 +21,10 @@
 
 <view>
     <columns>
-        <column name="code" display="left" order="100">
+        <column name="code" order="100">
             <widget type="text" fieldname="idcluster" onclick="EditWebCluster" />
         </column>
-        <column name="title" display="left" order="120">
+        <column name="title" order="120">
             <widget type="text" fieldname="title" />
         </column>
         <column name="description" order="125">
