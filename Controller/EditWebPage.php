@@ -23,7 +23,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
- * Description of EditWebPage
+ * Description of EditWebPage.
  *
  * @author Carlos García Gómez
  */
@@ -31,7 +31,7 @@ class EditWebPage extends ExtendedController\PanelController
 {
 
     /**
-     * Returns basic page attributes
+     * Returns basic page attributes.
      *
      * @return array
      */
@@ -47,7 +47,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * Load views
+     * Load views.
      */
     protected function createViews()
     {
@@ -56,7 +56,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * Load data view procedure
+     * Load data view procedure.
      *
      * @param string $keyView
      * @param ExtendedController\BaseView $view
@@ -77,7 +77,7 @@ class EditWebPage extends ExtendedController\PanelController
     }
 
     /**
-     * Run the actions that alter data before reading it
+     * Run the actions that alter data before reading it.
      *
      * @param string $action
      *
@@ -85,15 +85,19 @@ class EditWebPage extends ExtendedController\PanelController
      */
     protected function execPreviousAction($action)
     {
-        if ($action === 'save') {
+        if (!parent::execPreviousAction($action)) {
+            return false;
+        }
+
+        if ($action === 'save' || $action === 'delete') {
             $this->setRoutes();
         }
 
-        return parent::execPreviousAction($action);
+        return true;
     }
 
     /**
-     * Run the controller after actions
+     * Run the controller after actions.
      *
      * @param string $action
      */
@@ -123,7 +127,10 @@ class EditWebPage extends ExtendedController\PanelController
     private function setRoutes()
     {
         $appRouter = new AppRouter();
-        foreach ($this->views['EditWebPage']->getModel()->all() as $webpage) {
+        $appRouter->clear();
+
+        $webPages = $this->views['EditWebPage']->getModel()->all([], [], 0, 0);
+        foreach ($webPages as $webpage) {
             $customController = empty($webpage->customcontroller) ? 'PortalHome' : $webpage->customcontroller;
             $appRouter->setRoute($webpage->permalink, $customController, $webpage->idpage);
         }

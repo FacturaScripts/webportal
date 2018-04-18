@@ -33,18 +33,21 @@ class PageComposer
 
     /**
      * List of web blocks.
+     * 
      * @var WebBlock[]
      */
     private $blocks;
 
     /**
      * A web block.
+     * 
      * @var WebBlock
      */
     private $webBlock;
 
     /**
      * A web cluster.
+     * 
      * @var WebCluster
      */
     private $webCluster;
@@ -62,11 +65,11 @@ class PageComposer
     /**
      * Return blocks for a specific type.
      *
-     * @param $type
+     * @param string $type
      *
      * @return array
      */
-    public function getBlocks($type)
+    public function getBlocks(string $type): array
     {
         $blocks = [];
         foreach ($this->blocks as $block) {
@@ -108,7 +111,7 @@ class PageComposer
      * Add blocks to a page.
      *
      * @param WebBlock $block
-     * @param WebPage $page
+     * @param WebPage  $page
      */
     private function addBlock(WebBlock $block, WebPage $page)
     {
@@ -163,12 +166,12 @@ class PageComposer
     /**
      * Returns a cluster of html page.
      *
-     * @param $idcluster
+     * @param int     $idcluster
      * @param WebPage $page
      *
      * @return string
      */
-    private function getClusterHtml($idcluster, WebPage $page)
+    private function getClusterHtml(int $idcluster, WebPage $page): string
     {
         $cluster = $this->webCluster->get($idcluster);
         if (!$cluster) {
@@ -198,22 +201,22 @@ class PageComposer
      *
      * @param int $key
      *
-     * @return mixed
+     * @return string
      */
-    private function getColorClass($key = 0)
+    private function getColorClass(int $key = 0): string
     {
         $classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-        return $classes[$key];
+        return isset($classes[$key]) ? $classes[$key] : 'light';
     }
 
     /**
      * Returns the H1 title for the content.
      *
-     * @param $content
+     * @param string $content
      *
      * @return string
      */
-    private function getH1Ttitle($content)
+    private function getH1Ttitle(string $content): string
     {
         $matches = [];
         preg_match_all("/<h1>(.*?)<\/h1>/", $content, $matches);
@@ -223,12 +226,12 @@ class PageComposer
     /**
      * Returns the HTML container.
      *
-     * @param $content
+     * @param string $content
      * @param string $containerClass
      *
      * @return string
      */
-    private function getHtmlContainer($content, $containerClass = 'container grid-lg')
+    private function getHtmlContainer(string $content, string $containerClass = 'container grid-lg'): string
     {
         return '<br/><div class="' . $containerClass . '"><div class="row"><div class="col-12">'
             . $content . '</div></div></div>';

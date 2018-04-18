@@ -49,24 +49,28 @@ class PortalController extends Controller
 
     /**
      * The associated contact.
+     * 
      * @var Contacto
      */
     public $contact;
 
     /**
      * The page composer.
+     * 
      * @var PageComposer
      */
     public $pageComposer;
 
     /**
      * If cookies policy needs to be showed to the user.
+     * 
      * @var bool
      */
     public $showCookiesPolicy = false;
 
     /**
      * The web page object.
+     * 
      * @var Model\WebPage
      */
     public $webPage;
@@ -209,17 +213,27 @@ class PortalController extends Controller
     {
         $webPage = new Model\WebPage();
 
+        /// show default page?
         if ($this->uri === '/' || $this->uri === 'index.php') {
             if ($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
                 return $webPage;
             }
         }
 
-        if (!$webPage->loadFromCode('', [new DataBaseWhere('permalink', $this->uri)])) {
-            /// if no page found, then we use this page with noindex activated.
-            $webPage->noindex = true;
+        /// perfect match
+        if ($webPage->loadFromCode('', [new DataBaseWhere('permalink', $this->uri)])) {
+            return $webPage;
         }
 
+        /// match with pages with * in permalink
+        foreach ($webPage->all([new DataBaseWhere('permalink', '*', 'LIKE')], [], 0, 0) as $wpage) {
+            if (0 === strncmp($this->uri, $wpage->permalink, strlen($wpage->permalink) - 1)) {
+                return $wpage;
+            }
+        }
+
+        /// if no page found, then we use this page with noindex activated.
+        $webPage->noindex = true;
         return $webPage;
     }
 
