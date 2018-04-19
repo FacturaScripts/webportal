@@ -28,6 +28,14 @@
     min-height: 700px;
 }
 
+.body-padding {
+    padding: 10px 25px 10px 25px;
+}
+
 .footer-section {
     padding-bottom: 50px;
+}
+
+.container-padding {
+    padding: 10px 20px 10px 20px;
 }
