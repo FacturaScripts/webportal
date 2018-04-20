@@ -154,7 +154,7 @@ class PortalController extends Controller
     /**
      * Authenticate the contact.
      *
-     * @return bool|void
+     * @return bool
      */
     private function contactAuth()
     {
@@ -162,7 +162,7 @@ class PortalController extends Controller
             $this->response->headers->clearCookie('fsIdcontacto');
             $this->response->headers->clearCookie('fsLogkey');
             $this->contact = null;
-            return;
+            return false;
         }
 
         $idcontacto = $this->request->cookies->get('fsIdcontacto', '');
@@ -175,16 +175,16 @@ class PortalController extends Controller
             if ($contacto->verifyLogkey($this->request->cookies->get('fsLogkey'))) {
                 $this->contact = $contacto;
                 $this->updateCookies($this->contact);
-                return;
+                return true;
             }
 
             $this->miniLog->alert($this->i18n->trans('login-cookie-fail'));
             $this->response->headers->clearCookie('fsIdcontacto');
-            return;
+            return false;
         }
 
         $this->miniLog->alert($this->i18n->trans('login-contact-not-found'));
-        return;
+        return false;
     }
 
     /**
@@ -209,7 +209,7 @@ class PortalController extends Controller
      *
      * @return Model\WebPage
      */
-    private function getWebPage()
+    protected function getWebPage()
     {
         $webPage = new Model\WebPage();
 
@@ -240,7 +240,7 @@ class PortalController extends Controller
     /**
      * Process the web page.
      */
-    private function processWebPage()
+    protected function processWebPage()
     {
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
@@ -257,7 +257,7 @@ class PortalController extends Controller
      * Update contact cookies.
      *
      * @param Contacto $contact
-     * @param bool $force
+     * @param bool     $force
      */
     protected function updateCookies(Contacto &$contact, bool $force = false)
     {
