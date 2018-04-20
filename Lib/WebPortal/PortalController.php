@@ -220,14 +220,21 @@ class PortalController extends Controller
             }
         }
 
-        /// perfect match
+        /// perfect match?
         if ($webPage->loadFromCode('', [new DataBaseWhere('permalink', $this->uri)])) {
             return $webPage;
         }
 
-        /// match with pages with * in permalink
+        /// match with pages with * in permalink?
         foreach ($webPage->all([new DataBaseWhere('permalink', '*', 'LIKE')], [], 0, 0) as $wpage) {
             if (0 === strncmp($this->uri, $wpage->permalink, strlen($wpage->permalink) - 1)) {
+                return $wpage;
+            }
+        }
+
+        /// language root page?
+        if (in_array(strlen($this->uri), [3, 4])) {
+            foreach ($webPage->all([new DataBaseWhere('langcode', substr($this->uri, 1, 2))], [], 0, 0) as $wpage) {
                 return $wpage;
             }
         }

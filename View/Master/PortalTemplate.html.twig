@@ -84,9 +84,9 @@
         {% endblock %}
         {% import 'Macro/PortalTemplate.html.twig' as Macros %}
         {% block messages %}
-            <div class="container grid-lg">
+            <div class="container">
                 <div class="columns">
-                    <div class="col-12">
+                    <div class="column col-12">
                         {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}

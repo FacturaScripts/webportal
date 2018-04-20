@@ -129,10 +129,16 @@ class EditWebPage extends ExtendedController\PanelController
         $appRouter = new AppRouter();
         $appRouter->clear();
 
+        $langcodes = [FS_LANG];
         $webPages = $this->views['EditWebPage']->getModel()->all([], [], 0, 0);
         foreach ($webPages as $webpage) {
             $customController = empty($webpage->customcontroller) ? 'PortalHome' : $webpage->customcontroller;
             $appRouter->setRoute($webpage->permalink, $customController, $webpage->idpage);
+
+            if (!in_array($webpage->langcode, $langcodes)) {
+                $appRouter->setRoute('/' . $webpage->langcode . '/', $customController);
+                $langcodes[] = $webpage->langcode;
+            }
         }
     }
 }
