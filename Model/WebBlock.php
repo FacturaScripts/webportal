@@ -67,13 +67,24 @@ class WebBlock extends Base\ModelClass
     public $type;
 
     /**
-     * Returns the name of the table that uses this model.
+     * Reset the values of all model properties.
+     */
+    public function clear()
+    {
+        parent::clear();
+        $this->content = 'Hello world!';
+        $this->ordernum = 100;
+        $this->type = 'bodyContainer';
+    }
+
+    /**
+     * Return content
      *
      * @return string
      */
-    public static function tableName()
+    public function content()
     {
-        return 'webblocks';
+        return Utils::fixHtml($this->content);
     }
 
     /**
@@ -87,14 +98,13 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * Reset the values of all model properties.
+     * Returns the name of the table that uses this model.
+     *
+     * @return string
      */
-    public function clear()
+    public static function tableName()
     {
-        parent::clear();
-        $this->content = 'Hello world!';
-        $this->ordernum = 100;
-        $this->type = 'bodyContainer';
+        return 'webblocks';
     }
 
     /**
@@ -107,16 +117,6 @@ class WebBlock extends Base\ModelClass
         $this->content = Utils::noHtml($this->content);
 
         return true;
-    }
-
-    /**
-     * Return content
-     *
-     * @return string
-     */
-    public function content()
-    {
-        return Utils::fixHtml($this->content);
     }
 
     /**

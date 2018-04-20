@@ -188,7 +188,7 @@ class PageComposer
 
             $html .= '<div class="column col-md-4 col-sm-12">'
                 . '<div class="text-center"><i class="fa ' . $clusterPage->icon . ' fa-4x"></i></div>&nbsp;'
-                . '<a href="' . $clusterPage->link() . '" class="btn btn-' . $this->getColorClass($key) . ' btn-block">' . $clusterPage->shorttitle . '</a>'
+                . '<a href="' . $clusterPage->url('link') . '" class="btn btn-' . $this->getColorClass($key) . ' btn-block">' . $clusterPage->shorttitle . '</a>'
                 . '<p>' . $clusterPage->description . '</p></div>';
         }
         $html .= '</div></div></div>';

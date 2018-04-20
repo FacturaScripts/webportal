@@ -183,20 +183,6 @@ class WebPage extends Base\ModelClass
     }
 
     /**
-     * Return default homepage link or permalink.
-     *
-     * @return string
-     */
-    public function link()
-    {
-        if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
-            return FS_ROUTE . '/';
-        }
-
-        return FS_ROUTE . $this->permalink;
-    }
-
-    /**
      * Returns the name of the column that is the primary key of the model.
      *
      * @return string
@@ -247,5 +233,24 @@ class WebPage extends Base\ModelClass
 
         $this->lastmod = date('d-m-Y');
         return true;
+    }
+
+    public function url(string $type = 'auto', string $list = 'List')
+    {
+        switch ($type) {
+            case 'link':
+                if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
+                    return FS_ROUTE . '/';
+                }
+
+                if ('*' === substr($this->permalink, -1)) {
+                    return FS_ROUTE . substr($this->permalink, 0, -1);
+                }
+
+                return FS_ROUTE . $this->permalink;
+
+            default:
+                return parent::url($type, $list);
+        }
     }
 }

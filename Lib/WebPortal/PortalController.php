@@ -84,7 +84,7 @@ class PortalController extends Controller
     {
         $html = '';
         foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
-            $html = $cookiePage->description . ' <a href="' . $cookiePage->link() . '">'
+            $html = $cookiePage->description . ' <a href="' . $cookiePage->url('link') . '">'
                 . $this->i18n->trans('read-more') . '</a> | <a href="?okCookies=TRUE">'
                 . $this->i18n->trans('accept') . '</a>';
             break;

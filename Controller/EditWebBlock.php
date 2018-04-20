@@ -68,7 +68,7 @@ class EditWebBlock extends ExtendedController\EditController
                 if ($model !== false && $model->idpage !== null) {
                     $webPage = new WebPage();
                     $webPage->loadFromCode($model->idpage);
-                    $this->response->headers->set('Refresh', '0; ' . $webPage->link());
+                    $this->response->headers->set('Refresh', '0; ' . $webPage->url('link'));
                 }
                 break;
 

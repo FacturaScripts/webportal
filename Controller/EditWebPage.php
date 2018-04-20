@@ -107,7 +107,7 @@ class EditWebPage extends ExtendedController\PanelController
             case 'preview':
                 $model = $this->views['EditWebPage']->getModel();
                 if ($model !== false) {
-                    $this->response->headers->set('Refresh', '0; ' . $model->link());
+                    $this->response->headers->set('Refresh', '0; ' . $model->url('link'));
                     $this->setRoutes();
                 }
                 if ($this->user->homepage !== 'PortalHome') {
