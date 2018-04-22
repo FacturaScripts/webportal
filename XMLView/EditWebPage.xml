@@ -57,7 +57,9 @@
                 <widget type="number" fieldname="ordernum" />
             </column>
             <column name="custom-controller" numcolumns="4" order="150">
-                <widget type="text" fieldname="customcontroller" />
+                <widget type="select" fieldname="customcontroller">
+                    <values source="pages" fieldcode="name" fieldtitle="name"></values>
+                </widget>
             </column>
         </group>
         <group name="cluster">
