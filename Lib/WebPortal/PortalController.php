@@ -93,6 +93,19 @@ class PortalController extends Controller
         return $html;
     }
 
+    public function getLanguageRoots()
+    {
+        $roots = [];
+        $where = [new DataBaseWhere('showonmenu', true)];
+        foreach ($this->getAuxMenu($where, false) as $wpage) {
+            if (!isset($roots[$wpage->langcode])) {
+                $roots[$wpage->langcode] = $wpage;
+            }
+        }
+
+        return $roots;
+    }
+
     /**
      * Return public footer.
      *
@@ -189,14 +202,15 @@ class PortalController extends Controller
 
     /**
      * Return auxiliar menu.
-     *
-     * @param $where
-     *
-     * @return array
+     * 
+     * @param array $where
+     * @param bool $filterLangcode
+     * 
+     * @return Model\WebPage[]
      */
-    private function getAuxMenu($where)
+    private function getAuxMenu(array $where, bool $filterLangcode = true)
     {
-        if ($this->webPage) {
+        if ($this->webPage && $filterLangcode) {
             $where[] = new DataBaseWhere('langcode', $this->webPage->langcode);
         }
 

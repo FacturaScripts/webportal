@@ -112,16 +112,31 @@
         {% endif %}
         {% block footer %}
             <div class="footer-section">
-                <div class="divider text-center" data-content="{{ webCopyright }}"></div>
+                <header class="navbar">
+                    <section class="navbar-section">
+                        {% for block in fsc.pageComposer.getBlocks('footer') %}
+                            {{ block.content() | raw }}
+                        {% endfor %}
+                        {% for key, menuItem in fsc.getPublicFooter() %}
+                            {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+                            <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.title }}</a>
+                        {% endfor %}
+                    </section>
+                    <section class="navbar-center">
+                        {{ webCopyright }}
+                    </section>
+                    <section class="navbar-section">
+                        {% for key, menuItem in fsc.getLanguageRoots() %}
+                            {% if menuItem.langcode == fsc.webPage.langcode %}
+                                <b>{{ menuItem.langcode }}</b>
+                            {% else %}
+                                <a href="{{ menuItem.url('link') | raw }}" class="btn btn-link">{{ menuItem.langcode }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </header>
                 <div class="text-center">
-                    {% for block in fsc.pageComposer.getBlocks('footer') %}
-                        {{ block.content() | raw }}
-                    {% endfor %}
-                    {% for key, menuItem in fsc.getPublicFooter() %}
-                        {% if key > 0 %}|{% endif %}
-                        {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                        <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.title }}</a>
-                    {% endfor %}
+
                 </div>
             </div>
         {% endblock %}
