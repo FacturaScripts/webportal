@@ -112,7 +112,7 @@ class ChatBotMessage extends Base\ModelClass
     public function test()
     {
         $this->content = Utils::noHtml($this->content);
-        return true;
+        return parent::test();
     }
 
     /**

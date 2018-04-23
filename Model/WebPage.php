@@ -21,13 +21,14 @@ namespace FacturaScripts\Plugins\webportal\Model;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\WebPageClass;
 
 /**
  * Description of WebPage
  *
  * @author Carlos García Gómez
  */
-class WebPage extends Base\ModelClass
+class WebPage extends WebPageClass
 {
 
     use Base\ModelTrait;
@@ -68,20 +69,6 @@ class WebPage extends Base\ModelClass
      * @var int
      */
     public $idpage;
-
-    /**
-     * Language code, in 2 characters,
-     *
-     * @var string
-     */
-    public $langcode;
-
-    /**
-     * Last modification date.
-     *
-     * @var string
-     */
-    public $lastmod;
 
     /**
      * Hide to search engines.
@@ -133,40 +120,16 @@ class WebPage extends Base\ModelClass
     public $title;
 
     /**
-     * Visit counter.
-     *
-     * @var int
-     */
-    public $visitcount;
-
-    /**
      * Reset the values of all model properties.
      */
     public function clear()
     {
         parent::clear();
         $this->icon = 'fa-file-o';
-        $this->langcode = substr(FS_LANG, 0, 2);
-        $this->lastmod = date('d-m-Y');
         $this->noindex = false;
         $this->ordernum = 100;
         $this->showonmenu = true;
         $this->showonfooter = true;
-        $this->visitcount = 0;
-    }
-
-    /**
-     * Increase visit counter and save. To improve performancem this will only happen every 2 or 10 times.
-     */
-    public function increaseVisitCount()
-    {
-        if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
-            $this->visitcount += 2;
-            $this->save();
-        } elseif ($this->visitcount > 100 && mt_rand(0, 9) === 0) {
-            $this->visitcount += 10;
-            $this->save();
-        }
     }
 
     /**
@@ -234,10 +197,17 @@ class WebPage extends Base\ModelClass
             $this->permalink = '/' . $this->permalink;
         }
 
-        $this->lastmod = date('d-m-Y');
-        return true;
+        return parent::test();
     }
 
+    /**
+     * Returns url to list or edit this model.
+     *
+     * @param string $type
+     * @param string $list
+     *
+     * @return string
+     */
     public function url(string $type = 'auto', string $list = 'List')
     {
         switch ($type) {

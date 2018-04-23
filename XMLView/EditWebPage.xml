@@ -63,13 +63,19 @@
             </column>
         </group>
         <group name="cluster">
-            <column name="cluster" numcolumns="4" order="100">
+            <column name="cluster" numcolumns="3" order="100">
                 <widget type="select" fieldname="idcluster">
                     <values source="webclusters" fieldcode="idcluster" fieldtitle="title"></values>
                 </widget>
             </column>
             <column name="icon" numcolumns="3" order="110">
                 <widget type="text" fieldname="icon" />
+            </column>
+            <column name="creationdate" title="creation-date" numcolumns="3" order="120">
+                <widget type="text" fieldname="creationdate" readonly="true" />
+            </column>
+            <column name="lastmod" title="last-update" numcolumns="3" order="130">
+                <widget type="text" fieldname="lastmod" readonly="true" />
             </column>
         </group>
     </columns>

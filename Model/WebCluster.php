@@ -53,16 +53,6 @@ class WebCluster extends Base\ModelClass
     public $title;
 
     /**
-     * Returns the name of the table that uses this model.
-     *
-     * @return string
-     */
-    public static function tableName()
-    {
-        return 'webclusters';
-    }
-
-    /**
      * Returns the name of the column that is the primary key of the model.
      *
      * @return string
@@ -70,6 +60,16 @@ class WebCluster extends Base\ModelClass
     public static function primaryColumn()
     {
         return 'idcluster';
+    }
+
+    /**
+     * Returns the name of the table that uses this model.
+     *
+     * @return string
+     */
+    public static function tableName()
+    {
+        return 'webclusters';
     }
 
     /**
@@ -81,7 +81,7 @@ class WebCluster extends Base\ModelClass
     {
         $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
         $this->title = Utils::noHtml($this->title);
-        return true;
+        return parent::test();
     }
 
     /**
