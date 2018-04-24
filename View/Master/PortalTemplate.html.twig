@@ -7,8 +7,8 @@
         {% set webUrl = appSettings.get('webportal','url','') %}
         {% block meta %}
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <title>{{ fsc.webPage.title }}</title>
-            <meta name="description" content="{{ fsc.webPage.description }}" />
+            <title>{{ fsc.title }}</title>
+            <meta name="description" content="{{ fsc.description }}" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="generator" content="FacturaScripts" />
             {% if fsc.webPage.noindex %}<meta name="robots" content="noindex" />{% endif %}
@@ -122,9 +122,6 @@
                             <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.title }}</a>
                         {% endfor %}
                     </section>
-                    <section class="navbar-center">
-                        {{ webCopyright }}
-                    </section>
                     <section class="navbar-section">
                         {% for key, menuItem in fsc.getLanguageRoots() %}
                             {% if menuItem.langcode == fsc.webPage.langcode %}
@@ -136,7 +133,7 @@
                     </section>
                 </header>
                 <div class="text-center">
-
+                    {{ webCopyright }}
                 </div>
             </div>
         {% endblock %}

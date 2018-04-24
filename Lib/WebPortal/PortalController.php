@@ -53,6 +53,13 @@ class PortalController extends Controller
      * @var Contacto
      */
     public $contact;
+    
+    /**
+     * Page description.
+     *
+     * @var string
+     */
+    public $description;
 
     /**
      * The page composer.
@@ -255,6 +262,7 @@ class PortalController extends Controller
 
         /// if no page found, then we use this page with noindex activated.
         $webPage->noindex = true;
+        $webPage->title = $this->title;
         return $webPage;
     }
 
@@ -266,6 +274,9 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
+        
+        $this->title = $this->webPage->title;
+        $this->description = $this->webPage->description;
 
         if (null !== $this->webPage->idpage) {
             $this->webPage->increaseVisitCount();
