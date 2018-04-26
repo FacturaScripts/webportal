@@ -21,7 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Model;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
-use FacturaScripts\Plugins\webportal\Lib\WebPortal\WebPageClass;
+use FacturaScripts\Plugins\webportal\Model\Base\WebPageClass;
 
 /**
  * Description of WebPage
@@ -78,13 +78,6 @@ class WebPage extends WebPageClass
     public $noindex;
 
     /**
-     * Position number.
-     *
-     * @var int
-     */
-    public $ordernum;
-
-    /**
      * Permanent link.
      *
      * @var string
@@ -127,7 +120,6 @@ class WebPage extends WebPageClass
         parent::clear();
         $this->icon = 'fa-file-o';
         $this->noindex = false;
-        $this->ordernum = 100;
         $this->showonmenu = true;
         $this->showonfooter = true;
     }

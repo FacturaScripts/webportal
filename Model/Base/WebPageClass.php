@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
+namespace FacturaScripts\Plugins\webportal\Model\Base;
 
-use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Model\Base\ModelClass;
 
 /**
  * Description of WebPageClass
  *
  * @author Carlos García Gómez
  */
-abstract class WebPageClass extends Base\ModelClass
+abstract class WebPageClass extends ModelClass
 {
 
     /**
@@ -57,6 +57,13 @@ abstract class WebPageClass extends Base\ModelClass
     private $lastmoddisable;
 
     /**
+     * Position number.
+     *
+     * @var int
+     */
+    public $ordernum;
+
+    /**
      * Visit counter.
      *
      * @var int
@@ -72,6 +79,7 @@ abstract class WebPageClass extends Base\ModelClass
         $this->creationdate = date('d-m-Y');
         $this->langcode = substr(FS_LANG, 0, 2);
         $this->lastmod = date('d-m-Y');
+        $this->ordernum = 100;
         $this->visitcount = 0;
     }
 
