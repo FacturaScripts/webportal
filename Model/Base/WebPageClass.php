@@ -92,7 +92,7 @@ abstract class WebPageClass extends ModelClass
         if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
             $this->visitcount += 2;
             $this->save();
-        } elseif ($this->visitcount > 100 && mt_rand(0, 9) === 0) {
+        } elseif ($this->visitcount >= 100 && mt_rand(0, 9) === 0) {
             $this->visitcount += 10;
             $this->save();
         }
