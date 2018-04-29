@@ -1,3 +1,13 @@
+{% macro cookiesMessage(i18n, cookiesPage) %}
+    <form id="formCookies" action="" method="post">
+        <input type="hidden" name="okCookies" value="TRUE"/>
+    </form>
+    <div class="toast toast-primary">
+        {{ cookiesPage.description | raw }} <a href="{{ cookiesPage.url('link') }}">{{ i18n.trans('read-more') }}</a>
+        | <a href="" onclick="document.getElementById('formCookies').submit(); return false;">{{ i18n.trans('accept') }}</a>
+    </div>
+{% endmacro %}
+
 <!--
     Loads and displays a list of messages from the given types
 -->

@@ -83,21 +83,17 @@ class PortalController extends Controller
     public $webPage;
 
     /**
-     * Return cookies policy message.
+     * Return cookies policy page.
      *
      * @return string
      */
-    public function cookiesPolicy()
+    public function cookiesPage()
     {
-        $html = '';
         foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
-            $html = $cookiePage->description . ' <a href="' . $cookiePage->url('link') . '">'
-                . $this->i18n->trans('read-more') . '</a> | <a href="?okCookies=TRUE">'
-                . $this->i18n->trans('accept') . '</a>';
-            break;
+            return $cookiePage;
         }
 
-        return $html;
+        return $this->webPage;
     }
 
     public function getLanguageRoots()
@@ -148,7 +144,7 @@ class PortalController extends Controller
 
         /// cookie policy check
         $this->showCookiesPolicy = true;
-        if ('TRUE' === $this->request->query->get('okCookies', '')) {
+        if ('TRUE' === $this->request->request->get('okCookies', '')) {
             $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
             $this->response->headers->setCookie(new Cookie('okCookies', time(), $expire));
             $this->showCookiesPolicy = false;

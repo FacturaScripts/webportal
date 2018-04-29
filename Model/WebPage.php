@@ -135,7 +135,7 @@ class WebPage extends WebPageClass
     {
         return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
             . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
-            . "('Home','Home','Home description','/home','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
+            . "('Home','Home','Home description','/','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
             . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o'),"
             . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
     }
@@ -204,7 +204,8 @@ class WebPage extends WebPageClass
     {
         switch ($type) {
             case 'link':
-                if ($this->idpage === AppSettings::get('webportal', 'homepage')) {
+                /// don't use ===
+                if ($this->idpage == AppSettings::get('webportal', 'homepage')) {
                     return FS_ROUTE . '/';
                 }
 

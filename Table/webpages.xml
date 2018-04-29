@@ -89,7 +89,7 @@
         <type>PRIMARY KEY (idpage)</type>
     </constraint>
     <constraint>
-        <name>uniq_permalink</name>
+        <name>uniq_webpages_permalink</name>
         <type>UNIQUE (permalink,langcode)</type>
     </constraint>
 </table>
