@@ -43,6 +43,13 @@ abstract class WebPageClass extends ModelClass
     public $langcode;
 
     /**
+     * IP from last visitor.
+     *
+     * @var string
+     */
+    public $lastip;
+
+    /**
      * Last modification date.
      *
      * @var string
@@ -86,8 +93,13 @@ abstract class WebPageClass extends ModelClass
     /**
      * Increase visit counter and save. To improve performancem this will only happen every 2 or 10 times.
      */
-    public function increaseVisitCount()
+    public function increaseVisitCount(string $ipAddress = '')
     {
+        if($ipAddress == $this->lastip) {
+            return;
+        }
+        
+        $this->lastip = $ipAddress;
         $this->lastmoddisable = true;
         if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
             $this->visitcount += 2;

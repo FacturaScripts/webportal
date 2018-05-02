@@ -275,7 +275,7 @@ class PortalController extends Controller
         $this->description = $this->webPage->description;
 
         if (null !== $this->webPage->idpage) {
-            $this->webPage->increaseVisitCount();
+            $this->webPage->increaseVisitCount($this->request->getClientIp());
         }
 
         $this->pageComposer->set($this->webPage);

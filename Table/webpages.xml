@@ -38,6 +38,10 @@
         <type>character varying(2)</type>
     </column>
     <column>
+        <name>lastip</name>
+        <type>character varying(40)</type>
+    </column>
+    <column>
         <name>lastmod</name>
         <type>date</type>
     </column>
