@@ -44,7 +44,7 @@
                 <section class="navbar-center">
                     <div class="dropdown show-xs">
                         <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
-                            <i class="fa fa-bars" aria-hidden="true"></i>
+                            <i class="fa fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
                         </a>
                         <ul class="menu">
                             {% for menuItem in fsc.getPublicMenu() %}
@@ -57,7 +57,7 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" />
+                    <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" class="hide-xs" />
                 </section>
                 <section class="navbar-section">
                     {% if fsc.user %}
