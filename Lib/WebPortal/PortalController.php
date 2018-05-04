@@ -10,7 +10,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -53,7 +53,7 @@ class PortalController extends Controller
      * @var Contacto
      */
     public $contact;
-    
+
     /**
      * Page description.
      *
@@ -270,12 +270,13 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
-        
+
         $this->title = $this->webPage->title;
         $this->description = $this->webPage->description;
 
         if (null !== $this->webPage->idpage) {
-            $this->webPage->increaseVisitCount($this->request->getClientIp());
+            $ipAddress = is_null($this->request->getClientIp()) ? '::1' : $this->request->getClientIp();
+            $this->webPage->increaseVisitCount($ipAddress);
         }
 
         $this->pageComposer->set($this->webPage);
