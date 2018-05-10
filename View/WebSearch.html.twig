@@ -1,0 +1,37 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    <div class="body-section">
+        <br/>
+        <div class="container grid-lg">
+            <div class="columns">
+                <div class="col-12">
+                    <h1 class="text-center">{{ i18n.trans('search') }}</h1>
+                    <form action="{{ fsc.url() }}" method="post">
+                        <div class="input-group">
+                            <input type="text" name="query" value="{{ fsc.query }}" class="form-input" autocomplete="off" autofocus=""/>
+                            <button class="btn btn-primary input-group-btn">
+                                <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <br/>
+                    {% for item in fsc.searchResults %}
+                        <div class="tile">
+                            <div class="tile-icon">
+                                <div class="example-tile-icon">
+                                    <i class="fa {{ item.icon }} fa-2x" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="tile-content">
+                                <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
+                                <p class="tile-subtitle text-gray">{{ item.description }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

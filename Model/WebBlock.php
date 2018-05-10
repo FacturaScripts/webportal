@@ -79,11 +79,17 @@ class WebBlock extends Base\ModelClass
 
     /**
      * Return content.
-     *
+     * 
+     * @param bool $striptags
+     * 
      * @return string
      */
-    public function content()
+    public function content(bool $striptags = false)
     {
+        if ($striptags) {
+            return strip_tags(Utils::fixHtml($this->content));
+        }
+
         return Utils::fixHtml($this->content);
     }
 
@@ -128,6 +134,15 @@ class WebBlock extends Base\ModelClass
      */
     public function url(string $type = 'auto', string $list = 'List')
     {
+        if ($type === 'link') {
+            $webPage = new WebPage();
+            if (!empty($this->idpage) && $webPage->loadFromCode($this->idpage)) {
+                return $webPage->url($type);
+            }
+
+            return '';
+        }
+
         return parent::url($type, 'ListWebPage?active=List');
     }
 }

@@ -60,9 +60,14 @@
                     <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" class="hide-xs" />
                 </section>
                 <section class="navbar-section">
+                    <a class="btn" href="{{ constant('FS_ROUTE') }}/WebSearch">
+                        <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+                        <span class="hide-md">{{ i18n.trans('search') }}</span>
+                    </a>
+                    &nbsp;
                     {% if fsc.user %}
                         <div class="btn-group">
-                            <a class="btn btn-primary" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
+                            <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
                                 <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">

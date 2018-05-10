@@ -5,13 +5,20 @@
         <br/>
         <div class="container grid-lg">
             <div class="columns">
-                <div class="col-12 text-center">
-                    <h1>
-                        <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> {{ i18n.trans('login-to-continue') }}
-                    </h1>
-                    <a class="btn" href="#" onclick="return showModal('loginModal');">
-                        <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> {{ i18n.trans('login') }}
-                    </a>
+                <div class="col-12">
+                    <div class="empty">
+                        <div class="empty-icon">
+                            <i class="icon icon-people"></i>
+                        </div>
+                        <h1>
+                            <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> {{ i18n.trans('login-to-continue') }}
+                        </h1>
+                        <div class="empty-action">
+                            <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
+                                <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> {{ i18n.trans('login') }}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
