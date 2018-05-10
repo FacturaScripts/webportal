@@ -109,7 +109,7 @@ class WebSearch extends PortalController
             $this->searchResults[$link] = [
                 'icon' => 'fa-file-o',
                 'title' => $link,
-                'description' => $wblock->content(true),
+                'description' => $wblock->content(true, 300),
                 'link' => $link
             ];
         }

@@ -78,19 +78,31 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
-     * Return content.
-     * 
+     * Returns content of the block, without tags if $striptags is TRUE. And
+     * with a $lenght characters if $legth is more than 0.
+     *
      * @param bool $striptags
-     * 
+     * @param int  $length
+     *
      * @return string
      */
-    public function content(bool $striptags = false)
+    public function content(bool $striptags = false, int $length = 0): string
     {
-        if ($striptags) {
-            return strip_tags(Utils::fixHtml($this->content));
+        $html = $striptags ? strip_tags(Utils::fixHtml($this->content)) : Utils::fixHtml($this->content);
+        if ($length <= 0) {
+            return $html;
         }
 
-        return Utils::fixHtml($this->content);
+        $content = '';
+        foreach (explode(' ', $html) as $word) {
+            if (mb_strlen($content . $word . ' ') >= $length) {
+                break;
+            }
+
+            $content .= $word . ' ';
+        }
+
+        return trim($content);
     }
 
     /**
