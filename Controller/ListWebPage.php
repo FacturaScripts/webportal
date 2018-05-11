@@ -65,6 +65,17 @@ class ListWebPage extends ExtendedController\ListController
         $this->addFilterCheckbox('ListWebPage', 'noindex', 'no-index', 'noindex');
 
         /// Web blocks
+        $this->createViewWebBlock();
+
+        /// Web clusters
+        $this->createViewWebCluster();
+
+        /// Searches
+        $this->createViewWebSearch();
+    }
+
+    protected function createViewWebBlock()
+    {
         $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
         $this->addSearchFields('ListWebBlock', ['content']);
         $this->addOrderBy('ListWebBlock', 'idblock', 'code');
@@ -73,11 +84,21 @@ class ListWebPage extends ExtendedController\ListController
 
         $blockTypes = $this->codeModel->all('webblocks', 'type', 'type');
         $this->addFilterSelect('ListWebBlock', 'type', 'type', 'type', $blockTypes);
+    }
 
-        /// Web clusters
+    protected function createViewWebCluster()
+    {
         $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper-o');
         $this->addSearchFields('ListWebCluster', ['title', 'description']);
         $this->addOrderBy('ListWebCluster', 'title');
+    }
+
+    protected function createViewWebSearch()
+    {
+        $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fa-search');
+        $this->addSearchFields('ListWebSearch', ['query']);
+        $this->addOrderBy('ListWebSearch', 'visitcount');
+        $this->addOrderBy('ListWebSearch', 'lastmod', 'last-update');
     }
 
     /**

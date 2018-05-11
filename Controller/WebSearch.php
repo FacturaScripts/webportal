@@ -19,9 +19,11 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use FacturaScripts\Plugins\webportal\Model\WebBlock;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
+use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 
 /**
  * Description of WebSearch
@@ -42,6 +44,17 @@ class WebSearch extends PortalController
      * @var array
      */
     public $searchResults = [];
+
+    public function getCommonSearches()
+    {
+        $queries = [];
+        $webSearch = new WebSearchModel();
+        foreach ($webSearch->all([], ['visitcount' => 'DESC']) as $wsearch) {
+            $queries[] = $wsearch->query;
+        }
+
+        return json_encode($queries);
+    }
 
     /**
      * Returns basic page attributes
@@ -70,15 +83,50 @@ class WebSearch extends PortalController
         $this->initSearch();
     }
 
+    protected function addSearchResults(array $item)
+    {
+        if (isset($this->searchResults[$item['link']])) {
+            return;
+        }
+
+        $item['position'] = stripos($item['title'] . ' ' . $item['description'], $this->query);
+        $item['description'] = mb_substr($item['description'], 0, 300);
+        $this->searchResults[$item['link']] = $item;
+    }
+
     protected function initSearch()
     {
         $this->setTemplate('WebSearch');
-        $this->query = $this->request->get('query', '');
-        if (!empty($this->query)) {
-            $this->search();
+        $this->query = $this->sanitizeSearch();
+        if (mb_strlen($this->query) <= 2) {
+            return;
         }
+
+        /// load or create search query for statics
+        $webSearch = new WebSearchModel();
+        if (!$webSearch->loadFromCode($this->query)) {
+            $webSearch->query = $this->query;
+        }
+
+        $webSearch->increaseVisitCount($this->request->getClientIp());
+        $this->search();
+        $this->sort();
     }
 
+    /**
+     * Returns the query without HTML or upper case characters.
+     * 
+     * @return string
+     */
+    protected function sanitizeSearch()
+    {
+        $query = $this->request->get('query', '');
+        return Utils::noHtml(mb_strtolower($query));
+    }
+
+    /**
+     * Add search results to list.
+     */
     protected function search()
     {
         $webPageModel = new WebPage();
@@ -88,12 +136,12 @@ class WebSearch extends PortalController
         ];
         foreach ($webPageModel->all($wherePage, ['visitcount' => 'DESC']) as $wpage) {
             $link = $wpage->url('link');
-            $this->searchResults[$link] = [
+            $this->addSearchResults([
                 'icon' => 'fa-file-o',
                 'title' => $wpage->title,
                 'description' => $wpage->description,
                 'link' => $link
-            ];
+            ]);
         }
 
         $webBlockModel = new WebBlock();
@@ -106,12 +154,41 @@ class WebSearch extends PortalController
                 continue;
             }
 
-            $this->searchResults[$link] = [
+            $this->addSearchResults([
                 'icon' => 'fa-file-o',
                 'title' => $link,
-                'description' => $wblock->content(true, 300),
+                'description' => $wblock->content(true),
                 'link' => $link
-            ];
+            ]);
         }
+    }
+
+    protected function sort()
+    {
+        /// we need maximum value of position
+        $maxPosition = 0;
+        foreach ($this->searchResults as $item) {
+            if ($item['position'] > $maxPosition) {
+                $maxPosition = $item['position'];
+            }
+        }
+
+        /// add max position when position is FALSE
+        foreach ($this->searchResults as $key => $value) {
+            if (false === $value['position']) {
+                $this->searchResults[$key]['position'] = $maxPosition;
+            }
+        }
+
+        /// sort by position
+        usort($this->searchResults, function($item1, $item2) {
+            if ($item1['position'] == $item2['position']) {
+                return 0;
+            } else if ($item1['position'] > $item2['position']) {
+                return 1;
+            }
+
+            return -1;
+        });
     }
 }

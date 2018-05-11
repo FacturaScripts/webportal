@@ -1,5 +1,10 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}" />
+{% endblock %}
+
 {% block body %}
     <div class="body-section">
         <br/>
@@ -7,9 +12,9 @@
             <div class="columns">
                 <div class="column col-12">
                     <h1 class="text-center">{{ i18n.trans('search') }}</h1>
-                    <form action="{{ fsc.url() }}" method="post">
+                    <form id="searchForm" action="{{ fsc.url() }}" method="post">
                         <div class="input-group">
-                            <input type="text" name="query" value="{{ fsc.query }}" class="form-input" autocomplete="off" autofocus=""/>
+                            <input id="queryInput" type="text" name="query" value="{{ fsc.query }}" class="form-input" autocomplete="off" autofocus=""/>
                             <button class="btn btn-primary input-group-btn">
                                 <i class="fa fa-search fa-fw" aria-hidden="true"></i>
                             </button>
@@ -19,9 +24,7 @@
                     {% for item in fsc.searchResults %}
                         <div class="tile">
                             <div class="tile-icon">
-                                <div class="example-tile-icon">
-                                    <i class="fa {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
-                                </div>
+                                <i class="fa {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
@@ -29,9 +32,31 @@
                             </div>
                         </div>
                     {% else %}
+                        {% if fsc.query | length > 2 %}
+                            <div class="toast toast-warning">
+                                {{ i18n.trans('no-data') }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            var availableTags = {{ fsc.getCommonSearches() | raw }};
+            $("#queryInput").autocomplete({
+                source: availableTags,
+                select: function (event, ui) {
+                    $("#searchForm").submit();
+                }
+            });
+        });
+    </script>
 {% endblock %}
