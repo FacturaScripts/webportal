@@ -97,8 +97,8 @@ class ListWebPage extends ExtendedController\ListController
     {
         $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fa-search');
         $this->addSearchFields('ListWebSearch', ['query']);
-        $this->addOrderBy('ListWebSearch', 'visitcount');
         $this->addOrderBy('ListWebSearch', 'lastmod', 'last-update');
+        $this->addOrderBy('ListWebSearch', 'visitcount');
     }
 
     /**

@@ -27,14 +27,22 @@
         <column name="query" order="110">
             <widget type="text" fieldname="query" />
         </column>
-        <column name="visitcount" title="visit-counter" display="right" order="120">
+        <column name="results" display="right" order="120">
+            <widget type="number" fieldname="numresults" />
+        </column>
+        <column name="visitcount" title="visit-counter" display="right" order="130">
             <widget type="number" fieldname="visitcount" />
         </column>
-        <column name="lastip" title="last-ip" display="right" order="130">
+        <column name="lastip" title="last-ip" display="right" order="140">
             <widget type="text" fieldname="lastip" />
         </column>
-        <column name="lastmod" title="last-update" display="right" order="140">
+        <column name="lastmod" title="last-update" display="right" order="150">
             <widget type="date" fieldname="lastmod" />
         </column>
     </columns>
+    <rows>
+        <row type="status" fieldname="numresults">
+            <option color="table-warning">0</option>
+        </row>
+    </rows>
 </view>

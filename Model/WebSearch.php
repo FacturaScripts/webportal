@@ -58,7 +58,13 @@ class WebSearch extends Base\ModelClass
      * @var bool
      */
     private $lastmoddisable;
-    
+
+    /**
+     *
+     * @var int
+     */
+    public $numresults;
+
     /**
      * Query to search.
      *
@@ -81,6 +87,7 @@ class WebSearch extends Base\ModelClass
         parent::clear();
         $this->creationdate = date('d-m-Y');
         $this->lastmod = date('d-m-Y');
+        $this->numresults = 0;
         $this->visitcount = 0;
     }
 
@@ -89,10 +96,10 @@ class WebSearch extends Base\ModelClass
      */
     public function increaseVisitCount(string $ipAddress = '')
     {
-        if($ipAddress == $this->lastip) {
+        if ($ipAddress == $this->lastip) {
             return;
         }
-        
+
         $this->lastip = $ipAddress;
         $this->lastmoddisable = true;
         if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {

@@ -33,6 +33,9 @@ use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 class WebSearch extends PortalController
 {
 
+    const MAX_TOP_QUERIES = 100;
+    const MAX_WORD_DISTANCE = 3;
+
     /**
      *
      * @var string
@@ -45,16 +48,17 @@ class WebSearch extends PortalController
      */
     public $searchResults = [];
 
-    public function getCommonSearches()
-    {
-        $queries = [];
-        $webSearch = new WebSearchModel();
-        foreach ($webSearch->all([], ['visitcount' => 'DESC']) as $wsearch) {
-            $queries[] = $wsearch->query;
-        }
+    /**
+     *
+     * @var array
+     */
+    public $similarQueries = [];
 
-        return json_encode($queries);
-    }
+    /**
+     *
+     * @var array
+     */
+    public $topQueries = [];
 
     /**
      * Returns basic page attributes
@@ -83,15 +87,23 @@ class WebSearch extends PortalController
         $this->initSearch();
     }
 
-    protected function addSearchResults(array $item)
+    /**
+     * Adds item to search results.
+     *
+     * @param array $item
+     *
+     * @return bool
+     */
+    protected function addSearchResults(array $item): bool
     {
         if (isset($this->searchResults[$item['link']])) {
-            return;
+            return false;
         }
 
         $item['position'] = stripos($item['title'] . ' ' . $item['description'], $this->query);
         $item['description'] = mb_substr($item['description'], 0, 300);
         $this->searchResults[$item['link']] = $item;
+        return true;
     }
 
     protected function initSearch()
@@ -102,15 +114,19 @@ class WebSearch extends PortalController
             return;
         }
 
+        $this->search();
+        $this->sort();
+
         /// load or create search query for statics
         $webSearch = new WebSearchModel();
         if (!$webSearch->loadFromCode($this->query)) {
             $webSearch->query = $this->query;
         }
-
+        $webSearch->numresults = count($this->searchResults);
         $webSearch->increaseVisitCount($this->request->getClientIp());
-        $this->search();
-        $this->sort();
+
+        $this->setTopQueries();
+        $this->setSimilarQueries();
     }
 
     /**
@@ -163,6 +179,34 @@ class WebSearch extends PortalController
         }
     }
 
+    /**
+     * Adds to $this->similarQueries similar queries to $this->query
+     */
+    protected function setSimilarQueries()
+    {
+        foreach ($this->topQueries as $query) {
+            $distance = levenshtein($this->query, $query);
+            if ($distance > 0 && $distance <= self::MAX_WORD_DISTANCE) {
+                $this->similarQueries[] = $query;
+            }
+        }
+    }
+
+    /**
+     * Adds queries with more visits to $this->topQueries
+     */
+    protected function setTopQueries()
+    {
+        $webSearch = new WebSearchModel();
+        $where = [new DataBaseWhere('numresults', 0, '>')];
+        foreach ($webSearch->all($where, ['visitcount' => 'DESC'], 0, self::MAX_TOP_QUERIES) as $wsearch) {
+            $this->topQueries[] = $wsearch->query;
+        }
+    }
+
+    /**
+     * Sorts search results.
+     */
     protected function sort()
     {
         /// we need maximum value of position

@@ -37,6 +37,15 @@
                                 {{ i18n.trans('no-data') }}
                             </div>
                         {% endif %}
+                        {% if fsc.similarQueries | length > 0 %}
+                            <br/>
+                            <h2>{{ i18n.trans('similar-searches') }}:</h2>
+                        {% endif %}
+                        {% for query in fsc.similarQueries %}
+                            <a href="{{ fsc.url() }}?query={{ query }}" class="label label-rounded">
+                                <i class="fa fa-search fa-fw" aria-hidden="true"></i> {{ query }}
+                            </a>
+                        {% endfor %}
                     {% endfor %}
                 </div>
             </div>
@@ -50,7 +59,7 @@
     <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <script>
         $(document).ready(function () {
-            var availableTags = {{ fsc.getCommonSearches() | raw }};
+            var availableTags = {{ fsc.topQueries | json_encode() | raw }};
             $("#queryInput").autocomplete({
                 source: availableTags,
                 select: function (event, ui) {
