@@ -169,7 +169,7 @@ class WebSearch extends PortalController
         $maxPosition = 0;
         foreach ($this->searchResults as $item) {
             if ($item['position'] > $maxPosition) {
-                $maxPosition = $item['position'];
+                $maxPosition = 1 + $item['position'];
             }
         }
 
