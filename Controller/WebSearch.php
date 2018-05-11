@@ -137,7 +137,7 @@ class WebSearch extends PortalController
         foreach ($webPageModel->all($wherePage, ['visitcount' => 'DESC']) as $wpage) {
             $link = $wpage->url('link');
             $this->addSearchResults([
-                'icon' => 'fa-file-o',
+                'icon' => $wpage->icon,
                 'title' => $wpage->title,
                 'description' => $wpage->description,
                 'link' => $link
