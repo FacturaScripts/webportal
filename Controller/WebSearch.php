@@ -109,6 +109,8 @@ class WebSearch extends PortalController
     protected function initSearch()
     {
         $this->setTemplate('WebSearch');
+        $this->setTopQueries();
+
         $this->query = $this->sanitizeSearch();
         if (mb_strlen($this->query) <= 2) {
             return;
@@ -125,7 +127,6 @@ class WebSearch extends PortalController
         $webSearch->numresults = count($this->searchResults);
         $webSearch->increaseVisitCount($this->request->getClientIp());
 
-        $this->setTopQueries();
         $this->setSimilarQueries();
     }
 

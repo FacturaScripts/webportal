@@ -80,8 +80,9 @@
                             <span>{{ fsc.contact.nombre }}</span>
                         </a>
                     {% else %}
-                        <a class="btn" href="#" onclick="return showModal('loginModal');">
+                        <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
                             <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <span class="hide-md">{{ i18n.trans('login') }}</span>
                         </a>
                     {% endif %}
                 </section>
@@ -124,7 +125,7 @@
                         {% endfor %}
                         {% for key, menuItem in fsc.getPublicFooter() %}
                             {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                            <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.title }}</a>
+                            <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
                         {% endfor %}
                     </section>
                     <section class="navbar-section">

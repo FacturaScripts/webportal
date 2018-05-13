@@ -71,7 +71,7 @@ class EditWebPage extends ExtendedController\PanelController
 
             case 'ListWebBlock':
                 $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
-                $view->loadData(false, [new DataBaseWhere('idpage', $idpage)]);
+                $view->loadData(false, [new DataBaseWhere('idpage', $idpage)], ['ordernum' => 'ASC']);
                 break;
         }
     }
