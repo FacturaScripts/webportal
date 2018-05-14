@@ -114,7 +114,7 @@
         {% if fsc.contact %}
             {{ Macros.logoutModal(i18n, fsc) }}
         {% elseif fsc.user == false %}
-            {{ Macros.loginModal(i18n, appSettings) }}
+            {{ Macros.loginModal(i18n, appSettings, fsc) }}
         {% endif %}
         {% block footer %}
             <div class="footer-section">

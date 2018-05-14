@@ -167,6 +167,11 @@ class PortalController extends Controller
         $this->showCookiesPolicy = false;
     }
 
+    public function url()
+    {
+        return empty($this->webPage->permalink) ? parent::url() : $this->webPage->permalink;
+    }
+
     /**
      * Authenticate the contact.
      *
