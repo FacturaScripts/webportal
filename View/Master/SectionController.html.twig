@@ -1,0 +1,50 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    <div class="body-section">
+        <div class="container">
+            <div class="columns">
+                <div class="column col-2 col-md-12">
+                    <br/>
+                    {% for name, group in fsc.getSectionGroups() %}
+                        {% if name != '' %}
+                            <br/>
+                            <div class="divider text-center" data-content="{{ i18n.trans(name) }}"></div>
+                        {% endif %}
+                        {% for section in group %}
+                            {% set btnClass = (section.name == fsc.active) ? 'btn btn-primary' : 'btn' %}
+                            {% set counter = (section.count > 0) ? section.count : '' %}
+                            <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ counter }}" onclick="showSection('{{ section.name }}');">
+                                <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
+                            </button>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    {% for section in fsc.sections %}
+                        {% set divClass = (section.name == fsc.active) ? '' : 'd-hide' %}
+                        <div id="secDiv{{ section.name }}" class="section-div {{ divClass }}">
+                            {{ fsc.setCurrentSection(section.name) }}
+                            {% include section.template %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script>
+        function showSection(name) {
+            $(".section-btn").removeClass("btn-primary");
+            $("#secBtn" + name).addClass("btn-primary");
+            
+            $(".section-div").removeClass("d-hide");
+            $(".section-div").addClass("d-hide");
+            $("#secDiv" + name).removeClass("d-hide");
+        }
+    </script>
+{% endblock %}
