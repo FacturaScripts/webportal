@@ -115,7 +115,7 @@ class HybridLogin extends PortalController
             $this->updateCookies($this->contact, true);
 
             $return = $this->request->cookies->get('return', '');
-            $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url') . $return);
+            $this->response->headers->set('Refresh', '1; ' . $return);
         }
     }
 

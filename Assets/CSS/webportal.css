@@ -45,3 +45,7 @@ h2, h3, h4, h5 {
     background-color: #F8F9FA;
     border-top: 1px solid #E0E3E7;
 }
+
+.section-btn {
+    margin-bottom: 5px;
+}
