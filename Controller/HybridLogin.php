@@ -28,7 +28,6 @@ use Hybridauth\Provider\Facebook;
 use Hybridauth\Provider\Google;
 use Hybridauth\Provider\Twitter;
 use Hybridauth\User\Profile;
-use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Description of HybridLogin
@@ -69,7 +68,7 @@ class HybridLogin extends PortalController
         /// we need to save url to return
         $return = $this->request->get('return', '');
         if ('' !== $return) {
-            $this->response->headers->setCookie(new Cookie('return', $return, time() + 300));
+            $_SESSION['hybridLoginReturn'] = $return;
         }
 
         $prov = $this->request->get('prov', '');
@@ -114,8 +113,8 @@ class HybridLogin extends PortalController
             $this->contact = $contact;
             $this->updateCookies($this->contact, true);
 
-            $return = $this->request->cookies->get('return', '');
-            $this->response->headers->set('Refresh', '1; ' . $return);
+            $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
+            $this->response->headers->set('Refresh', '0; ' . $return);
         }
     }
 
