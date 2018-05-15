@@ -63,6 +63,7 @@
             $("#queryInput").autocomplete({
                 source: availableTags,
                 select: function (event, ui) {
+                    $("#queryInput").val(ui.item.label);
                     $("#searchForm").submit();
                 }
             });

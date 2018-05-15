@@ -44,9 +44,9 @@ abstract class SectionController extends PortalController
      */
     public $sections = [];
 
-    abstract function createSections();
+    abstract protected function createSections();
 
-    abstract function loadData($sectionName);
+    abstract protected function loadData($sectionName);
 
     public function getCurrentSection(): array
     {
@@ -63,12 +63,30 @@ abstract class SectionController extends PortalController
         return $group;
     }
 
+    public function privateCore(&$response, $user, $permissions)
+    {
+        parent::privateCore($response, $user, $permissions);
+        $this->commonCore();
+    }
+
     public function publicCore(&$response)
     {
         parent::publicCore($response);
-        $this->setTemplate('Master/SectionController');
+        $this->commonCore();
+    }
+
+    public function setCurrentSection(string $name)
+    {
+        $this->current = $name;
+    }
+
+    protected function commonCore()
+    {
         $this->active = $this->request->get('active', '');
         $this->createSections();
+        if (!empty($this->sections)) {
+            $this->setTemplate('Master/SectionController');
+        }
 
         foreach (array_keys($this->sections) as $key) {
             if ($this->active === '') {
@@ -83,11 +101,6 @@ abstract class SectionController extends PortalController
                 $this->sections[$key]['count'] = count($section['cursor']);
             }
         }
-    }
-
-    public function setCurrentSection(string $name)
-    {
-        $this->current = $name;
     }
 
     protected function newSection(string $name, string $modelName, string $templateName, string $label, string $icon = 'fa-file-o', string $group = ''): bool
