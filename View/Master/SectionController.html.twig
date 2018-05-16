@@ -1,6 +1,8 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
 {% block body %}
+    {% import _self as macros %}
+
     <div class="body-section">
         <br/>
         <div class="container">
@@ -25,7 +27,23 @@
                         {% set divClass = (section.name == fsc.active) ? '' : 'd-hide' %}
                         <div id="secDiv{{ section.name }}" class="section-div {{ divClass }}">
                             {{ fsc.setCurrentSection(section.name) }}
+                            <form id="secForm{{ section.name }}" action="" method="post">
+                                <input type="hidden" name="active" value="{{ section.name }}"/>
+                                <input type="hidden" name="offset" value="0"/>
+                                <div class="columns">
+                                    <div class="column">
+                                        {{ macros.sectionButtons(section) }}
+                                    </div>
+                                    <div class="column">
+                                        {{ macros.sectionSearch(section, i18n) }}
+                                    </div>
+                                    <div class="column">
+                                        {{ macros.sectionOrder(section) }}
+                                    </div>
+                                </div>
+                            </form>
                             {% include section.template %}
+                            {{ macros.sectionPagination(section) }}
                         </div>
                     {% endfor %}
                 </div>
@@ -37,14 +55,82 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script>
-        function showSection(name) {
-            $(".section-btn").removeClass("btn-primary");
-            $("#secBtn" + name).addClass("btn-primary");
-            
-            $(".section-div").removeClass("d-hide");
-            $(".section-div").addClass("d-hide");
-            $("#secDiv" + name).removeClass("d-hide");
-        }
+    <script type="text/javascript">
+                                function showSection(name) {
+                                    $(".section-btn").removeClass("btn-primary");
+                                    $("#secBtn" + name).addClass("btn-primary");
+
+                                    $(".section-div").removeClass("d-hide");
+                                    $(".section-div").addClass("d-hide");
+                                    $("#secDiv" + name).removeClass("d-hide");
+                                }
+                                function showSectionPage(name, offset) {
+                                    $("#secForm" + name + " input[name=offset]").val(offset);
+                                    $("#secForm" + name).submit();
+                                    return false;
+                                }
     </script>
 {% endblock %}
+
+{% macro sectionButtons(section) %}
+    {% if section.buttons | length > 0 %}
+        <div class="btn-group">
+            {% for button in section.buttons %}
+                <a href="{{ button.link }}" class="btn">
+                    {% if '' != button.icon %}
+                        <i class="fa {{ button.icon }} fa-fw" aria-hidden="true"></i>
+                    {% endif %}
+                    {{ button.label }}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro sectionOrder(section) %}
+    {% if section.orderOptions | length > 0 %}
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="fa fa-sort fa-fw" aria-hidden="true"></i>
+            </span>
+            <select name="order" class="form-select" onchange="this.form.submit();">
+                {% for option in section.orderOptions %}
+                    {% if option.selected %}
+                        <option value="{{ option.field }} {{ option.order }}" selected="">{{ option.label }} {{ option.order }}</option>
+                    {% else %}
+                        <option value="{{ option.field }} {{ option.order }}">{{ option.label }} {{ option.order }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro sectionPagination(section) %}
+    {% if section.pages | length > 0 %}
+        <ul class="pagination">
+            {% for page in section.pages %}
+                {% if page.current %}
+                    <li class="page-item active">
+                        <a href="#" onclick="return showSectionPage('{{ section.name }}', '{{ page.offset }}');">{{ page.num }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a href="#" onclick="return showSectionPage('{{ section.name }}', '{{ page.offset }}');">{{ page.num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro sectionSearch(section, i18n) %}
+    {% if section.searchOptions | length > 0 %}
+        <div class="input-group">
+            <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
+            <button class="btn btn-primary input-group-btn">
+                <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endif %}
+{% endmacro %}
