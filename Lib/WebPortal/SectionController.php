@@ -115,14 +115,14 @@ abstract class SectionController extends PortalController
             'field' => $field,
             'label' => $this->i18n->trans($label),
             'order' => 'ASC',
-            'selected' => false,
+            'selected' => (1 == $selection),
         ];
 
         $this->sections[$sectionName]['orderOptions'][] = [
             'field' => $field,
             'label' => $this->i18n->trans($label),
             'order' => 'DESC',
-            'selected' => false,
+            'selected' => (2 == $selection),
         ];
 
         switch ($selection) {
@@ -145,7 +145,6 @@ abstract class SectionController extends PortalController
 
                 $this->sections[$sectionName]['order'] = [$option['field'] => $option['order']];
                 $this->sections[$sectionName]['orderOptions'][$key]['selected'] = true;
-                break;
             }
         }
     }
