@@ -82,7 +82,7 @@ abstract class SectionController extends PortalController
         $this->current = $sectionName;
     }
 
-    protected function addButton(string $sectionName, string $link, string $label, string $icon = '')
+    protected function addButton(string $sectionName, string $link, string $label, string $icon)
     {
         $this->sections[$sectionName]['buttons'][] = [
             'icon' => $icon,

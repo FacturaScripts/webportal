@@ -118,26 +118,28 @@
         {% endif %}
         {% block footer %}
             <div class="footer-section">
-                <header class="navbar">
-                    <section class="navbar-section">
-                        {% for block in fsc.pageComposer.getBlocks('footer') %}
-                            {{ block.content() | raw }}
-                        {% endfor %}
-                        {% for key, menuItem in fsc.getPublicFooter() %}
-                            {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                            <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
-                        {% endfor %}
-                    </section>
-                    <section class="navbar-section">
-                        {% for key, menuItem in fsc.getLanguageRoots() %}
-                            {% if menuItem.langcode == fsc.webPage.langcode %}
-                                <b>{{ menuItem.langcode }}</b>
-                            {% else %}
-                                <a href="{{ menuItem.url('link') | raw }}" class="btn btn-link">{{ menuItem.langcode }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </section>
-                </header>
+                <div class="container">
+                    <div class="columns">
+                        <div class="column">
+                            {% for block in fsc.pageComposer.getBlocks('footer') %}
+                                {{ block.content() | raw }}
+                            {% endfor %}
+                            {% for key, menuItem in fsc.getPublicFooter() %}
+                                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+                                <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
+                            {% endfor %}
+                        </div>
+                        <div class="column text-right">
+                            {% for key, menuItem in fsc.getLanguageRoots() %}
+                                {% if menuItem.langcode == fsc.webPage.langcode %}
+                                    <b>{{ menuItem.langcode }}</b>
+                                {% else %}
+                                    <a href="{{ menuItem.url('link') | raw }}" class="btn btn-link">{{ menuItem.langcode }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
                 <div class="text-center">
                     {{ webCopyright }}
                 </div>

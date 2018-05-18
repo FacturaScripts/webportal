@@ -49,3 +49,12 @@ h2, h3, h4, h5 {
 .section-btn {
     margin-bottom: 5px;
 }
+
+.custom-img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+
+.custom-table-scroll {
+    overflow-x: auto;
+}
