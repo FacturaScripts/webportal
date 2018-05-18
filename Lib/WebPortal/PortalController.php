@@ -108,6 +108,15 @@ class PortalController extends Controller
 
         return $roots;
     }
+    
+    public function getPageData()
+    {
+        $pageData = parent::getPageData();
+        $pageData['menu'] = 'web';
+        $pageData['showonmenu'] = false;
+
+        return $pageData;
+    }
 
     /**
      * Return public footer.

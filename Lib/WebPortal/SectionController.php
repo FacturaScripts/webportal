@@ -243,7 +243,7 @@ abstract class SectionController extends PortalController
         return (count($pages) > 1) ? $pages : [];
     }
 
-    protected function loadListSection(string $sectionName, array $where)
+    protected function loadListSection(string $sectionName, array $where = [])
     {
         $section = $this->sections[$sectionName];
 
