@@ -64,7 +64,7 @@ class EditWebBlock extends ExtendedController\EditController
     {
         switch ($action) {
             case 'preview':
-                $model = $this->views['EditWebBlock']->getModel();
+                $model = $this->views['EditWebBlock']->model;
                 if ($model !== false && $model->idpage !== null) {
                     $webPage = new WebPage();
                     $webPage->loadFromCode($model->idpage);

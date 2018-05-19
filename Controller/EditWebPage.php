@@ -105,7 +105,7 @@ class EditWebPage extends ExtendedController\PanelController
     {
         switch ($action) {
             case 'preview':
-                $model = $this->views['EditWebPage']->getModel();
+                $model = $this->views['EditWebPage']->model;
                 if ($model !== false) {
                     $this->response->headers->set('Refresh', '0; ' . $model->url('link'));
                     $this->setRoutes();
@@ -130,7 +130,7 @@ class EditWebPage extends ExtendedController\PanelController
         $appRouter->clear();
 
         $langcodes = [substr(FS_LANG, 0, 2)];
-        $webPages = $this->views['EditWebPage']->getModel()->all([], [], 0, 0);
+        $webPages = $this->views['EditWebPage']->model->all([], [], 0, 0);
         foreach ($webPages as $webpage) {
             $customController = empty($webpage->customcontroller) ? 'PortalHome' : $webpage->customcontroller;
             $appRouter->setRoute($webpage->permalink, $customController, $webpage->idpage);
