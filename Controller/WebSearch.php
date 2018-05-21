@@ -147,11 +147,8 @@ class WebSearch extends PortalController
     protected function search()
     {
         $webPageModel = new WebPage();
-        $wherePage = [
-            new DataBaseWhere('description', $this->query, 'LIKE', 'OR'),
-            new DataBaseWhere('title', $this->query, 'LIKE', 'OR'),
-        ];
-        foreach ($webPageModel->all($wherePage, ['visitcount' => 'DESC']) as $wpage) {
+        $where = [new DataBaseWhere('description|title', $this->query, 'LIKE')];
+        foreach ($webPageModel->all($where, ['visitcount' => 'DESC']) as $wpage) {
             $link = $wpage->url('link');
             $this->addSearchResults([
                 'icon' => $wpage->icon,
@@ -161,11 +158,14 @@ class WebSearch extends PortalController
             ]);
         }
 
+        $this->searchBlocks();
+    }
+
+    protected function searchBlocks()
+    {
         $webBlockModel = new WebBlock();
-        $whereBlock = [
-            new DataBaseWhere('content', $this->query, 'LIKE')
-        ];
-        foreach ($webBlockModel->all($whereBlock) as $wblock) {
+        $where = [new DataBaseWhere('content', $this->query, 'LIKE')];
+        foreach ($webBlockModel->all($where) as $wblock) {
             $link = $wblock->url('link');
             if (empty($link)) {
                 continue;
