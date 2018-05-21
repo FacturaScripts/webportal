@@ -26,7 +26,7 @@
 {% macro loginModal(i18n, appSettings, fsc) %}
     <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
         <div class="modal modal-sm" id="loginModal">
-            <a href="#close" class="modal-overlay" aria-label="Close"></a>
+            <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>
             <div class="modal-container">
                 <div class="modal-header">
                     <a href="#close" onclick="return hideModal('loginModal');" class="btn btn-clear float-right" aria-label="Close"></a>
@@ -78,7 +78,7 @@
 
 {% macro logoutModal(i18n, fsc) %}
     <div class="modal modal-sm" id="logoutModal">
-        <a href="#close" class="modal-overlay" aria-label="Close"></a>
+        <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('logoutModal');"></a>
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#close" onclick="return hideModal('logoutModal');" class="btn btn-clear float-right" aria-label="Close"></a>

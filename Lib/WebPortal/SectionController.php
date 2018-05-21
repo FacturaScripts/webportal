@@ -158,7 +158,8 @@ abstract class SectionController extends PortalController
 
     protected function addSection(string $sectionName, array $params): bool
     {
-        if ($this->active === '') {
+        $fixed = isset($params['fixed']) ? $params['fixed'] : false;
+        if ('' === $this->active && !$fixed) {
             $this->active = $sectionName;
             $this->current = $sectionName;
         }
@@ -168,7 +169,7 @@ abstract class SectionController extends PortalController
             'buttons' => [],
             'count' => 0,
             'cursor' => [],
-            'fixed' => false,
+            'fixed' => $fixed,
             'group' => '',
             'label' => '',
             'model' => null,
