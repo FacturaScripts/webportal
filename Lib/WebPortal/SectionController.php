@@ -59,7 +59,9 @@ abstract class SectionController extends PortalController
     {
         $group = [];
         foreach ($this->sections as $section) {
-            $group[$section['group']][] = $section;
+            if (!$section['fixed']) {
+                $group[$section['group']][] = $section;
+            }
         }
 
         return $group;
@@ -166,6 +168,7 @@ abstract class SectionController extends PortalController
             'buttons' => [],
             'count' => 0,
             'cursor' => [],
+            'fixed' => false,
             'group' => '',
             'label' => '',
             'model' => null,
@@ -190,22 +193,55 @@ abstract class SectionController extends PortalController
 
     protected function commonCore()
     {
+        $this->setTemplate('Master/SectionController');
+
         $this->active = $this->request->get('active', '');
         $this->createSections();
-        if (!empty($this->sections)) {
-            $this->setTemplate('Master/SectionController');
+
+        // Get any operations that have to be performed
+        $action = $this->request->get('action', '');
+
+        // Run operations on the data before reading it
+        if (!$this->execPreviousAction($action)) {
+            return;
         }
 
+        // Loads data for each section
         foreach (array_keys($this->sections) as $key) {
             $this->loadData($key);
         }
 
-        /// don't combine with previous foreach
+        // don't combine with previous foreach
         foreach ($this->sections as $key => $section) {
             if ($section['count'] === 0) {
                 $this->sections[$key]['count'] = count($section['cursor']);
             }
         }
+
+        // General operations with the loaded data
+        $this->execAfterAction($action);
+    }
+
+    /**
+     * General operations with the loaded data.
+     *
+     * @param string $action
+     */
+    protected function execAfterAction(string $action)
+    {
+        
+    }
+
+    /**
+     * Run operations on the data before reading it. Returns false to stop process.
+     *
+     * @param string $action
+     * 
+     * @return boolean
+     */
+    protected function execPreviousAction(string $action)
+    {
+        return true;
     }
 
     protected function getPagination(array $section): array
