@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -245,7 +245,7 @@ class PortalController extends Controller
         $webPage = new Model\WebPage();
 
         /// show default page?
-        if ($this->uri === '/' || $this->uri === 'index.php') {
+        if ($this->uri === '/' || $this->uri === '/index.php') {
             if ($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
                 return $webPage;
             }
