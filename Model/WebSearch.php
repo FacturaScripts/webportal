@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -101,7 +101,6 @@ class WebSearch extends Base\ModelClass
         }
 
         $this->lastip = $ipAddress;
-        $this->lastmoddisable = true;
         if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
             $this->visitcount += 2;
             $this->save();
@@ -109,7 +108,6 @@ class WebSearch extends Base\ModelClass
             $this->visitcount += 10;
             $this->save();
         }
-        $this->lastmoddisable = false;
     }
 
     /**
