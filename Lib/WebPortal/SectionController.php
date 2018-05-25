@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -48,7 +48,7 @@ abstract class SectionController extends PortalController
 
     abstract protected function createSections();
 
-    abstract protected function loadData($sectionName);
+    abstract protected function loadData(string $sectionName);
 
     public function getCurrentSection(): array
     {

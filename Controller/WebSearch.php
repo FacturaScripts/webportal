@@ -149,12 +149,11 @@ class WebSearch extends PortalController
         $webPageModel = new WebPage();
         $where = [new DataBaseWhere('description|title', $this->query, 'LIKE')];
         foreach ($webPageModel->all($where, ['visitcount' => 'DESC']) as $wpage) {
-            $link = $wpage->url('link');
             $this->addSearchResults([
                 'icon' => $wpage->icon,
                 'title' => $wpage->title,
                 'description' => $wpage->description,
-                'link' => $link
+                'link' => $wpage->url('link')
             ]);
         }
 
