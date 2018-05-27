@@ -106,7 +106,7 @@ abstract class SectionController extends PortalController
             'group' => $group,
             'label' => $this->i18n->trans($label),
             'model' => new $modelClass(),
-            'template' => $templateName . '.html.twig',
+            'template' => $templateName,
         ];
         return $this->addSection($sectionName, $newSection);
     }
@@ -180,12 +180,12 @@ abstract class SectionController extends PortalController
             'pages' => [],
             'query' => ($this->active == $sectionName) ? $this->request->get('query', '') : '',
             'searchOptions' => [],
-            'template' => '',
+            'template' => 'Section/WebPage.html.twig',
             'where' => [],
         ];
 
         foreach ($params as $key => $value) {
-            $newSection[$key] = $value;
+            $newSection[$key] = ($key === 'template') ? $value . '.html.twig' : $value;
         }
 
         $this->sections[$sectionName] = $newSection;

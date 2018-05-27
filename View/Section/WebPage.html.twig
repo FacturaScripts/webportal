@@ -1,0 +1,3 @@
+{% for block in fsc.pageComposer.getBlocks('body') %}
+    {{ block.content() | raw }}
+{% endfor %}
