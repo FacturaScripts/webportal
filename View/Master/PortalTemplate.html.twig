@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="generator" content="FacturaScripts" />
             {% if fsc.webPage.noindex %}<meta name="robots" content="noindex" />{% endif %}
-            <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.url('link') }}" />
+            <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.url('public') }}" />
             {% for block in fsc.pageComposer.getBlocks('meta') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -36,7 +36,7 @@
                 <section class="navbar-section hide-xs">
                     {% for menuItem in fsc.getPublicMenu() %}
                         {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                        <a class="btn{{ activeClass }}" href="{{ menuItem.url('link') | raw }}">
+                        <a class="btn{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
                             {{ menuItem.shorttitle }}
                         </a>
                     {% endfor %}
@@ -50,7 +50,7 @@
                             {% for menuItem in fsc.getPublicMenu() %}
                                 {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
                                 <li class="menu-item">
-                                    <a class="{{ activeClass }}" href="{{ menuItem.url('link') | raw }}">
+                                    <a class="{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
                                         <i class="fa {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
                                     </a>
                                 </li>
@@ -126,7 +126,7 @@
                             {% endfor %}
                             {% for key, menuItem in fsc.getPublicFooter() %}
                                 {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                                <a href="{{ menuItem.url('link') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
+                                <a href="{{ menuItem.url('public') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
                             {% endfor %}
                         </div>
                         <div class="column text-right">
@@ -134,7 +134,7 @@
                                 {% if menuItem.langcode == fsc.webPage.langcode %}
                                     <b>{{ menuItem.langcode }}</b>
                                 {% else %}
-                                    <a href="{{ menuItem.url('link') | raw }}" class="btn btn-link">{{ menuItem.langcode }}</a>
+                                    <a href="{{ menuItem.url('public') | raw }}" class="btn btn-link">{{ menuItem.langcode }}</a>
                                 {% endif %}
                             {% endfor %}
                         </div>

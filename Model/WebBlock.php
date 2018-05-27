@@ -146,7 +146,7 @@ class WebBlock extends Base\ModelClass
      */
     public function url(string $type = 'auto', string $list = 'List')
     {
-        if ($type === 'link') {
+        if ($type === 'public') {
             $webPage = new WebPage();
             if (!empty($this->idpage) && $webPage->loadFromCode($this->idpage)) {
                 return $webPage->url($type);

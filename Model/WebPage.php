@@ -203,7 +203,7 @@ class WebPage extends WebPageClass
     public function url(string $type = 'auto', string $list = 'List')
     {
         switch ($type) {
-            case 'link':
+            case 'public':
                 /// don't use ===
                 if ($this->idpage == AppSettings::get('webportal', 'homepage')) {
                     return FS_ROUTE . '/';

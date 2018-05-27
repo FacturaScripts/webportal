@@ -3,7 +3,7 @@
         <input type="hidden" name="okCookies" value="TRUE"/>
         <div class="toast toast-primary">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
-            <a href="{{ cookiesPage.url('link') }}">{{ i18n.trans('read-more') }}</a>
+            <a href="{{ cookiesPage.url('public') }}">{{ i18n.trans('read-more') }}</a>
         </div>
     </form>
 {% endmacro %}

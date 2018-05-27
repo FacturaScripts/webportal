@@ -153,7 +153,7 @@ class WebSearch extends PortalController
                 'icon' => $wpage->icon,
                 'title' => $wpage->title,
                 'description' => $wpage->description,
-                'link' => $wpage->url('link')
+                'link' => $wpage->url('public')
             ]);
         }
 
@@ -165,7 +165,7 @@ class WebSearch extends PortalController
         $webBlockModel = new WebBlock();
         $where = [new DataBaseWhere('content', $this->query, 'LIKE')];
         foreach ($webBlockModel->all($where) as $wblock) {
-            $link = $wblock->url('link');
+            $link = $wblock->url('public');
             if (empty($link)) {
                 continue;
             }

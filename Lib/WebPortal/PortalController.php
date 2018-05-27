@@ -178,7 +178,7 @@ class PortalController extends Controller
 
     public function url()
     {
-        return empty($this->webPage->permalink) ? parent::url() : $this->webPage->url('link');
+        return empty($this->webPage->permalink) ? parent::url() : $this->webPage->url('public');
     }
 
     /**
