@@ -57,4 +57,5 @@ h2, h3, h4, h5 {
 
 .custom-table-scroll {
     overflow-x: auto;
+    overflow-y: hidden;
 }

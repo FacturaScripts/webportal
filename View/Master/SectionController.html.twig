@@ -13,10 +13,10 @@
         {% endfor %}
         <div class="container">
             <div class="columns">
-                <div class="column col-2 col-md-12">
+                <div class="column">
                     {{ macros.sectionsButtons(fsc, i18n) }}
                 </div>
-                <div class="column">
+                <div class="column col-10 col-md-12">
                     {% for section in fsc.sections %}
                         {% if section.fixed == false %}
                             {% set divClass = (section.name == fsc.active) ? '' : 'd-hide' %}
