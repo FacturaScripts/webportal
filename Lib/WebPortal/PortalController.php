@@ -108,7 +108,7 @@ class PortalController extends Controller
 
         return $roots;
     }
-    
+
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -141,6 +141,27 @@ class PortalController extends Controller
     }
 
     /**
+     * Runs the controller's private logic.
+     *
+     * @param Response              $response
+     * @param User                  $user
+     * @param ControllerPermissions $permissions
+     */
+    public function privateCore(&$response, $user, $permissions)
+    {
+        parent::privateCore($response, $user, $permissions);
+
+        /// loads contact
+        $contact = new Contacto();
+        if (!empty($this->user->email) && $contact->loadFromCode('', [new DataBaseWhere('email', $this->user->email)])) {
+            $this->contact = $contact;
+        }
+
+        $this->processWebPage();
+        $this->showCookiesPolicy = false;
+    }
+
+    /**
      * Execute the public part of the controller.
      *
      * @param Response $response
@@ -160,20 +181,6 @@ class PortalController extends Controller
         } elseif ('' !== $this->request->cookies->get('okCookies', '')) {
             $this->showCookiesPolicy = false;
         }
-    }
-
-    /**
-     * Runs the controller's private logic.
-     *
-     * @param Response              $response
-     * @param User                  $user
-     * @param ControllerPermissions $permissions
-     */
-    public function privateCore(&$response, $user, $permissions)
-    {
-        parent::privateCore($response, $user, $permissions);
-        $this->processWebPage();
-        $this->showCookiesPolicy = false;
     }
 
     public function url()

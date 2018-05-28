@@ -14,36 +14,7 @@
         <div class="container">
             <div class="columns">
                 <div class="column col-2 col-md-12">
-                    <div class="hide-md">
-                        {% for name, group in fsc.getSectionGroups() %}
-                            {% if name != '' %}
-                                <br/>
-                                <div class="divider text-center" data-content="{{ i18n.trans(name) }}"></div>
-                            {% endif %}
-                            {% for section in group %}
-                                {% set btnClass = (section.name == fsc.active) ? 'btn btn-primary' : 'btn' %}
-                                {% set counter = (section.count > 0) ? section.count : '' %}
-                                <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ counter }}" onclick="showSection('{{ section.name }}');">
-                                    <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
-                                </button>
-                            {% endfor %}
-                        {% endfor %}
-                    </div>
-                    <div class="show-md">
-                        <ul class="tab tab-block">
-                            {% for section in fsc.sections %}
-                                {% if section.fixed == false %}
-                                    {% set tabClass = (section.name == fsc.active) ? 'active' : '' %}
-                                    {% set counter = (section.count > 0) ? section.count : '' %}
-                                    <li class="tab-item">
-                                        <a href="#" id="secBtn{{ section.name }}2" class="section-tab badge {{ tabClass }}" data-badge="{{ counter }}" onclick="return showSection('{{ section.name }}');">
-                                            <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ macros.sectionsButtons(fsc, i18n) }}
                 </div>
                 <div class="column">
                     {% for section in fsc.sections %}
@@ -83,24 +54,68 @@
     {{ parent() }}
     <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript">
-                                            function showSection(name) {
-                                                $(".section-btn").removeClass("btn-primary");
-                                                $("#secBtn" + name).addClass("btn-primary");
+        function showSection(name) {
+            $(".section-btn").removeClass("btn-primary");
+            $("#secBtn" + name).addClass("btn-primary");
 
-                                                $(".section-tab").removeClass("active");
-                                                $("#secBtn" + name + "2").addClass("active");
+            $(".section-tab").removeClass("active");
+            $("#secBtn" + name + "2").addClass("active");
 
-                                                $(".section-div").removeClass("d-hide");
-                                                $(".section-div").addClass("d-hide");
-                                                $("#secDiv" + name).removeClass("d-hide");
-                                            }
-                                            function showSectionPage(name, offset) {
-                                                $("#secForm" + name + " input[name=offset]").val(offset);
-                                                $("#secForm" + name).submit();
-                                                return false;
-                                            }
+            $(".section-div").removeClass("d-hide");
+            $(".section-div").addClass("d-hide");
+            $("#secDiv" + name).removeClass("d-hide");
+        }
+        function showSectionPage(name, offset) {
+            $("#secForm" + name + " input[name=offset]").val(offset);
+            $("#secForm" + name).submit();
+            return false;
+        }
     </script>
 {% endblock %}
+
+{% macro sectionsButtons(fsc, i18n) %}
+    <div class="hide-md">
+        {% for name, group in fsc.getSectionGroups() %}
+            {% if name != '' %}
+                <br/>
+                <div class="divider text-center" data-content="{{ i18n.trans(name) }}"></div>
+            {% endif %}
+            {% for section in group %}
+                {% set btnClass = (section.name == fsc.active) ? 'btn btn-primary' : 'btn' %}
+                {% if section.count > 0 %}
+                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ section.count }}" onclick="showSection('{{ section.name }}');">
+                        <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
+                    </button>
+                {% else %}
+                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block" onclick="showSection('{{ section.name }}');">
+                        <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="show-md">
+        <ul class="tab tab-block">
+            {% for section in fsc.sections %}
+                {% set tabClass = (section.name == fsc.active) ? 'active' : '' %}
+                {% if section.fixed == true %}
+                {% elseif section.count > 0 %}
+                    <li class="tab-item">
+                        <a href="#" id="secBtn{{ section.name }}2" class="section-tab badge {{ tabClass }}" data-badge="{{ section.count }}" onclick="return showSection('{{ section.name }}');">
+                            <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="tab-item">
+                        <a href="#" id="secBtn{{ section.name }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ section.name }}');">
+                            <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
 
 {% macro sectionButtons(section) %}
     {% if section.buttons | length > 0 %}
