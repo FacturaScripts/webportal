@@ -28,7 +28,7 @@
                             </div>
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
-                                <p class="tile-subtitle text-gray">{{ item.description }}</p>
+                                <p class="tile-subtitle text-gray">{{ item.description | raw }}</p>
                             </div>
                         </div>
                     {% else %}

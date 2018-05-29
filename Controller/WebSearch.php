@@ -33,6 +33,7 @@ use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 class WebSearch extends PortalController
 {
 
+    const MAX_DESCRIPTION_LENGTH = 300;
     const MAX_TOP_QUERIES = 100;
     const MAX_WORD_DISTANCE = 3;
 
@@ -89,21 +90,60 @@ class WebSearch extends PortalController
 
     /**
      * Adds item to search results.
-     *
-     * @param array $item
-     *
+     * 
+     * @param array  $item
+     * @param string $query
+     * 
      * @return bool
      */
-    protected function addSearchResults(array $item): bool
+    protected function addSearchResults(array $item, string $query): bool
     {
         if (isset($this->searchResults[$item['link']])) {
             return false;
         }
 
-        $item['position'] = stripos($item['title'] . ' ' . $item['description'], $this->query);
-        $item['description'] = mb_substr($item['description'], 0, 300);
+        $item['position'] = stripos($item['title'] . ' ' . $item['description'], $query);
+        $item['description'] = $this->fixDescription($item['description']);
         $this->searchResults[$item['link']] = $item;
         return true;
+    }
+
+    /**
+     * Fix search results descriptions.
+     * 
+     * @param string $txt
+     * 
+     * @return string
+     */
+    protected static function fixDescription(string $txt): string
+    {
+        if (null === $txt) {
+            return '';
+        }
+
+        $final = trim(Utils::trueTextBreak($txt, self::MAX_DESCRIPTION_LENGTH));
+        return (mb_strlen($final) < self::MAX_DESCRIPTION_LENGTH) ? $final : $final . '...';
+    }
+
+    /**
+     * Returns an array with the query and the same query without accents.
+     * 
+     * @return array
+     */
+    protected function getFinalQueries(): array
+    {
+        $queries = [$this->query];
+        $transform = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
+            'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
+            'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
+            'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
+        $newQuery = strtr($this->query, $transform);
+        if ($newQuery != $this->query) {
+            $queries[] = $newQuery;
+        }
+
+        return $queries;
     }
 
     protected function initSearch()
@@ -116,7 +156,9 @@ class WebSearch extends PortalController
             return;
         }
 
-        $this->search();
+        foreach ($this->getFinalQueries() as $query) {
+            $this->search($query);
+        }
         $this->sort();
 
         /// load or create search query for statics
@@ -143,27 +185,29 @@ class WebSearch extends PortalController
 
     /**
      * Add search results to list.
+     * 
+     * @param string $query
      */
-    protected function search()
+    protected function search(string $query)
     {
         $webPageModel = new WebPage();
-        $where = [new DataBaseWhere('description|title', $this->query, 'LIKE')];
+        $where = [new DataBaseWhere('description|title', $query, 'LIKE')];
         foreach ($webPageModel->all($where, ['visitcount' => 'DESC']) as $wpage) {
             $this->addSearchResults([
                 'icon' => $wpage->icon,
                 'title' => $wpage->title,
                 'description' => $wpage->description,
                 'link' => $wpage->url('public')
-            ]);
+                ], $query);
         }
 
-        $this->searchBlocks();
+        $this->searchBlocks($query);
     }
 
-    protected function searchBlocks()
+    protected function searchBlocks(string $query)
     {
         $webBlockModel = new WebBlock();
-        $where = [new DataBaseWhere('content', $this->query, 'LIKE')];
+        $where = [new DataBaseWhere('content', $query, 'LIKE')];
         foreach ($webBlockModel->all($where) as $wblock) {
             $link = $wblock->url('public');
             if (empty($link)) {
@@ -175,7 +219,7 @@ class WebSearch extends PortalController
                 'title' => $link,
                 'description' => $wblock->content(true),
                 'link' => $link
-            ]);
+                ], $query);
         }
     }
 
