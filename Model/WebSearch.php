@@ -39,6 +39,13 @@ class WebSearch extends Base\ModelClass
     public $creationdate;
 
     /**
+     * Primary key.
+     *
+     * @var int
+     */
+    public $id;
+
+    /**
      * IP from last visitor.
      *
      * @var string
@@ -51,13 +58,6 @@ class WebSearch extends Base\ModelClass
      * @var string
      */
     public $lastmod;
-
-    /**
-     * Disable lastmod update.
-     *
-     * @var bool
-     */
-    private $lastmoddisable;
 
     /**
      *
@@ -117,7 +117,7 @@ class WebSearch extends Base\ModelClass
      */
     public static function primaryColumn()
     {
-        return 'query';
+        return 'id';
     }
 
     /**

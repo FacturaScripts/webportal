@@ -171,9 +171,9 @@ class WebSearch extends PortalController
         }
         $this->sort();
 
-        /// load or create search query for statics
+        /// load or create search query for statistics
         $webSearch = new WebSearchModel();
-        if (!$webSearch->loadFromCode($this->query)) {
+        if (!$webSearch->loadFromCode('', [new DataBaseWhere('query', $this->query)])) {
             $webSearch->query = $this->query;
         }
         $webSearch->numresults = count($this->searchResults);

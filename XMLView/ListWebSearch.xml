@@ -22,7 +22,7 @@
 <view>
     <columns>
         <column name="code" display="none" order="100">
-            <widget type="text" fieldname="query" onclick="WebSearch" />
+            <widget type="text" fieldname="id" onclick="WebSearch" />
         </column>
         <column name="query" order="110">
             <widget type="text" fieldname="query" />
