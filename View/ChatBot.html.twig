@@ -43,3 +43,14 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('Plugins/webportal/node_modules/push.js/bin/push.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            ///Push.create('Hello World!');
+        });
+    </script>
+{% endblock %}

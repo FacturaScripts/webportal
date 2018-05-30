@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/FacturaScripts/webportal#readme",
   "dependencies": {
+    "push.js": "^1.0.5",
     "spectre.css": "^0.5.1"
   }
 }

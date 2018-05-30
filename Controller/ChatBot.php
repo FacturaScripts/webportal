@@ -23,9 +23,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use DialogFlow\Client;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
-use FacturaScripts\Plugins\webportal\Model\ChatBotMessage;
+use FacturaScripts\Plugins\webportal\Model\ChatMessage;
+use FacturaScripts\Plugins\webportal\Model\ChatSession;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
@@ -36,48 +36,18 @@ use Symfony\Component\HttpFoundation\Cookie;
 class ChatBot extends PortalController
 {
 
-    const MAX_CHAT_EXPIRE = 604800;
-
     /**
-     * All messages with ChatBot.
+     * All messages in current chat session.
      * 
-     * @var ChatBotMessage[]
+     * @var ChatMessage[]
      */
     public $messages = [];
 
-    public function getSessionId()
-    {
-        if ($this->showCookiesPolicy) {
-            return time();
-        }
-
-        if ('' !== $this->request->cookies->get('chatbotSessionId', '')) {
-            return $this->request->cookies->get('chatbotSessionId', '');
-        }
-
-        $sessionId = Utils::randomString();
-        $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
-        $this->response->headers->setCookie(new Cookie('chatbotSessionId', $sessionId, $expire));
-        return $sessionId;
-    }
-
     /**
-     * Returns a human identifier.
      *
-     * @return null|string
+     * @var ChatSession
      */
-    public function getHumanId()
-    {
-        if ($this->user) {
-            return $this->user->nick;
-        }
-
-        if ($this->contact) {
-            return $this->contact->email;
-        }
-
-        return $this->request->getClientIp();
-    }
+    public $session;
 
     /**
      * Returns basic page attributes
@@ -122,13 +92,13 @@ class ChatBot extends PortalController
         $this->processChat();
     }
 
-    private function askDialogflow(string $token, string $userInput)
+    protected function askDialogflow(string $token, string $userInput)
     {
         try {
             $client = new Client($token);
             $query = $client->get('query', [
                 'query' => $userInput,
-                'sessionId' => $this->getSessionId()
+                'sessionId' => $this->session->idchat
             ]);
 
             $response = json_decode((string) $query->getBody(), true);
@@ -146,14 +116,32 @@ class ChatBot extends PortalController
     /**
      * Return all chat messages with this user.
      */
-    private function getChatMessages()
+    protected function getChatMessages()
     {
-        $chatBotMessage = new ChatBotMessage();
-        $where = [
-            new DataBaseWhere('humanid', $this->getHumanId()),
-            new DataBaseWhere('creationtime', time() - self::MAX_CHAT_EXPIRE, '>')
-        ];
-        $this->messages = array_reverse($chatBotMessage->all($where, ['creationtime' => 'DESC']));
+        $chatMessage = new ChatMessage();
+        $chatSession = $this->getChatSession();
+        $where = [new DataBaseWhere('idchat', $chatSession->idchat)];
+        $this->messages = array_reverse($chatMessage->all($where, ['creationtime' => 'DESC']));
+    }
+
+    protected function getChatSession()
+    {
+        if (isset($this->session)) {
+            return $this->session;
+        }
+
+        $this->session = new ChatSession();
+        $sessionId = $this->request->cookies->get('chatSessionId', '');
+        if (!empty($sessionId) && $this->session->loadFromCode($sessionId)) {
+            return $this->session;
+        }
+
+        if ($this->session->save()) {
+            $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
+            $this->response->headers->setCookie(new Cookie('chatSessionId', $this->session->idchat, $expire));
+        }
+
+        return $this->session;
     }
 
     /**
@@ -163,37 +151,32 @@ class ChatBot extends PortalController
      * @param bool   $unmatched
      * @param bool   $isChatbot
      */
-    private function newChatMessage(string $content, bool $unmatched = false, bool $isChatbot = false)
+    protected function newChatMessage(string $content, bool $unmatched = false, bool $isChatbot = false)
     {
-        $chatBotMessage = new ChatBotMessage();
-        $chatBotMessage->content = $content;
-        $chatBotMessage->humanid = $this->getHumanId();
-        $chatBotMessage->ischatbot = $isChatbot;
-        $chatBotMessage->unmatched = $unmatched;
+        $chatMessage = new ChatMessage();
+        $chatMessage->content = $content;
+        $chatMessage->idchat = $this->session->idchat;
+        $chatMessage->ischatbot = $isChatbot;
+        $chatMessage->unmatched = $unmatched;
 
         if ($isChatbot) {
-            $chatBotMessage->creationtime++;
+            $chatMessage->creationtime++;
         }
 
-        if ($chatBotMessage->save()) {
-            $this->messages[] = $chatBotMessage;
+        if ($chatMessage->save()) {
+            $this->messages[] = $chatMessage;
         }
     }
 
     /**
      * Process answer and reply.
      */
-    private function processChat()
+    protected function processChat()
     {
         $dfToken = AppSettings::get('webportal', 'dfclitoken', '');
         $userInput = $this->request->request->get('question', '');
         if ('' === $dfToken || '' === $userInput) {
             /// no token or message
-            return;
-        }
-
-        if (null !== $this->contact || null !== $this->user) {
-            $this->askDialogflow($dfToken, $userInput);
             return;
         }
 

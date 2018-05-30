@@ -18,15 +18,14 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
- * Description of EditChatBotMessage
+ * Description of ListChatSession
  *
  * @author Carlos García Gómez
  */
-class EditChatBotMessage extends ExtendedController\PanelController
+class ListChatSession extends ExtendedController\ListController
 {
 
     /**
@@ -37,10 +36,9 @@ class EditChatBotMessage extends ExtendedController\PanelController
     public function getPageData()
     {
         $pageData = parent::getPageData();
-        $pageData['title'] = 'chat-message';
+        $pageData['title'] = 'chat-messages';
         $pageData['menu'] = 'web';
-        $pageData['showonmenu'] = false;
-        $pageData['icon'] = 'fa-commenting-o';
+        $pageData['icon'] = 'fa-comments-o';
 
         return $pageData;
     }
@@ -50,30 +48,19 @@ class EditChatBotMessage extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('EditChatBotMessage', 'ChatBotMessage', 'chat-message', 'fa-commenting-o');
-        $this->addListView('ListChatBotMessage', 'ChatBotMessage', 'chat-messages', 'fa-comments');
-
-        $this->views['ListChatBotMessage']->disableColumn('humanid', true);
-    }
-
-    /**
-     * Load data view procedure
-     *
-     * @param string $keyView
-     * @param ExtendedController\BaseView $view
-     */
-    protected function loadData($keyView, $view)
-    {
-        switch ($keyView) {
-            case 'EditChatBotMessage':
-                $code = $this->request->get('code');
-                $view->loadData($code);
-                break;
-
-            case 'ListChatBotMessage':
-                $humanid = $this->getViewModelValue('EditChatBotMessage', 'humanid');
-                $view->loadData(false, [new DataBaseWhere('humanid', $humanid)], ['creationtime' => 'DESC']);
-                break;
-        }
+        /// sessions
+        $this->addView('ListChatSession', 'ChatSession', 'chat-sessions', 'fa-comments-o');
+        $this->addOrderBy('ListChatSession', 'idchat', 'code');
+        $this->addOrderBy('ListChatSession', 'creationtime', 'date', 2);
+        $this->addSearchFields('ListChatSession', ['idchat']);
+        
+        /// messages
+        $this->addView('ListChatMessage', 'ChatMessage', 'chat-messages', 'fa-comments-o');
+        $this->addSearchFields('ListChatMessage', ['content']);
+        $this->addOrderBy('ListChatMessage', 'idchat', 'code');
+        $this->addOrderBy('ListChatMessage', 'creationtime', 'date', 2);
+        $this->addFilterCheckbox('ListChatMessage', 'unmatched', 'unmatched', 'unmatched');
+        $this->addFilterCheckbox('ListChatMessage', 'ischatbot', 'chatbot', 'ischatbot');
+        $this->addFilterCheckbox('ListChatMessage', 'nochatbot', 'human', 'ischatbot', true);
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : chatsessions.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Structure for the chatsessions table.
+-->
+<table>
+    <column>
+        <name>creationtime</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idchat</name>
+        <type>serial</type>
+        <null>NO</null>
+        <default>nextval('chatsession_idchat_seq'::regclass)</default>
+    </column>
+    <constraint>
+        <name>chatsessions_pkey</name>
+        <type>PRIMARY KEY (idchat)</type>
+    </constraint>
+</table>

@@ -18,14 +18,15 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
- * Description of ListChatBotMessage
+ * Description of EditChatSession
  *
  * @author Carlos García Gómez
  */
-class ListChatBotMessage extends ExtendedController\ListController
+class EditChatSession extends ExtendedController\PanelController
 {
 
     /**
@@ -36,9 +37,10 @@ class ListChatBotMessage extends ExtendedController\ListController
     public function getPageData()
     {
         $pageData = parent::getPageData();
-        $pageData['title'] = 'chat-messages';
+        $pageData['title'] = 'chat-message';
         $pageData['menu'] = 'web';
-        $pageData['icon'] = 'fa-comments-o';
+        $pageData['showonmenu'] = false;
+        $pageData['icon'] = 'fa-commenting-o';
 
         return $pageData;
     }
@@ -48,13 +50,30 @@ class ListChatBotMessage extends ExtendedController\ListController
      */
     protected function createViews()
     {
-        $this->addView('ListChatBotMessage', 'ChatBotMessage', 'chat-messages', 'fa-comments-o');
-        $this->addSearchFields('ListChatBotMessage', ['content', 'humanid']);
-        $this->addOrderBy('ListChatBotMessage', 'idchat', 'code');
-        $this->addOrderBy('ListChatBotMessage', 'creationtime', 'date', 2);
-        $this->addFilterAutocomplete('ListChatBotMessage', 'humanid', 'humanid', 'humanid', 'chatbot_messages', 'humanid', 'humanid');
-        $this->addFilterCheckbox('ListChatBotMessage', 'unmatched', 'unmatched', 'unmatched');
-        $this->addFilterCheckbox('ListChatBotMessage', 'ischatbot', 'chatbot', 'ischatbot');
-        $this->addFilterCheckbox('ListChatBotMessage', 'nochatbot', 'human', 'ischatbot', true);
+        $this->addEditView('EditChatSession', 'ChatSession', 'chat-session', 'fa-commenting-o');
+        $this->addListView('ListChatMessage', 'ChatMessage', 'chat-messages', 'fa-comments');
+
+        $this->views['ListChatMessage']->disableColumn('code', true);
+    }
+
+    /**
+     * Load data view procedure
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
+    protected function loadData($keyView, $view)
+    {
+        switch ($keyView) {
+            case 'EditChatSession':
+                $code = $this->request->get('code');
+                $view->loadData($code);
+                break;
+
+            case 'ListChatMessage':
+                $idchat = $this->getViewModelValue('EditChatSession', 'idchat');
+                $view->loadData(false, [new DataBaseWhere('idchat', $idchat)], ['creationtime' => 'ASC']);
+                break;
+        }
     }
 }
