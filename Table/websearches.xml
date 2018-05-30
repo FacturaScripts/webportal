@@ -24,7 +24,7 @@
     </column>
     <column>
         <name>query</name>
-        <type>character varying(300)</type>
+        <type>character varying(100)</type>
         <null>NO</null>
     </column>
     <column>
