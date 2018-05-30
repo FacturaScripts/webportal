@@ -189,7 +189,8 @@ class WebSearch extends PortalController
      */
     protected function sanitizeSearch()
     {
-        $query = $this->request->get('query', '');
+        $code = $this->request->get('code', '');
+        $query = $this->request->get('query', $code);
         return Utils::noHtml(mb_strtolower($query));
     }
 
