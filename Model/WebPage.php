@@ -125,22 +125,6 @@ class WebPage extends WebPageClass
     }
 
     /**
-     * This function is called when creating the model table. Returns the SQL
-     * that will be executed after the creation of the table. Useful to insert values
-     * default.
-     *
-     * @return string
-     */
-    public function install()
-    {
-        return 'INSERT INTO ' . static::tableName() . " (title,shorttitle,description,"
-            . "permalink,langcode,showonmenu,showonfooter,noindex,icon) VALUES "
-            . "('Home','Home','Home description','/','" . substr(FS_LANG, 0, 2) . "',true,false,false,'fa-file-o'),"
-            . "('Cookies','Cookies','Cookies description','/cookies','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o'),"
-            . "('Privacy','Privacy','Privacy description','/privacy','" . substr(FS_LANG, 0, 2) . "',false,true,true,'fa-file-o');";
-    }
-
-    /**
      * Returns the name of the column that is the primary key of the model.
      *
      * @return string
