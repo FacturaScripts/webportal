@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,6 +35,8 @@ use Symfony\Component\HttpFoundation\Cookie;
  */
 class ChatBot extends PortalController
 {
+
+    const MAX_CHAT_EXPIRE = 604800;
 
     /**
      * All messages with ChatBot.
@@ -149,9 +151,9 @@ class ChatBot extends PortalController
         $chatBotMessage = new ChatBotMessage();
         $where = [
             new DataBaseWhere('humanid', $this->getHumanId()),
-            new DataBaseWhere('creationtime', time() - self::PUBLIC_COOKIES_EXPIRE, '>')
+            new DataBaseWhere('creationtime', time() - self::MAX_CHAT_EXPIRE, '>')
         ];
-        $this->messages = $chatBotMessage->all($where, ['creationtime' => 'DESC']);
+        $this->messages = array_reverse($chatBotMessage->all($where, ['creationtime' => 'DESC']));
     }
 
     /**
@@ -174,7 +176,7 @@ class ChatBot extends PortalController
         }
 
         if ($chatBotMessage->save()) {
-            array_unshift($this->messages, $chatBotMessage);
+            $this->messages[] = $chatBotMessage;
         }
     }
 
