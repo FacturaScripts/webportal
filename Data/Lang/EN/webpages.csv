@@ -1,0 +1,4 @@
+creationdate;customcontroller;description;icon;idcluster;idpage;langcode;lastip;lastmod;noindex;ordernum;permalink;shorttitle;showonfooter;showonmenu;title;visitcount
+NULL;NULL;"Home description";"fa-file-o";NULL;"1";"en";NULL;NULL;"0";"100";"/";"Home";"0";"1";"Home";"0"
+NULL;NULL;"Cookies description";"fa-file-o";NULL;"2";"en";NULL;NULL;"1";"100";"/cookies";"Cookies";"1";"0";"Cookies";"0"
+NULL;NULL;"Privacy description";"fa-file-o";NULL;"3";"en";NULL;NULL;"1";"100";"/privacy";"Privacy";"1";"0";"Privacy";"0"
