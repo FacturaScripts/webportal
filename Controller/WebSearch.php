@@ -102,7 +102,17 @@ class WebSearch extends PortalController
             return false;
         }
 
-        $item['position'] = stripos($item['title'] . ' ' . $item['description'], $query);
+        $item['position'] = false;
+        foreach (explode(' ', $query) as $subQuery) {
+            $position = stripos($item['title'] . ' ' . $item['description'], $subQuery);
+            if (false === $position) {
+                $item['position'] = false;
+                break;
+            }
+
+            $item['position'] = max([(int) $item['position'], (int) $position]);
+        }
+
         $item['description'] = $this->fixDescription($item['description']);
         $this->searchResults[$item['link']] = $item;
         return true;

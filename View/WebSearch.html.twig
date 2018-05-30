@@ -28,6 +28,9 @@
                             </div>
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
+                                {% if fsc.user %}
+                                    {{ item.position }}
+                                {% endif %}
                                 <p class="tile-subtitle text-gray">{{ item.description | raw }}</p>
                             </div>
                         </div>
@@ -60,7 +63,7 @@
     <script>
         $(document).ready(function () {
             var availableTags = {{ fsc.topQueries | json_encode() | raw }};
-            $("#queryInput").autocomplete({
+                    $("#queryInput").autocomplete({
                 source: availableTags,
                 select: function (event, ui) {
                     $("#queryInput").val(ui.item.label);
