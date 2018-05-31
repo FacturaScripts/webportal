@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
+use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -29,6 +30,13 @@ class ChatSession extends Base\ModelClass
 {
 
     use Base\ModelTrait;
+
+    /**
+     * Message content.
+     *
+     * @var string
+     */
+    public $content;
 
     /**
      * Creation time, in seconds.
@@ -45,12 +53,25 @@ class ChatSession extends Base\ModelClass
     public $idchat;
 
     /**
+     *
+     * @var int
+     */
+    public $idcontacto;
+
+    /**
+     *
+     * @var int
+     */
+    public $lastmodtime;
+
+    /**
      * Reset the values of all model properties.
      */
     public function clear()
     {
         parent::clear();
         $this->creationtime = time();
+        $this->lastmodtime = time();
     }
 
     /**
@@ -71,5 +92,45 @@ class ChatSession extends Base\ModelClass
     public static function tableName()
     {
         return 'chatsessions';
+    }
+
+    /**
+     * Returns True if there is no errors on properties values.
+     *
+     * @return bool
+     */
+    public function test()
+    {
+        $this->content = Utils::noHtml($this->content);
+        return parent::test();
+    }
+
+    /**
+     * Return time since now.
+     *
+     * @return string
+     */
+    public function timesince()
+    {
+        $time = time() - $this->lastmodtime;
+        $finalTime = ($time < 1) ? 1 : $time;
+        $tokens = array(
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+
+        foreach ($tokens as $unit => $text) {
+            if ($finalTime < $unit) {
+                continue;
+            }
+
+            $numberOfUnits = floor($finalTime / $unit);
+            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+        }
     }
 }

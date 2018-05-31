@@ -51,6 +51,12 @@ class ChatMessage extends Base\ModelClass
      * @var int
      */
     public $idchat;
+    
+    /**
+     *
+     * @var int
+     */
+    public $idcontacto;
 
     /**
      * Primary key.

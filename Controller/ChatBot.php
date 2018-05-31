@@ -92,6 +92,19 @@ class ChatBot extends PortalController
         $this->processChat();
     }
 
+    protected function answerUnknown()
+    {
+        
+    }
+
+    /**
+     * Ask dialogflow service to answer the user input.
+     * 
+     * @param string $token
+     * @param string $userInput
+     *
+     * @return string
+     */
     protected function askDialogflow(string $token, string $userInput)
     {
         try {
@@ -102,15 +115,16 @@ class ChatBot extends PortalController
             ]);
 
             $response = json_decode((string) $query->getBody(), true);
-            $botMessage = $response['result']['fulfillment']['speech'] ?? '-';
-            $unmatched = ($response['result']['action'] === 'input.unknown');
-            $this->newChatMessage($userInput, $unmatched);
-            $this->newChatMessage($botMessage, false, true);
+            if ($response['result']['action'] === 'input.unknown') {
+                return '';
+            }
+
+            return $response['result']['fulfillment']['speech'] ?? '';
         } catch (\Exception $error) {
-            $this->newChatMessage($userInput, true);
-            $this->newChatMessage($error->getMessage(), false, true);
             $this->miniLog->alert($error->getMessage());
         }
+
+        return '';
     }
 
     /**
@@ -134,6 +148,10 @@ class ChatBot extends PortalController
         $sessionId = $this->request->cookies->get('chatSessionId', '');
         if (!empty($sessionId) && $this->session->loadFromCode($sessionId)) {
             return $this->session;
+        }
+
+        if ($this->contact) {
+            $this->session->idcontacto = $this->contact->idcontacto;
         }
 
         if ($this->session->save()) {
@@ -161,10 +179,16 @@ class ChatBot extends PortalController
 
         if ($isChatbot) {
             $chatMessage->creationtime++;
+        } else {
+            $chatMessage->idcontacto = is_null($this->contact) ? null : $this->contact->idcontacto;
+            $this->session->content = $content;
         }
 
         if ($chatMessage->save()) {
             $this->messages[] = $chatMessage;
+
+            $this->session->lastmodtime = time();
+            $this->session->save();
         }
     }
 
@@ -182,11 +206,18 @@ class ChatBot extends PortalController
 
         /// anonymous comment. We check message limits.
         $maxAnonymousMsgs = AppSettings::get('webportal', 'dfmaxanonymous', '');
-        if ('' === $maxAnonymousMsgs || count($this->messages) < (int) $maxAnonymousMsgs) {
-            $this->askDialogflow($dfToken, $userInput);
+        if (!empty($maxAnonymousMsgs) && count($this->messages) > (int) $maxAnonymousMsgs) {
+            $this->setTemplate('Master/LoginToContinue');
             return;
         }
 
-        $this->setTemplate('Master/LoginToContinue');
+        $botMessage = $this->askDialogflow($dfToken, $userInput);
+        if ('' === $botMessage) {
+            $this->newChatMessage($userInput, true);
+            $this->answerUnknown();
+        } else {
+            $this->newChatMessage($userInput);
+            $this->newChatMessage($botMessage, false, true);
+        }
     }
 }

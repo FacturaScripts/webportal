@@ -7,6 +7,10 @@
 -->
 <table>
     <column>
+        <name>content</name>
+        <type>text</type>
+    </column>
+    <column>
         <name>creationtime</name>
         <type>integer</type>
         <null>NO</null>
@@ -17,8 +21,20 @@
         <null>NO</null>
         <default>nextval('chatsession_idchat_seq'::regclass)</default>
     </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>lastmodtime</name>
+        <type>integer</type>
+    </column>
     <constraint>
         <name>chatsessions_pkey</name>
         <type>PRIMARY KEY (idchat)</type>
+    </constraint>
+    <constraint>
+        <name>ca_chatsessions_contactos</name>
+        <type>FOREIGN KEY (idcontacto) REFERENCES contactos (idcontacto) ON DELETE CASCADE ON UPDATE CASCADE</type>
     </constraint>
 </table>

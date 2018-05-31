@@ -21,6 +21,10 @@
         <null>NO</null>
     </column>
     <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
         <name>idmessage</name>
         <type>serial</type>
         <null>NO</null>
@@ -45,5 +49,9 @@
     <constraint>
         <name>ca_chatmessages_chatsessions</name>
         <type>FOREIGN KEY (idchat) REFERENCES chatsessions (idchat) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_chatmessages_contactos</name>
+        <type>FOREIGN KEY (idcontacto) REFERENCES contactos (idcontacto) ON DELETE CASCADE ON UPDATE CASCADE</type>
     </constraint>
 </table>
