@@ -83,9 +83,9 @@ abstract class WebPageClass extends ModelClass
     public function clear()
     {
         parent::clear();
-        $this->creationdate = date('d-m-Y');
+        $this->creationdate = date('d-m-Y H:i:s');
         $this->langcode = substr(FS_LANG, 0, 2);
-        $this->lastmod = date('d-m-Y');
+        $this->lastmod = date('d-m-Y H:i:s');
         $this->ordernum = 100;
         $this->visitcount = 0;
     }
@@ -95,10 +95,10 @@ abstract class WebPageClass extends ModelClass
      */
     public function increaseVisitCount(string $ipAddress = '')
     {
-        if($ipAddress == $this->lastip) {
+        if ($ipAddress == $this->lastip) {
             return;
         }
-        
+
         $this->lastip = $ipAddress;
         $this->lastmoddisable = true;
         if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
@@ -118,7 +118,7 @@ abstract class WebPageClass extends ModelClass
      */
     public function test()
     {
-        $this->lastmod = (true === $this->lastmoddisable) ? $this->lastmod : date('d-m-Y');
+        $this->lastmod = (true === $this->lastmoddisable) ? $this->lastmod : date('d-m-Y H:i:s');
         return parent::test();
     }
 }
