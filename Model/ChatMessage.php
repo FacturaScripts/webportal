@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,11 +22,11 @@ use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
- * Description of ChatBotMessage
+ * Description of ChatMessage
  *
  * @author Carlos García Gómez
  */
-class ChatBotMessage extends Base\ModelClass
+class ChatMessage extends Base\ModelClass
 {
 
     use Base\ModelTrait;
@@ -46,18 +46,24 @@ class ChatBotMessage extends Base\ModelClass
     public $creationtime;
 
     /**
-     * Human identification.
+     * Chat session identifier.
      *
-     * @var string
+     * @var int
      */
-    public $humanid;
+    public $idchat;
+    
+    /**
+     *
+     * @var int
+     */
+    public $idcontacto;
 
     /**
      * Primary key.
      *
      * @var int
      */
-    public $idchat;
+    public $idmessage;
 
     /**
      * To identify chatbot messages,
@@ -84,6 +90,12 @@ class ChatBotMessage extends Base\ModelClass
         $this->unmatched = false;
     }
 
+    public function install()
+    {
+        new ChatSession();
+        return parent::install();
+    }
+
     /**
      * Returns the name of the column that is the primary key of the model.
      *
@@ -91,7 +103,7 @@ class ChatBotMessage extends Base\ModelClass
      */
     public static function primaryColumn()
     {
-        return 'idchat';
+        return 'idmessage';
     }
 
     /**
@@ -101,7 +113,7 @@ class ChatBotMessage extends Base\ModelClass
      */
     public static function tableName()
     {
-        return 'chatbot_messages';
+        return 'chatmessages';
     }
 
     /**

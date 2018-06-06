@@ -29,7 +29,7 @@
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
                                 {% if fsc.user %}
-                                    {{ item.position }}
+                                    <span class="label">{{ item.position }}</span>
                                 {% endif %}
                                 <p class="tile-subtitle text-gray">{{ item.description | raw }}</p>
                             </div>

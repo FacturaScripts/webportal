@@ -21,22 +21,19 @@
 
 <view>
     <columns>
-        <column name="code" display="none" order="100">
-            <widget type="text" fieldname="idchat" onclick="EditChatBotMessage" />
+        <column name="code" order="100">
+            <widget type="text" fieldname="idchat" onclick="EditChatSession" />
         </column>
-        <column name="humanid" order="110">
-            <widget type="text" fieldname="humanid" />
-        </column>
-        <column name="content" order="120">
+        <column name="content" order="110">
             <widget type="text" fieldname="content" />
         </column>
-        <column name="unmatched" display="center" order="130">
+        <column name="unmatched" display="center" order="120">
             <widget type="checkbox" fieldname="unmatched" />
         </column>
-        <column name="chatbot" display="center" order="140">
+        <column name="chatbot" display="center" order="130">
             <widget type="checkbox" fieldname="ischatbot" />
         </column>
-        <column name="date" display="right" order="150">
+        <column name="date" display="right" order="140">
             <widget type="date" fieldname="creationtime" />
         </column>
     </columns>

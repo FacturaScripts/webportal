@@ -22,20 +22,11 @@
 <view>
     <columns>
         <group name="data" numcolumns="12">
-            <column name="code" display="none" order="100">
-                <widget type="text" fieldname="idchat" required="true" />
+            <column name="code" order="100">
+                <widget type="text" fieldname="idchat" required="true" readonly="true" />
             </column>
-            <column name="humanid" numcolumns="4" order="110">
-                <widget type="text" fieldname="humanid" readonly="true" />
-            </column>
-            <column name="unmatched" numcolumns="4" order="110">
-                <widget type="checkbox" fieldname="unmatched" />
-            </column>
-            <column name="chatbot" numcolumns="4" order="110">
-                <widget type="checkbox" fieldname="ischatbot" readonly="true" />
-            </column>
-            <column name="content" numcolumns="12" order="120">
-                <widget type="textarea" fieldname="content" readonly="true" required="true" />
+            <column name="date" order="120">
+                <widget type="date" fieldname="creationtime" readonly="true" />
             </column>
         </group>
     </columns>
