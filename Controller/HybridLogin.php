@@ -85,6 +85,10 @@ class HybridLogin extends PortalController
                 $this->twitterLogin();
                 break;
 
+            case 'fs':
+                $this->contactLogin();
+                break;
+
             default:
                 $this->miniLog->alert('no-login-provider');
                 break;
@@ -97,7 +101,7 @@ class HybridLogin extends PortalController
     private function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->alert($this->i18n->trans('invalid-email'));
+            $this->miniLog->alert($this->i18n->trans('invalid-email', [ '%email%' => $userProfile->email]));
             return;
         }
 
@@ -118,6 +122,9 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Manager Facebook login
+     */
     private function facebookLogin()
     {
         $config = [
@@ -139,6 +146,9 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Manage Google login
+     */
     private function googleLogin()
     {
         $config = [
@@ -160,6 +170,9 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Manage Twitter login
+     */
     private function twitterLogin()
     {
         $config = [
@@ -179,6 +192,35 @@ class HybridLogin extends PortalController
             $this->checkContact($userProfile);
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
+        }
+    }
+
+    /**
+     * Manager FacturaScripts contact login
+     */
+    private function contactLogin()
+    {
+        if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
+            return false;
+        }
+
+        $contactEmail = $this->request->request->get('fsContact', '');
+        if ($contactEmail !== '') {
+            $contact = new Contacto();
+            $contact = $contact->getByEmail($contactEmail);
+            if ($contact === null) {
+                $this->miniLog->alert($this->i18n->trans('email-not-registered', [ '%email%' => $contactEmail]));
+            } else {
+                $contactPass = $this->request->request->get('fsContactPass', '');
+                if ($contact->verifyPassword($contactPass)) {
+                    $this->contact = $contact;
+                    $this->updateCookies($this->contact, true);
+                    $homeUrl = AppSettings::get('webportal', 'url');
+                    $this->response->headers->set('Refresh', '0; ' . $homeUrl);
+                } else {
+                    $this->miniLog->alert($this->i18n->trans('invalid-password'));
+                }
+            }
         }
     }
 }

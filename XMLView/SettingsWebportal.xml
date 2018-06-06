@@ -33,11 +33,19 @@
             </column>
             <column name="homepage" numcolumns="3" order="120">
                 <widget type="select" fieldname="homepage" required="true">
-                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
+                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
                 </widget>
             </column>
             <column name="copyright" title="copyright-text" numcolumns="12" order="130">
                 <widget type="textarea" fieldname="copyright"/>
+            </column>
+        </group>
+        <group name="local-login" title="local-login" icon="fa-sign-in" numcolumns="12">
+            <column name="allow-login-contacts" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="allowlogincontacts"/>
+            </column>
+            <column name="allow-new-registrations" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="allownewregistrations"/>
             </column>
         </group>
         <group name="facebook-login" title="facebook-login" icon="fa-facebook" numcolumns="12">

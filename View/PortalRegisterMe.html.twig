@@ -1,0 +1,58 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    <div class="body-section">
+        <br/>
+        <div class="container grid-lg">
+            <div class="columns">
+                <div class="col-12">
+                    <div class="panel">
+                        <form action="{{ fsc.url() }}?action=register" method="post">
+                            <div class="panel-header text-center">
+                                <i class="fa {{ fsc.getPageData()['icon']  }} fa-2x fa-fw" aria-hidden="true"></i>
+                                <h1 class="panel-title">{{ i18n.trans('register-new-contact') }}</h1>
+                            </div>
+                            <div class="panel-body">
+                                <div class="container">
+                                    <div class="columns">
+                                        <div class="column col-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="name">{{ i18n.trans('name') }}</label>
+                                                <input class="form-input" type="text" name="name" id="name" placeholder="{{ i18n.trans('name') }}">
+                                            </div>
+                                        </div>
+                                        <div class="column col-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="email">{{ i18n.trans('email') }} *</label>
+                                                <input class="form-input" type="text" name="email" id="email" placeholder="{{ i18n.trans('email') }}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column col-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="password">{{ i18n.trans('password') }} *</label>
+                                                <input class="form-input" type="password" name="password" id="password" placeholder="{{ i18n.trans('password') }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="column col-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="password2">{{ i18n.trans('repeat-password') }} *</label>
+                                                <input class="form-input" type="password" name="password2" id="password2" placeholder="{{ i18n.trans('repeat-password') }}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <div class="container">
+                                    <button class="btn btn-primary input-group-btn">{{ i18n.trans('register-me') }}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
