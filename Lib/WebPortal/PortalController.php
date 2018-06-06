@@ -49,7 +49,7 @@ class PortalController extends Controller
 
     /**
      * The associated contact.
-     * 
+     *
      * @var Contacto
      */
     public $contact;
@@ -63,21 +63,21 @@ class PortalController extends Controller
 
     /**
      * The page composer.
-     * 
+     *
      * @var PageComposer
      */
     public $pageComposer;
 
     /**
      * If cookies policy needs to be showed to the user.
-     * 
+     *
      * @var bool
      */
     public $showCookiesPolicy = false;
 
     /**
      * The web page object.
-     * 
+     *
      * @var Model\WebPage
      */
     public $webPage;
@@ -96,6 +96,11 @@ class PortalController extends Controller
         return $this->webPage;
     }
 
+    /**
+     * Return a list of pages clasified by lang code.
+     *
+     * @return array
+     */
     public function getLanguageRoots()
     {
         $roots = [];
@@ -109,6 +114,11 @@ class PortalController extends Controller
         return $roots;
     }
 
+    /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
     public function getPageData()
     {
         $pageData = parent::getPageData();
@@ -183,6 +193,11 @@ class PortalController extends Controller
         }
     }
 
+    /**
+     * Return the URL of the actual controller.
+     *
+     * @return string
+     */
     public function url()
     {
         return empty($this->webPage->permalink) ? parent::url() : $this->webPage->url('public');
@@ -226,10 +241,10 @@ class PortalController extends Controller
 
     /**
      * Return auxiliar menu.
-     * 
+     *
      * @param array $where
      * @param bool $filterLangcode
-     * 
+     *
      * @return Model\WebPage[]
      */
     private function getAuxMenu(array $where, bool $filterLangcode = true)
@@ -296,7 +311,7 @@ class PortalController extends Controller
         $this->description = $this->webPage->description;
 
         if (null !== $this->webPage->idpage) {
-            $ipAddress = is_null($this->request->getClientIp()) ? '::1' : $this->request->getClientIp();
+            $ipAddress = $this->request->getClientIp() ?? '::1';
             $this->webPage->increaseVisitCount($ipAddress);
         }
 
@@ -309,7 +324,7 @@ class PortalController extends Controller
      * @param Contacto $contact
      * @param bool     $force
      */
-    protected function updateCookies(Contacto &$contact, bool $force = false)
+    protected function updateCookies(&$contact, bool $force = false)
     {
         if ($force || \time() - \strtotime($contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
             $contact->newLogkey($this->request->getClientIp());
