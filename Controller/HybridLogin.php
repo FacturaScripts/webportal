@@ -207,8 +207,8 @@ class HybridLogin extends PortalController
         $contactEmail = $this->request->request->get('fsContact', '');
         if ($contactEmail !== '') {
             $contact = new Contacto();
-            $contact = $contact->getByEmail($contactEmail);
-            if ($contact === null) {
+            $where = [new DataBaseWhere('email', $contactEmail)];
+            if (!$contact->loadFromCode('', $where)) {
                 $this->miniLog->alert($this->i18n->trans('email-not-registered', [ '%email%' => $contactEmail]));
             } else {
                 $contactPass = $this->request->request->get('fsContactPass', '');

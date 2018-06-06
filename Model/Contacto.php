@@ -34,39 +34,6 @@ class Contacto extends \FacturaScripts\Core\Model\Contacto
     public $password;
 
     /**
-     * New password.
-     *
-     * @var string
-     */
-    public $newPassword;
-
-    /**
-     * Repeated new password.
-     *
-     * @var string
-     */
-    public $newPassword2;
-
-    /**
-     * Returns an user by email.
-     *
-     * @param string $email
-     *
-     * @return self|null
-     */
-    public function getByEmail(string $email): ?self
-    {
-        $sql = 'SELECT * FROM ' . static::tableName() . ' WHERE email = '
-            . self::$dataBase->var2str($email) . ' ORDER BY idcontacto DESC;';
-        $data = self::$dataBase->select($sql);
-
-        foreach ($data as $d) {
-            return new self($d);
-        }
-        return null;
-    }
-
-    /**
      * Asigns the new password to the contact.
      *
      * @param string $pass
@@ -104,14 +71,6 @@ class Contacto extends \FacturaScripts\Core\Model\Contacto
     {
         $status = parent::test();
 
-        if (isset($this->newPassword, $this->newPassword2) && $this->newPassword !== '' && $this->newPassword2 !== '') {
-            if ($this->newPassword !== $this->newPassword2) {
-                self::$miniLog->alert(self::$i18n->trans('different-passwords', ['%userNick%' => $this->email]));
-                $status = false;
-            }
-
-            $this->setPassword($this->newPassword);
-        }
         if (!isset($this->email) || !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             self::$miniLog->alert(self::$i18n->trans('invalid-email', ['%email%' => $this->email]));
             $status = false;

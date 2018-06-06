@@ -24,21 +24,25 @@
 {% endmacro %}
 
 {% macro loginModal(i18n, appSettings, fsc) %}
+    <script type="text/javascript">
+        function showSection(name) {
+            var secTab = document.getElementsByClassName("section-tab");
+            Array.prototype.forEach.call(secTab, function(itemSecTab) {
+                itemSecTab.classList.remove("active");
+            });
+            var secBtn = document.getElementById("secBtn" + name);
+            secBtn.classList.add("active");
 
-    {% block javascripts %}
-        <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
-        <script type="text/javascript">
-            function showSection(name) {
-                $(".section-tab").removeClass("active");
-                $("#secBtn" + name).addClass("active");
-
-                var sectionDiv = $(".section-div");
-                sectionDiv.removeClass("d-hide");
-                sectionDiv.addClass("d-hide");
-                $("#secDiv" + name).removeClass("d-hide");
-            }
-        </script>
-    {% endblock %}
+            var sectionDiv = document.getElementsByClassName("section-div");
+            Array.prototype.forEach.call(sectionDiv, function(itemSectionDiv) {
+                itemSectionDiv.classList.remove("d-hide");
+                itemSectionDiv.classList.add("d-hide");
+            });
+            var secDiv = document.getElementById("secDiv" + name);
+            secDiv.classList.remove("d-hide");
+            return false;
+        }
+    </script>
 
     <div class="modal modal-sm" id="loginModal">
         <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>

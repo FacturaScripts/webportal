@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\ControllerPermissions;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -104,18 +105,20 @@ class PortalRegisterMe extends PortalController
         $contact = new Contacto();
         $email = $this->request->request->get('email');
 
-        if ($contact->getByEmail($email) === null) {
+        if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)]) === false) {
             $userName = \explode('@', $email);
             preg_match_all('/[A-Za-z0-9_]/', $userName[0], $userName);
             $userName = \implode('', $userName[0]);
             $contact->nombre = !empty($this->request->request->get('name')) ? $this->request->request->get('name') : $userName;
             $contact->email = $email;
-            $contact->password = '';    // Added to avoid warning that can't be null, is setted on test
-            $contact->newPassword = $this->request->request->get('password');
-            $contact->newPassword2 = $this->request->request->get('password2');
-            if ($idContact = $contact->save()) {
-                $homeUrl = AppSettings::get('webportal', 'url');
+            $newPassword = $this->request->request->get('password');
+            if ($newPassword !== null && $newPassword === $this->request->request->get('password2')) {
+                $contact->setPassword($newPassword);
+            }
+
+            if ($contact->save()) {
                 $this->updateCookies($contact, true);
+                $homeUrl = AppSettings::get('webportal', 'url');
                 $this->response->headers->set('Refresh', '0; ' . $homeUrl);
             } else {
                 $this->miniLog->error(
