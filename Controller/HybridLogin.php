@@ -196,9 +196,11 @@ class HybridLogin extends PortalController
     }
 
     /**
-     * Manager FacturaScripts contact login
+     * Manager FacturaScripts contact login.
+     *
+     * @return bool Returns false if fails, or return true and set headers to redirect.
      */
-    private function contactLogin()
+    private function contactLogin(): bool
     {
         if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
             return false;
@@ -208,19 +210,18 @@ class HybridLogin extends PortalController
         if ($contactEmail !== '') {
             $contact = new Contacto();
             $where = [new DataBaseWhere('email', $contactEmail)];
-            if (!$contact->loadFromCode('', $where)) {
-                $this->miniLog->alert($this->i18n->trans('email-not-registered', [ '%email%' => $contactEmail]));
-            } else {
-                $contactPass = $this->request->request->get('fsContactPass', '');
-                if ($contact->verifyPassword($contactPass)) {
-                    $this->contact = $contact;
-                    $this->updateCookies($this->contact, true);
-                    $homeUrl = AppSettings::get('webportal', 'url');
-                    $this->response->headers->set('Refresh', '0; ' . $homeUrl);
-                } else {
-                    $this->miniLog->alert($this->i18n->trans('invalid-password'));
-                }
+            $contactPass = $this->request->request->get('fsContactPass', '');
+            if ($contact->loadFromCode('', $where) && $contact->verifyPassword($contactPass)) {
+                $this->contact = $contact;
+                $this->updateCookies($this->contact, true);
+                $this->response->headers->set('Refresh', '0; ' . \FS_ROUTE);
+                return true;
             }
+
+            $this->miniLog->alert($this->i18n->trans('invalid-email-or-password'));
+            return false;
         }
+        $this->miniLog->alert($this->i18n->trans('invalid-email', [ '%email%' => $contactEmail]));
+        return false;
     }
 }

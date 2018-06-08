@@ -21,7 +21,7 @@
     "humanid": "Human id",
     "icon": "Icon",
     "idpage": "Page Id",
-    "invalid-email": "Invalid email %email%",
+    "invalid-email-or-password": "Invalid email or password",
     "is-chatbot": "Is chatbot",
     "local-login": "Local login",
     "new-contact-not-saved": "New contact not saved",

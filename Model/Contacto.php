@@ -60,22 +60,4 @@ class Contacto extends \FacturaScripts\Core\Model\Contacto
         }
         return false;
     }
-
-    /**
-     * Returns True if there is no errors on properties values.
-     * It runs inside the save method.
-     *
-     * @return bool
-     */
-    public function test()
-    {
-        $status = parent::test();
-
-        if (!isset($this->email) || !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            self::$miniLog->alert(self::$i18n->trans('invalid-email', ['%email%' => $this->email]));
-            $status = false;
-        }
-
-        return $status;
-    }
 }
