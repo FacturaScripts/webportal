@@ -24,7 +24,6 @@ use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
-use FacturaScripts\Plugins\webportal\Lib\WebPortal\PageComposer;
 use FacturaScripts\Plugins\webportal\Model;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
@@ -306,6 +305,7 @@ class PortalController extends Controller
         $this->setTemplate('Master/PortalTemplate');
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
+        $this->i18n->setLangCode($this->webPage->langcode);
 
         $this->title = $this->webPage->title;
         $this->description = $this->webPage->description;
@@ -334,5 +334,23 @@ class PortalController extends Controller
             $this->response->headers->setCookie(new Cookie('fsIdcontacto', $contact->idcontacto, $expire));
             $this->response->headers->setCookie(new Cookie('fsLogkey', $contact->logkey, $expire));
         }
+    }
+
+    /**
+     * Return the page details.
+     *
+     * @param string $equivalence
+     *
+     * @return string
+     */
+    public function getPublicUrl(string $equivalence): string
+    {
+        $webPage = new Model\WebPage();
+        $where = [
+            new DataBaseWhere('equivalentpage', $equivalence),
+            new DataBaseWhere('langcode', $this->webPage->langcode)
+        ];
+        $webPage->loadFromCode('', $where);
+        return \FS_ROUTE . $webPage->permalink;
     }
 }

@@ -50,22 +50,25 @@
             </column>
         </group>
         <group name="advanced" numcolumns="9">
-            <column name="short-title" numcolumns="4" order="120">
+            <column name="short-title" numcolumns="3" order="100">
                 <widget type="text" fieldname="shorttitle" required="true" />
             </column>
-            <column name="sort" numcolumns="4" order="140">
+            <column name="sort" numcolumns="3" order="110">
                 <widget type="number" fieldname="ordernum" />
             </column>
-            <column name="custom-controller" numcolumns="4" order="150">
+            <column name="equivalence" numcolumns="3" order="120" description="equivalent-page-desc">
+                <widget type="text" fieldname="equivalentpage" />
+            </column>
+            <column name="custom-controller" numcolumns="3" order="130">
                 <widget type="select" fieldname="customcontroller">
-                    <values source="pages" fieldcode="name" fieldtitle="name"></values>
+                    <values source="pages" fieldcode="name" fieldtitle="name"/>
                 </widget>
             </column>
         </group>
         <group name="cluster">
             <column name="cluster" numcolumns="3" order="100">
                 <widget type="select" fieldname="idcluster">
-                    <values source="webclusters" fieldcode="idcluster" fieldtitle="title"></values>
+                    <values source="webclusters" fieldcode="idcluster" fieldtitle="title"/>
                 </widget>
             </column>
             <column name="icon" numcolumns="3" order="110">

@@ -54,8 +54,9 @@ class ListWebPage extends ExtendedController\ListController
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', 'permalink');
         $this->addOrderBy('ListWebPage', 'title');
+        $this->addOrderBy('ListWebPage', 'equivalentpage', 'equivalence');
         $this->addOrderBy('ListWebPage', 'ordernum');
-        $this->addOrderBy('ListWebPage', 'visitcount');
+        $this->addOrderBy('ListWebPage', 'visitcount', 'visit-counter');
         $this->addOrderBy('ListWebPage', 'lastmod', 'last-update');
 
         $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
@@ -101,7 +102,7 @@ class ListWebPage extends ExtendedController\ListController
         $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fa-search');
         $this->addSearchFields('ListWebSearch', ['query']);
         $this->addOrderBy('ListWebSearch', 'lastmod', 'last-update', 2);
-        $this->addOrderBy('ListWebSearch', 'visitcount');
+        $this->addOrderBy('ListWebSearch', 'visitcount', 'visit-counter');
     }
 
     /**
