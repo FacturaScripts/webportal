@@ -30,6 +30,11 @@
                                     <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
                                 </a>
                             {% endif %}
+                            {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs&return={{ fsc.url() }}" class="btn btn-block">
+                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> FacturaScripts
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
