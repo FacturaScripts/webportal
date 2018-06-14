@@ -25,21 +25,15 @@
 
 {% macro loginModal(i18n, appSettings, fsc) %}
     <script type="text/javascript">
-        function showSection(name) {
-            var secTab = document.getElementsByClassName("section-tab");
-            Array.prototype.forEach.call(secTab, function(itemSecTab) {
-                itemSecTab.classList.remove("active");
-            });
-            var secBtn = document.getElementById("secBtn" + name);
-            secBtn.classList.add("active");
-
-            var sectionDiv = document.getElementsByClassName("section-div");
-            Array.prototype.forEach.call(sectionDiv, function(itemSectionDiv) {
-                itemSectionDiv.classList.remove("d-hide");
-                itemSectionDiv.classList.add("d-hide");
-            });
-            var secDiv = document.getElementById("secDiv" + name);
-            secDiv.classList.remove("d-hide");
+        function showLoginModalTab(showName, hideName) {
+            var showBtn = document.getElementById("btnLoginModal" + showName);
+            showBtn.classList.add("active");
+            var showDiv = document.getElementById("divLoginModal" + showName);
+            showDiv.classList.remove("d-hide");
+            var hideBtn = document.getElementById("btnLoginModal" + hideName);
+            hideBtn.classList.remove("active");
+            var hideDiv = document.getElementById("divLoginModal" + hideName);
+            hideDiv.classList.add("d-hide");
             return false;
         }
     </script>
@@ -55,14 +49,13 @@
                 <div class="content">
                     <ul class="tab tab-block">
                         <li class="tab-item">
-                            <a href="#" id="secBtnCustomers" class="section-tab active" onclick="return showSection('Customers');">{{ i18n.trans('customers') }}</a>
+                            <a href="#" id="btnLoginModalCustomers" class="active" onclick="return showLoginModalTab('Customers', 'Employees');">{{ i18n.trans('customers') }}</a>
                         </li>
                         <li class="tab-item">
-                            <a href="#" id="secBtnEmployees" class="section-tab" onclick="return showSection('Employees');">{{ i18n.trans('employees') }}</a>
+                            <a href="#" id="btnLoginModalEmployees" onclick="return showLoginModalTab('Employees', 'Customers');">{{ i18n.trans('employees') }}</a>
                         </li>
                     </ul>
-
-                    <div id="secDivCustomers" class="section-div">
+                    <div id="divLoginModalCustomers">
                         <br/>
                         {% if appSettings.get('webportal','fbappid','') != '' %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
@@ -83,17 +76,17 @@
                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                 <div class="form-group">
                                     <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-                                    </span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                                        </span>
                                         <input type="text" name="fsContact" id="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i>
-                                    </span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                        </span>
                                         <input type="password" name="fsContactPass" id="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
                                     </div>
                                 </div>
@@ -109,24 +102,23 @@
                                 {% endif %}
                             </form>
                         {% endif %}
-
                     </div>
-                    <div id="secDivEmployees" class="section-div d-hide">
+                    <div id="divLoginModalEmployees" class="d-hide">
                         <br/>
                         <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
                             <div class="form-group">
                                 <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-                                </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                                    </span>
                                     <input type="text" name="fsNick" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('user') }}" required="" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-key fa-fw" aria-hidden="true"></i>
-                                </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                    </span>
                                     <input type="password" name="fsPassword" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
                                 </div>
                             </div>
