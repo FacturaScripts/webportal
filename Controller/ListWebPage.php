@@ -52,11 +52,11 @@ class ListWebPage extends ExtendedController\ListController
         /// Web pages
         $this->addView('ListWebPage', 'WebPage', 'pages', 'fa-globe');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
-        $this->addOrderBy('ListWebPage', 'permalink');
-        $this->addOrderBy('ListWebPage', 'title');
-        $this->addOrderBy('ListWebPage', 'ordernum');
-        $this->addOrderBy('ListWebPage', 'visitcount');
-        $this->addOrderBy('ListWebPage', 'lastmod', 'last-update');
+        $this->addOrderBy('ListWebPage', ['permalink']);
+        $this->addOrderBy('ListWebPage', ['title']);
+        $this->addOrderBy('ListWebPage', ['ordernum']);
+        $this->addOrderBy('ListWebPage', ['visitcount'], 'visit-counter');
+        $this->addOrderBy('ListWebPage', ['lastmod'], 'last-update');
 
         $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
         $this->addFilterSelect('ListWebPage', 'langcode', 'language', 'langcode', $langValues);
@@ -78,9 +78,9 @@ class ListWebPage extends ExtendedController\ListController
     {
         $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
         $this->addSearchFields('ListWebBlock', ['content']);
-        $this->addOrderBy('ListWebBlock', 'idblock', 'code');
-        $this->addOrderBy('ListWebBlock', 'idpage');
-        $this->addOrderBy('ListWebBlock', 'ordernum');
+        $this->addOrderBy('ListWebBlock', ['idblock'], 'code');
+        $this->addOrderBy('ListWebBlock', ['idpage']);
+        $this->addOrderBy('ListWebBlock', ['ordernum']);
 
         $blockTypes = $this->codeModel->all('webblocks', 'type', 'type');
         $this->addFilterSelect('ListWebBlock', 'type', 'type', 'type', $blockTypes);
@@ -93,15 +93,15 @@ class ListWebPage extends ExtendedController\ListController
     {
         $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper-o');
         $this->addSearchFields('ListWebCluster', ['title', 'description']);
-        $this->addOrderBy('ListWebCluster', 'title');
+        $this->addOrderBy('ListWebCluster', ['title']);
     }
 
     protected function createViewWebSearch()
     {
         $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fa-search');
         $this->addSearchFields('ListWebSearch', ['query']);
-        $this->addOrderBy('ListWebSearch', 'lastmod', 'last-update', 2);
-        $this->addOrderBy('ListWebSearch', 'visitcount');
+        $this->addOrderBy('ListWebSearch', ['lastmod'], 'last-update', 2);
+        $this->addOrderBy('ListWebSearch', ['visitcount'], 'visit-counter');
     }
 
     /**
