@@ -73,6 +73,7 @@
                             </a>
                         {% endif %}
                         {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                            <br/>
                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                 <div class="form-group">
                                     <div class="input-group">
