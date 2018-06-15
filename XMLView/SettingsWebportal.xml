@@ -41,7 +41,7 @@
             </column>
         </group>
         <group name="ipinfodb-credentials" title="ipinfodb-credentials" icon="fa-map-marker" numcolumns="12">
-            <column name="ipinfodb-key" numcolumns="12" order="100">
+            <column name="api-key" numcolumns="12" order="100">
                 <widget type="text" fieldname="ipinfodbkey"/>
             </column>
         </group>

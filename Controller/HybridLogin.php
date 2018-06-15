@@ -22,6 +22,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\DownloadTools;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\Pais;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -285,14 +286,9 @@ class HybridLogin extends PortalController
             return [];
         }
 
-        $url = 'http://api.ipinfodb.com/v3/ip-city/?key=';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url . $key);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $reply = curl_exec($ch);
-        curl_close($ch);
-
-        if (!$reply) {
+        $downloader = new DownloadTools();
+        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key);
+        if ($reply === 'ERROR') {
             return [];
         }
 
