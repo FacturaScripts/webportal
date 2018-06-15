@@ -29,10 +29,11 @@
                                 <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
                                     <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
                                 </a>
+                                <br/>
                             {% endif %}
                             {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> FacturaScripts
+                                <a href="#" class="btn btn-primary btn-block" onclick="return showModal('loginModal');">
+                                    <i class="fa fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
                                 </a>
                             {% endif %}
                         </div>
