@@ -40,6 +40,11 @@
                 <widget type="textarea" fieldname="copyright"/>
             </column>
         </group>
+        <group name="ipinfodb-credentials" title="ipinfodb-credentials" icon="fa-map-marker" numcolumns="12">
+            <column name="api-key" numcolumns="12" order="100">
+                <widget type="text" fieldname="ipinfodbkey"/>
+            </column>
+        </group>
         <group name="local-login" title="local-login" icon="fa-sign-in" numcolumns="12">
             <column name="allow-login-contacts" numcolumns="6" order="100">
                 <widget type="checkbox" fieldname="allowlogincontacts"/>

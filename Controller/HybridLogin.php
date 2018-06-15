@@ -22,7 +22,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\DownloadTools;
 use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Dinamic\Model\Pais;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use Hybridauth\Provider\Facebook;
 use Hybridauth\Provider\Google;
@@ -93,6 +95,8 @@ class HybridLogin extends PortalController
                 $this->miniLog->alert('no-login-provider');
                 break;
         }
+
+        $this->setGeoIpData();
     }
 
     /**
@@ -223,5 +227,84 @@ class HybridLogin extends PortalController
         }
         $this->miniLog->alert($this->i18n->trans('invalid-email', [ '%email%' => $contactEmail]));
         return false;
+    }
+
+    /**
+     * Set geoIP details to contact.
+     * Return true on success, false otherwise.
+     *
+     * @return bool
+     */
+    private function setGeoIpData(): bool
+    {
+        $ipAddress = $this->request->getClientIp() ?? '::1';
+        $excludedIp = ['127.0.0.1', '::1'];
+        if ($this->contact !== null && !\in_array($ipAddress, $excludedIp, true)) {
+            $data = $this->getGeoIpData();
+            if (empty($data)) {
+                return false;
+            }
+            $this->setContactField('ciudad', $data['cityName']);
+            $this->setContactField('provincia', $data['regionName']);
+            $country = new Pais();
+            if ($country->loadFromCode('', [new DataBaseWhere('codiso', $data['countryCode'])])) {
+                $this->contact->codpais = $country->codpais;
+            }
+
+            $this->contact->save();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set string to field, truncated to max field length.
+     *
+     * @param string $field
+     * @param string $string
+     */
+    private function setContactField(string $field, string $string)
+    {
+        $size = (int) preg_replace('/[^0-9]/', '', $this->contact->getModelFields()[$field]['type']);
+        if (\property_exists(\get_class($this->contact), $field)) {
+            $this->contact->{$field} = \mb_strlen($string) > $size ? \substr($string, 0, $size-3) . '...' : $string;
+        }
+    }
+
+    /**
+     * Return details from IP Info DB as associative array.
+     * Available fields: 'status', 'unknownField', 'ipAddress', 'countryCode', 'countryName', 'regionName', 'cityName',
+     * 'zipCode', 'lat', 'long', 'timezone'.
+     *
+     * @return array
+     */
+    private function getGeoIpData(): array
+    {
+        $key = AppSettings::get('webportal', 'ipinfodbkey');
+        if ($key === null) {
+            return [];
+        }
+
+        $downloader = new DownloadTools();
+        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key);
+        if ($reply === 'ERROR') {
+            return [];
+        }
+
+        $reply = \explode(';', $reply);
+        return [
+            'status' => $reply[0],
+            'unknownField' => $reply[1],
+            'ipAddress' => $reply[2],
+            'countryCode' => $reply[3],
+            'countryName' => $reply[4],
+            'regionName' => $reply[5],
+            'cityName' => $reply[6],
+            'zipCode' => $reply[7],
+            'lat' => $reply[8],
+            'long' => $reply[9],
+            'timezone' => $reply[10],
+        ];
     }
 }
