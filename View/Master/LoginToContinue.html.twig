@@ -32,9 +32,16 @@
                                 <br/>
                             {% endif %}
                             {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                                <a href="#" class="btn btn-primary btn-block" onclick="return showModal('loginModal');">
-                                    <i class="fa fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
-                                </a>
+                                <div class="btn-group btn-group-block">
+                                    <a href="#" class="btn btn-primary" onclick="return showModal('loginModal');">
+                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
+                                    </a>
+                                    {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+                                        <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                            {{ i18n.trans('register-me') }}
+                                        </a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         </div>
                     </div>

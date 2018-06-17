@@ -1,5 +1,5 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
-    <form action="" method="post">
+    <form action="" method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
         <div class="toast toast-primary">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
@@ -95,11 +95,9 @@
                                     {{ i18n.trans('login') }}
                                 </button>
                                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                    <div class="text-center">
-                                        <a class="text-center btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                            {{ i18n.trans('register-me') }}
-                                        </a>
-                                    </div>
+                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                        {{ i18n.trans('register-me') }}
+                                    </a>
                                 {% endif %}
                             </form>
                         {% endif %}

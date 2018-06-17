@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -105,30 +105,27 @@ class PortalRegisterMe extends PortalController
         $contact = new Contacto();
         $email = $this->request->request->get('email');
 
-        if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)]) === false) {
-            $userName = \explode('@', $email);
-            preg_match_all('/[A-Za-z0-9_]/', $userName[0], $userName);
-            $userName = \implode('', $userName[0]);
-            $contact->nombre = !empty($this->request->request->get('name')) ? $this->request->request->get('name') : $userName;
-            $contact->email = $email;
-            $newPassword = $this->request->request->get('password');
-            if ($newPassword !== null && $newPassword === $this->request->request->get('password2')) {
-                $contact->setPassword($newPassword);
-            }
+        if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
+            return;
+        }
 
-            if ($contact->save()) {
-                $this->updateCookies($contact, true);
-                $homeUrl = AppSettings::get('webportal', 'url');
-                $this->response->headers->set('Refresh', '0; ' . $homeUrl);
-            } else {
-                $this->miniLog->error(
-                    $this->i18n->trans('new-contact-not-saved')
-                );
-            }
+        $emailData = \explode('@', $email);
+        $contact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
+        $contact->email = $email;
+        $newPassword = $this->request->request->get('password', '');
+        $newPassword2 = $this->request->request->get('password2', '');
+        if (empty($newPassword) || $newPassword !== $newPassword2) {
+            $this->miniLog->alert($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
+            return;
+        }
+
+        $contact->setPassword($newPassword);
+        if ($contact->save()) {
+            $this->updateCookies($contact, true);
+            $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url'));
         } else {
-            $this->miniLog->error(
-                $this->i18n->trans('email-contact-already-used')
-            );
+            $this->miniLog->alert($this->i18n->trans('record-save-error'));
         }
     }
 }

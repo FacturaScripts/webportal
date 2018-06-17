@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -95,8 +95,6 @@ class HybridLogin extends PortalController
                 $this->miniLog->alert('no-login-provider');
                 break;
         }
-
-        $this->setGeoIpData();
     }
 
     /**
@@ -105,7 +103,7 @@ class HybridLogin extends PortalController
     private function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->alert($this->i18n->trans('invalid-email', [ '%email%' => $userProfile->email]));
+            $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
             return;
         }
 
@@ -117,6 +115,7 @@ class HybridLogin extends PortalController
             $contact->apellidos = $userProfile->lastName;
         }
 
+        $this->setGeoIpData($contact);
         if ($contact->save()) {
             $this->contact = $contact;
             $this->updateCookies($this->contact, true);
@@ -124,6 +123,37 @@ class HybridLogin extends PortalController
             $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
             $this->response->headers->set('Refresh', '0; ' . $return);
         }
+    }
+
+    /**
+     * Manager FacturaScripts contact login.
+     *
+     * @return bool Returns false if fails, or return true and set headers to redirect.
+     */
+    private function contactLogin(): bool
+    {
+        if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
+            return false;
+        }
+
+        $email = $this->request->request->get('fsContact', '');
+        $passwd = $this->request->request->get('fsContactPass', '');
+        if ($email !== '') {
+            $contact = new Contacto();
+            $where = [new DataBaseWhere('email', $email)];
+            if ($contact->loadFromCode('', $where) && $contact->verifyPassword($passwd)) {
+                $this->contact = $contact;
+                $this->updateCookies($this->contact, true);
+                $this->response->headers->set('Refresh', '0; ' . \FS_ROUTE);
+                return true;
+            }
+
+            $this->miniLog->alert($this->i18n->trans('invalid-email-or-password'));
+            return false;
+        }
+
+        $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $email]));
+        return false;
     }
 
     /**
@@ -151,6 +181,42 @@ class HybridLogin extends PortalController
     }
 
     /**
+     * Return details from IP Info DB as associative array.
+     * Available fields: 'status', 'unknownField', 'ipAddress', 'countryCode', 'countryName', 'regionName', 'cityName',
+     * 'zipCode', 'lat', 'long', 'timezone'.
+     *
+     * @return array
+     */
+    private function getGeoIpData(): array
+    {
+        $key = AppSettings::get('webportal', 'ipinfodbkey');
+        if ($key === null) {
+            return [];
+        }
+
+        $downloader = new DownloadTools();
+        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key);
+        if ($reply === 'ERROR') {
+            return [];
+        }
+
+        $data = \explode(';', $reply);
+        return [
+            'status' => $data[0],
+            'unknownField' => $data[1],
+            'ipAddress' => $data[2],
+            'countryCode' => $data[3],
+            'countryName' => $data[4],
+            'regionName' => $data[5],
+            'cityName' => $data[6],
+            'zipCode' => $data[7],
+            'lat' => $data[8],
+            'long' => $data[9],
+            'timezone' => $data[10],
+        ];
+    }
+
+    /**
      * Manage Google login
      */
     private function googleLogin()
@@ -171,6 +237,47 @@ class HybridLogin extends PortalController
             $this->checkContact($userProfile);
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
+        }
+    }
+
+    /**
+     * Set string to field, truncated to max field length.
+     * 
+     * @param Contact $contact
+     * @param string $field
+     * @param string $string
+     */
+    private function setContactField(&$contact, string $field, string $string)
+    {
+        $size = (int) preg_replace('/[^0-9]/', '', $contact->getModelFields()[$field]['type']);
+        if (\property_exists(\get_class($contact), $field)) {
+            $contact->{$field} = \mb_strlen($string) > $size ? \substr($string, 0, $size - 3) . '...' : $string;
+        }
+    }
+
+    /**
+     * Set geoIP details to contact.
+     * 
+     * @param Contacto $contact
+     */
+    private function setGeoIpData(&$contact)
+    {
+        $this->miniLog->alert('yolo');
+        
+        $ipAddress = $this->request->getClientIp() ?? '::1';
+        $excludedIp = ['127.0.0.1', '::1'];
+        if ($contact !== null && !\in_array($ipAddress, $excludedIp, true)) {
+            $data = $this->getGeoIpData();
+            if (empty($data)) {
+                return;
+            }
+
+            $this->setContactField($contact, 'ciudad', $data['cityName']);
+            $this->setContactField($contact, 'provincia', $data['regionName']);
+            $country = new Pais();
+            if ($country->loadFromCode('', [new DataBaseWhere('codiso', $data['countryCode'])])) {
+                $contact->codpais = $country->codpais;
+            }
         }
     }
 
@@ -197,114 +304,5 @@ class HybridLogin extends PortalController
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
         }
-    }
-
-    /**
-     * Manager FacturaScripts contact login.
-     *
-     * @return bool Returns false if fails, or return true and set headers to redirect.
-     */
-    private function contactLogin(): bool
-    {
-        if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
-            return false;
-        }
-
-        $contactEmail = $this->request->request->get('fsContact', '');
-        if ($contactEmail !== '') {
-            $contact = new Contacto();
-            $where = [new DataBaseWhere('email', $contactEmail)];
-            $contactPass = $this->request->request->get('fsContactPass', '');
-            if ($contact->loadFromCode('', $where) && $contact->verifyPassword($contactPass)) {
-                $this->contact = $contact;
-                $this->updateCookies($this->contact, true);
-                $this->response->headers->set('Refresh', '0; ' . \FS_ROUTE);
-                return true;
-            }
-
-            $this->miniLog->alert($this->i18n->trans('invalid-email-or-password'));
-            return false;
-        }
-        $this->miniLog->alert($this->i18n->trans('invalid-email', [ '%email%' => $contactEmail]));
-        return false;
-    }
-
-    /**
-     * Set geoIP details to contact.
-     * Return true on success, false otherwise.
-     *
-     * @return bool
-     */
-    private function setGeoIpData(): bool
-    {
-        $ipAddress = $this->request->getClientIp() ?? '::1';
-        $excludedIp = ['127.0.0.1', '::1'];
-        if ($this->contact !== null && !\in_array($ipAddress, $excludedIp, true)) {
-            $data = $this->getGeoIpData();
-            if (empty($data)) {
-                return false;
-            }
-            $this->setContactField('ciudad', $data['cityName']);
-            $this->setContactField('provincia', $data['regionName']);
-            $country = new Pais();
-            if ($country->loadFromCode('', [new DataBaseWhere('codiso', $data['countryCode'])])) {
-                $this->contact->codpais = $country->codpais;
-            }
-
-            $this->contact->save();
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Set string to field, truncated to max field length.
-     *
-     * @param string $field
-     * @param string $string
-     */
-    private function setContactField(string $field, string $string)
-    {
-        $size = (int) preg_replace('/[^0-9]/', '', $this->contact->getModelFields()[$field]['type']);
-        if (\property_exists(\get_class($this->contact), $field)) {
-            $this->contact->{$field} = \mb_strlen($string) > $size ? \substr($string, 0, $size-3) . '...' : $string;
-        }
-    }
-
-    /**
-     * Return details from IP Info DB as associative array.
-     * Available fields: 'status', 'unknownField', 'ipAddress', 'countryCode', 'countryName', 'regionName', 'cityName',
-     * 'zipCode', 'lat', 'long', 'timezone'.
-     *
-     * @return array
-     */
-    private function getGeoIpData(): array
-    {
-        $key = AppSettings::get('webportal', 'ipinfodbkey');
-        if ($key === null) {
-            return [];
-        }
-
-        $downloader = new DownloadTools();
-        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key);
-        if ($reply === 'ERROR') {
-            return [];
-        }
-
-        $reply = \explode(';', $reply);
-        return [
-            'status' => $reply[0],
-            'unknownField' => $reply[1],
-            'ipAddress' => $reply[2],
-            'countryCode' => $reply[3],
-            'countryName' => $reply[4],
-            'regionName' => $reply[5],
-            'cityName' => $reply[6],
-            'zipCode' => $reply[7],
-            'lat' => $reply[8],
-            'long' => $reply[9],
-            'timezone' => $reply[10],
-        ];
     }
 }
