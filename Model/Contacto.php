@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace FacturaScripts\Plugins\webportal\Model;
 
 /**
@@ -26,6 +25,7 @@ namespace FacturaScripts\Plugins\webportal\Model;
  */
 class Contacto extends \FacturaScripts\Core\Model\Contacto
 {
+
     /**
      * Password hashed with password_hash()
      *
@@ -56,8 +56,10 @@ class Contacto extends \FacturaScripts\Core\Model\Contacto
             if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
                 $this->setPassword($pass);
             }
+
             return true;
         }
+
         return false;
     }
 }

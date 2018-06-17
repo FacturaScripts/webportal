@@ -23,6 +23,7 @@ use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -121,11 +122,24 @@ class PortalRegisterMe extends PortalController
         }
 
         $contact->setPassword($newPassword);
+        $this->setGeoIpData($contact);
         if ($contact->save()) {
             $this->updateCookies($contact, true);
             $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url'));
         } else {
             $this->miniLog->alert($this->i18n->trans('record-save-error'));
         }
+    }
+
+    /**
+     * Set geoIP details to contact.
+     * 
+     * @param Contacto $contact
+     */
+    private function setGeoIpData(&$contact)
+    {
+        $ipAddress = $this->request->getClientIp() ?? '::1';
+        $geoLocation = new GeoLocation();
+        $geoLocation->setGeoIpData($contact, $ipAddress);
     }
 }
