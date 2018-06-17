@@ -71,25 +71,12 @@ class GeoLocation
         }
 
         $downloader = new DownloadTools();
-        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key . '&ip=' . $ip);
+        $reply = $downloader->getContents('http://api.ipinfodb.com/v3/ip-city/?key=' . $key . '&ip=' . $ip . '&format=json');
         if ($reply === 'ERROR') {
             return [];
         }
 
-        $data = \explode(';', $reply);
-        return [
-            'status' => $data[0],
-            'unknownField' => $data[1],
-            'ipAddress' => $data[2],
-            'countryCode' => $data[3],
-            'countryName' => $data[4],
-            'regionName' => $data[5],
-            'cityName' => $data[6],
-            'zipCode' => $data[7],
-            'lat' => $data[8],
-            'long' => $data[9],
-            'timezone' => $data[10],
-        ];
+        return json_decode($reply, true);
     }
 
     /**
