@@ -49,11 +49,21 @@ class GeoLocation
 
             $this->setContactField($contact, 'ciudad', $data['cityName']);
             $this->setContactField($contact, 'provincia', $data['regionName']);
-            $country = new Pais();
-            if ($country->loadFromCode('', [new DataBaseWhere('codiso', $data['countryCode'])])) {
-                $contact->codpais = $country->codpais;
-            }
+            $contact->codpais = $this->getCodpais($data['countryCode'], $data['countryName']);
         }
+    }
+
+    private function getCodpais(string $codiso, string $name): string
+    {
+        $country = new Pais();
+        if (!$country->loadFromCode('', [new DataBaseWhere('codiso', $codiso)])) {
+            $country->codiso = $codiso;
+            $country->codpais = $codiso;
+            $country->nombre = $name;
+            $country->save();
+        }
+
+        return $country->codpais;
     }
 
     /**
