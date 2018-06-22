@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -167,7 +167,8 @@ class WebPage extends WebPageClass
         $this->title = Utils::noHtml($this->title);
         $this->shorttitle = Utils::noHtml($this->shorttitle);
 
-        if ($this->langcode !== substr(FS_LANG, 0, 2) && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
+        $homepage = $this->get(AppSettings::get('webportal', 'homepage'));
+        if ((false !== $homepage) && $this->langcode !== $homepage->langcode && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
             $this->permalink = '/' . $this->langcode . '/' . $this->permalink;
         } elseif ($this->permalink[0] !== '/') {
             $this->permalink = '/' . $this->permalink;
