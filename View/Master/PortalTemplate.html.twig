@@ -110,11 +110,13 @@
             </div>
         {% endblock %}
         <br/><br/><br/>
-        {% if fsc.contact %}
-            {{ Macros.logoutModal(i18n, fsc) }}
-        {% elseif fsc.user == false %}
-            {{ Macros.loginModal(i18n, appSettings, fsc) }}
-        {% endif %}
+        {% block modals %}
+            {% if fsc.contact %}
+                {{ Macros.logoutModal(i18n, fsc) }}
+            {% elseif fsc.user == false %}
+                {{ Macros.loginModal(i18n, appSettings, fsc) }}
+            {% endif %}
+        {% endblock %}
         {% block footer %}
             <div class="footer-section">
                 <div class="container">
