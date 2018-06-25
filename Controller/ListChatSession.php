@@ -50,15 +50,15 @@ class ListChatSession extends ExtendedController\ListController
     {
         /// sessions
         $this->addView('ListChatSession', 'ChatSession', 'chat-sessions', 'fa-comments-o');
-        $this->addOrderBy('ListChatSession', 'idchat', 'code');
-        $this->addOrderBy('ListChatSession', 'creationtime', 'date', 2);
+        $this->addOrderBy('ListChatSession', ['idchat'], 'code');
+        $this->addOrderBy('ListChatSession', ['creationtime'], 'date', 2);
         $this->addSearchFields('ListChatSession', ['idchat']);
-        
+
         /// messages
         $this->addView('ListChatMessage', 'ChatMessage', 'chat-messages', 'fa-comments-o');
         $this->addSearchFields('ListChatMessage', ['content']);
-        $this->addOrderBy('ListChatMessage', 'idchat', 'code');
-        $this->addOrderBy('ListChatMessage', 'creationtime', 'date', 2);
+        $this->addOrderBy('ListChatMessage', ['idchat'], 'code');
+        $this->addOrderBy('ListChatMessage', ['creationtime'], 'date', 2);
         $this->addFilterCheckbox('ListChatMessage', 'unmatched', 'unmatched', 'unmatched');
         $this->addFilterCheckbox('ListChatMessage', 'ischatbot', 'chatbot', 'ischatbot');
         $this->addFilterCheckbox('ListChatMessage', 'nochatbot', 'human', 'ischatbot', true);

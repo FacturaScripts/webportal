@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use Hybridauth\Provider\Facebook;
 use Hybridauth\Provider\Google;
@@ -60,6 +61,7 @@ class HybridLogin extends PortalController
     public function publicCore(&$response)
     {
         parent::publicCore($response);
+        $this->setTemplate('Master/LoginToContinue');
 
         if (!session_id()) {
             session_start();
@@ -85,6 +87,10 @@ class HybridLogin extends PortalController
                 $this->twitterLogin();
                 break;
 
+            case 'fs':
+                $this->contactLogin();
+                break;
+
             default:
                 $this->miniLog->alert('no-login-provider');
                 break;
@@ -97,7 +103,7 @@ class HybridLogin extends PortalController
     private function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->alert($this->i18n->trans('invalid-email'));
+            $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
             return;
         }
 
@@ -109,6 +115,7 @@ class HybridLogin extends PortalController
             $contact->apellidos = $userProfile->lastName;
         }
 
+        $this->setGeoIpData($contact);
         if ($contact->save()) {
             $this->contact = $contact;
             $this->updateCookies($this->contact, true);
@@ -118,6 +125,43 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Manager FacturaScripts contact login.
+     *
+     * @return bool Returns false if fails, or return true and set headers to redirect.
+     */
+    private function contactLogin(): bool
+    {
+        if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
+            return false;
+        }
+
+        $email = $this->request->request->get('fsContact', '');
+        $passwd = $this->request->request->get('fsContactPass', '');
+        if ($email !== '') {
+            $contact = new Contacto();
+            $where = [new DataBaseWhere('email', $email)];
+            if ($contact->loadFromCode('', $where) && $contact->verifyPassword($passwd)) {
+                $this->setGeoIpData($contact);
+                $this->contact = $contact;
+                $this->updateCookies($this->contact, true);
+
+                $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
+                $this->response->headers->set('Refresh', '0; ' . $return);
+                return true;
+            }
+
+            $this->miniLog->alert($this->i18n->trans('invalid-email-or-password'));
+            return false;
+        }
+
+        $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $email]));
+        return false;
+    }
+
+    /**
+     * Manager Facebook login
+     */
     private function facebookLogin()
     {
         $config = [
@@ -139,6 +183,9 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Manage Google login
+     */
     private function googleLogin()
     {
         $config = [
@@ -160,6 +207,21 @@ class HybridLogin extends PortalController
         }
     }
 
+    /**
+     * Set geoIP details to contact.
+     * 
+     * @param Contacto $contact
+     */
+    private function setGeoIpData(&$contact)
+    {
+        $ipAddress = $this->request->getClientIp() ?? '::1';
+        $geoLocation = new GeoLocation();
+        $geoLocation->setGeoIpData($contact, $ipAddress);
+    }
+
+    /**
+     * Manage Twitter login
+     */
     private function twitterLogin()
     {
         $config = [

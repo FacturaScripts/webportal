@@ -183,7 +183,7 @@ class PortalController extends Controller
 
         /// cookie policy check
         $this->showCookiesPolicy = true;
-        if ('TRUE' === $this->request->request->get('okCookies', '')) {
+        if ('TRUE' === $this->request->get('okCookies', '')) {
             $expire = time() + self::PUBLIC_COOKIES_EXPIRE;
             $this->response->headers->setCookie(new Cookie('okCookies', time(), $expire));
             $this->showCookiesPolicy = false;

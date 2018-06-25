@@ -26,10 +26,10 @@
                                     <input type="hidden" name="active" value="{{ section.name }}"/>
                                     <input type="hidden" name="offset" value="0"/>
                                     <div class="columns">
-                                        <div class="column col-4 col-sm-12">
+                                        <div class="column">
                                             {{ macros.sectionButtons(section) }}
                                         </div>
-                                        <div class="column col-4 col-sm-12">
+                                        <div class="column">
                                             {{ macros.sectionSearch(section, i18n) }}
                                         </div>
                                         <div class="column col-4 col-sm-12">
@@ -64,6 +64,7 @@
             $(".section-div").removeClass("d-hide");
             $(".section-div").addClass("d-hide");
             $("#secDiv" + name).removeClass("d-hide");
+            return false;
         }
         function showSectionPage(name, offset) {
             $("#secForm" + name + " input[name=offset]").val(offset);
@@ -83,11 +84,11 @@
             {% for section in group %}
                 {% set btnClass = (section.name == fsc.active) ? 'btn btn-primary' : 'btn' %}
                 {% if section.count > 0 %}
-                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ section.count }}" onclick="showSection('{{ section.name }}');">
+                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ section.count }}" onclick="return showSection('{{ section.name }}');">
                         <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
                     </button>
                 {% else %}
-                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block" onclick="showSection('{{ section.name }}');">
+                    <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block" onclick="return showSection('{{ section.name }}');">
                         <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
                     </button>
                 {% endif %}

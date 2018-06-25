@@ -1,7 +1,7 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
-    <form action="" method="post">
+    <form action="" method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
-        <div class="toast toast-primary">
+        <div class="toast toast-primary cookies">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
             <a href="{{ cookiesPage.url('public') }}">{{ i18n.trans('read-more') }}</a>
         </div>
@@ -24,16 +24,39 @@
 {% endmacro %}
 
 {% macro loginModal(i18n, appSettings, fsc) %}
-    <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
-        <div class="modal modal-sm" id="loginModal">
-            <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>
-            <div class="modal-container">
-                <div class="modal-header">
-                    <a href="#close" onclick="return hideModal('loginModal');" class="btn btn-clear float-right" aria-label="Close"></a>
-                    <div class="modal-title h5">{{ i18n.trans('login') }}</div>
-                </div>
-                <div class="modal-body">
-                    <div class="content">
+    <script type="text/javascript">
+        function showLoginModalTab(showName, hideName) {
+            var showBtn = document.getElementById("btnLoginModal" + showName);
+            showBtn.classList.add("active");
+            var showDiv = document.getElementById("divLoginModal" + showName);
+            showDiv.classList.remove("d-hide");
+            var hideBtn = document.getElementById("btnLoginModal" + hideName);
+            hideBtn.classList.remove("active");
+            var hideDiv = document.getElementById("divLoginModal" + hideName);
+            hideDiv.classList.add("d-hide");
+            return false;
+        }
+    </script>
+
+    <div class="modal modal-sm" id="loginModal">
+        <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#close" onclick="return hideModal('loginModal');" class="btn btn-clear float-right" aria-label="Close"></a>
+                <div class="modal-title h5">{{ i18n.trans('login') }}</div>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <ul class="tab tab-block">
+                        <li class="tab-item">
+                            <a href="#" id="btnLoginModalCustomers" class="active" onclick="return showLoginModalTab('Customers', 'Employees');">{{ i18n.trans('customers') }}</a>
+                        </li>
+                        <li class="tab-item">
+                            <a href="#" id="btnLoginModalEmployees" onclick="return showLoginModalTab('Employees', 'Customers');">{{ i18n.trans('employees') }}</a>
+                        </li>
+                    </ul>
+                    <div id="divLoginModalCustomers">
+                        <br/>
                         {% if appSettings.get('webportal','fbappid','') != '' %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fa fa-facebook fa-fw" aria-hidden="true"></i> facebook
@@ -49,31 +72,64 @@
                                 <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
                             </a>
                         {% endif %}
-                        <div class="divider text-center" data-content="{{ i18n.trans('employees') }}"></div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="fsNick" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('user') }}" required="" autocomplete="off"/>
+                        {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                            <br/>
+                            <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+                                        </span>
+                                        <input type="text" name="fsContact" id="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                        </span>
+                                        <input type="password" name="fsContactPass" id="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-block btn-primary">
+                                    {{ i18n.trans('login') }}
+                                </button>
+                                {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                        {{ i18n.trans('register-me') }}
+                                    </a>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div id="divLoginModalEmployees" class="d-hide">
+                        <br/>
+                        <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="text" name="fsNick" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('user') }}" required="" autocomplete="off"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-key fa-fw" aria-hidden="true"></i>
-                                </span>
-                                <input type="password" name="fsPassword" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="password" name="fsPassword" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-block btn-primary">
-                            {{ i18n.trans('login') }}
-                        </button>
+                            <button type="submit" class="btn btn-block btn-primary">
+                                {{ i18n.trans('login') }}
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 {% endmacro %}
 
 {% macro logoutModal(i18n, fsc) %}

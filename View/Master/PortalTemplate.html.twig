@@ -22,13 +22,12 @@
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
         {% endblock %}
         {% block css %}
-            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css',
-'node_modules/font-awesome/css/font-awesome.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
-                {% for block in fsc.pageComposer.getBlocks('css') %}
-                    {{ block.content() | raw }}
-                {% endfor %}
-            {% endblock %}
-            {{ debugBarRender.renderHead()|raw }}
+            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css','node_modules/font-awesome/css/font-awesome.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
+            {% for block in fsc.pageComposer.getBlocks('css') %}
+                {{ block.content() | raw }}
+            {% endfor %}
+        {% endblock %}
+        {{ debugBarRender.renderHead()|raw }}
     </head>
     <body>
         {% block navbar %}
@@ -111,11 +110,13 @@
             </div>
         {% endblock %}
         <br/><br/><br/>
-        {% if fsc.contact %}
-            {{ Macros.logoutModal(i18n, fsc) }}
-        {% elseif fsc.user == false %}
-            {{ Macros.loginModal(i18n, appSettings, fsc) }}
-        {% endif %}
+        {% block modals %}
+            {% if fsc.contact %}
+                {{ Macros.logoutModal(i18n, fsc) }}
+            {% elseif fsc.user == false %}
+                {{ Macros.loginModal(i18n, appSettings, fsc) }}
+            {% endif %}
+        {% endblock %}
         {% block footer %}
             <div class="footer-section">
                 <div class="container">

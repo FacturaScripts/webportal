@@ -29,6 +29,19 @@
                                 <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
                                     <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
                                 </a>
+                                <br/>
+                            {% endif %}
+                            {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                                <div class="btn-group btn-group-block">
+                                    <a href="#" class="btn btn-primary" onclick="return showModal('loginModal');">
+                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
+                                    </a>
+                                    {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+                                        <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                            {{ i18n.trans('register-me') }}
+                                        </a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         </div>
                     </div>
