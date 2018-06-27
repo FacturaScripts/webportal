@@ -53,8 +53,20 @@ class GeoLocation
         }
     }
 
-    private function getCodpais(string $codiso, string $name): string
+    /**
+     * Returns country code.
+     * 
+     * @param string $codiso
+     * @param string $name
+     * 
+     * @return string|null
+     */
+    private function getCodpais(string $codiso, string $name)
     {
+        if (empty($codiso) || '-' === $codiso) {
+            return null;
+        }
+
         $country = new Pais();
         if (!$country->loadFromCode('', [new DataBaseWhere('codiso', $codiso)])) {
             $country->codiso = $codiso;

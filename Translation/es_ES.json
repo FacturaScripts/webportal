@@ -21,7 +21,7 @@
     "humanid": "Id. humano",
     "icon": "Icono",
     "idpage": "Id. página",
-    "invalid-email-or-password": "Email o contraseña incorrectos",
+    "ipinfodb-credentials": "IPInfoDB credentials",
     "is-chatbot": "Es chatbot",
     "local-login": "Login local",
     "new-contact-not-saved": "Nuevo contacto no registrado",
