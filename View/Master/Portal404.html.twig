@@ -1,0 +1,19 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    <div class="body-section">
+        <br/>
+        <div class="container grid-lg">
+            <div class="columns">
+                <div class="column col-12">
+                    <div class="empty">
+                        <div class="empty-icon">
+                            <i class="fa fa-search fa-3x" aria-hidden="true"></i>
+                        </div>
+                        <h1 class="empty-title h5">{{ i18n.trans('no-data') }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
