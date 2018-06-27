@@ -98,6 +98,7 @@ class WebSearch extends PortalController
      */
     protected function addSearchResults(array $item, string $query): bool
     {
+        /// link already in results
         if (isset($this->searchResults[$item['link']])) {
             return false;
         }
@@ -113,7 +114,10 @@ class WebSearch extends PortalController
             $item['position'] = max([(int) $item['position'], (int) $position]);
         }
 
+        $item['icon'] = isset($item['icon']) ? $item['icon'] : 'fa-file-o';
+        $item['title'] = isset($item['title']) ? $item['title'] : 'Title';
         $item['description'] = $this->fixDescription($item['description']);
+        $item['priority'] = isset($item['priority']) ? $item['priority'] : 0;
         $this->searchResults[$item['link']] = $item;
         return true;
     }
@@ -143,11 +147,16 @@ class WebSearch extends PortalController
     protected function getFinalQueries(): array
     {
         $queries = [$this->query];
-        $transform = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
-            'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
-            'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
-            'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
-            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
+        $transform = [
+            'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A',
+            'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+            'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O',
+            'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y',
+            'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a',
+            'æ' => 'a', 'ç' => 'c', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i',
+            'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y'
+        ];
         $newQuery = strtr($this->query, $transform);
         if ($newQuery != $this->query) {
             $queries[] = $newQuery;
@@ -264,11 +273,16 @@ class WebSearch extends PortalController
      */
     protected function sort()
     {
-        /// we need maximum value of position
+        /// we need maximum value of position and priority
         $maxPosition = 0;
+        $maxPriority = 0;
         foreach ($this->searchResults as $item) {
             if ($item['position'] > $maxPosition) {
                 $maxPosition = 1 + $item['position'];
+            }
+
+            if ($item['priority'] > $maxPriority) {
+                $maxPriority = 1 + $item['priority'];
             }
         }
 
@@ -276,6 +290,10 @@ class WebSearch extends PortalController
         foreach ($this->searchResults as $key => $value) {
             if (false === $value['position']) {
                 $this->searchResults[$key]['position'] = $maxPosition;
+            }
+
+            if ($value['priority'] < $maxPriority) {
+                $this->searchResults[$key]['position'] += $maxPosition * ($maxPriority - $value['priority']);
             }
         }
 
