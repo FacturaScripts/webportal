@@ -90,7 +90,7 @@ class EditWebPage extends ExtendedController\PanelController
         }
 
         if ($action === 'save' || $action === 'delete') {
-            $this->setRoutes();
+            UpdateRoutes::setRoutes();
         }
 
         return true;
@@ -108,8 +108,7 @@ class EditWebPage extends ExtendedController\PanelController
                 $model = $this->views['EditWebPage']->model;
                 if ($model !== false) {
                     $this->response->headers->set('Refresh', '0; ' . $model->url('public'));
-                    $updater = new UpdateRoutes();
-                    $updater->setRoutes();
+                    UpdateRoutes::setRoutes();
                 }
                 if ($this->user->homepage !== 'PortalHome') {
                     $this->user->homepage = 'PortalHome';
