@@ -18,7 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
@@ -103,34 +102,5 @@ class ListWebPage extends ExtendedController\ListController
         $this->addSearchFields('ListWebSearch', ['query']);
         $this->addOrderBy('ListWebSearch', ['lastmod'], 'last-update', 2);
         $this->addOrderBy('ListWebSearch', ['visitcount'], 'visit-counter');
-    }
-
-    /**
-     * Runs the controller actions
-     *
-     * @param string $action
-     */
-    protected function execAfterAction($action)
-    {
-        $this->setPortalAsHome();
-        parent::execAfterAction($action);
-    }
-
-    /**
-     * Sets PortalHome as default homepage.
-     */
-    private function setPortalAsHome()
-    {
-        $appSettings = new AppSettings();
-        if ($appSettings->get('default', 'homepage') !== 'PortalHome') {
-            $appSettings->set('default', 'homepage', 'PortalHome');
-            $appSettings->save();
-        }
-
-        /// set portal home page
-        if ($appSettings->get('webportal', 'homepage') === null) {
-            $appSettings->set('webportal', 'homepage', 1);
-            $appSettings->save();
-        }
     }
 }

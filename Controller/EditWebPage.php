@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,9 +18,9 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\App\AppRouter;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 
 /**
  * Description of EditWebPage.
@@ -90,7 +90,7 @@ class EditWebPage extends ExtendedController\PanelController
         }
 
         if ($action === 'save' || $action === 'delete') {
-            $this->setRoutes();
+            UpdateRoutes::setRoutes();
         }
 
         return true;
@@ -108,7 +108,7 @@ class EditWebPage extends ExtendedController\PanelController
                 $model = $this->views['EditWebPage']->model;
                 if ($model !== false) {
                     $this->response->headers->set('Refresh', '0; ' . $model->url('public'));
-                    $this->setRoutes();
+                    UpdateRoutes::setRoutes();
                 }
                 if ($this->user->homepage !== 'PortalHome') {
                     $this->user->homepage = 'PortalHome';
@@ -118,27 +118,6 @@ class EditWebPage extends ExtendedController\PanelController
 
             default:
                 parent::execAfterAction($action);
-        }
-    }
-
-    /**
-     * Set routes from model WebPage.
-     */
-    private function setRoutes()
-    {
-        $appRouter = new AppRouter();
-        $appRouter->clear();
-
-        $langcodes = [substr(FS_LANG, 0, 2)];
-        $webPages = $this->views['EditWebPage']->model->all([], [], 0, 0);
-        foreach ($webPages as $webpage) {
-            $customController = empty($webpage->customcontroller) ? 'PortalHome' : $webpage->customcontroller;
-            $appRouter->setRoute($webpage->permalink, $customController, $webpage->idpage);
-
-            if (!in_array($webpage->langcode, $langcodes)) {
-                $appRouter->setRoute('/' . $webpage->langcode . '/', $customController);
-                $langcodes[] = $webpage->langcode;
-            }
         }
     }
 }

@@ -138,12 +138,16 @@
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#close" onclick="return hideModal('logoutModal');" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">{{ i18n.trans('logout') }}</div>
-                <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
-                <span>{{ fsc.contact.email }}</span>
+                <div class="modal-title h5">
+                    <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> {{ fsc.contact.email }}
+                </div>
             </div>
             <div class="modal-body">
                 <div class="content">
+                    <a href="{{ constant('FS_ROUTE') }}/EditProfile" class="btn btn-block btn-success">
+                        <i class="fa fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('edit') }}
+                    </a>
+                    <div class="divider"></div>
                     <a href="{{ constant('FS_ROUTE') }}/?public_logout=TRUE" class="btn btn-block btn-error">
                         <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> {{ i18n.trans('logout') }}
                     </a>

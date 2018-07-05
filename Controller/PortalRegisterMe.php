@@ -36,22 +36,6 @@ class PortalRegisterMe extends PortalController
 {
 
     /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
-    {
-        $pageData = parent::getPageData();
-        $pageData['title'] = 'webportal';
-        $pageData['menu'] = 'registered-contacts';
-        $pageData['icon'] = 'fa-user-plus';
-        $pageData['showonmenu'] = false;
-
-        return $pageData;
-    }
-
-    /**
      * Runs the controller's private logic.
      *
      * @param Response              $response
@@ -105,7 +89,6 @@ class PortalRegisterMe extends PortalController
     {
         $contact = new Contacto();
         $email = $this->request->request->get('email');
-
         if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
             return;

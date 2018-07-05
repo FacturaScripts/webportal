@@ -41,12 +41,12 @@
 
 h1 {
     margin-bottom: 10px;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 h2, h3, h4, h5 {
     margin-bottom: 5px;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .navbar-top {
@@ -54,21 +54,19 @@ h2, h3, h4, h5 {
 }
 
 p {
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .section-btn {
     margin-bottom: 5px;
 }
 
-.word-break {
-    word-break: break-all;
+.word-wrap {
+    word-wrap: break-word;
 }
 
 @media screen and (max-width: 600px) {
-    .custom-table-scroll table {
-        display: block;
-        width: 100%;
+    .custom-scroll {
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;

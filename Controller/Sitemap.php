@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -69,6 +69,26 @@ class Sitemap extends Controller
     }
 
     /**
+     * Returns a valid sitemap item.
+     *
+     * @param string $loc
+     * @param int    $lastmod
+     * @param string $changefreq
+     * @param float  $priority
+     * 
+     * @return array
+     */
+    protected function createItem(string $loc, int $lastmod, string $changefreq = 'weekly', float $priority = 0.5): array
+    {
+        return [
+            'loc' => $loc,
+            'lastmod' => date('Y-m-d', $lastmod),
+            'changefreq' => $changefreq,
+            'priority' => $priority
+        ];
+    }
+
+    /**
      * Generate sitemap.
      */
     private function generateSitemap()
@@ -94,22 +114,17 @@ class Sitemap extends Controller
      *
      * @return array
      */
-    private function getSitemapItems()
+    protected function getSitemapItems(): array
     {
         $items = [];
 
         $webpageModel = new WebPage();
         foreach ($webpageModel->all([], [], 0, 0) as $wpage) {
-            if ($wpage->noindex) {
+            if ($wpage->noindex || substr($wpage->permalink, -1) === '*') {
                 continue;
             }
 
-            $items[] = [
-                'loc' => $wpage->permalink,
-                'lastmod' => date('Y-m-d', strtotime($wpage->lastmod)),
-                'changefreq' => 'always',
-                'priority' => 0.7
-            ];
+            $items[] = $this->createItem($wpage->url('public'), strtotime($wpage->lastmod), 'weekly', 0.8);
         }
 
         return $items;

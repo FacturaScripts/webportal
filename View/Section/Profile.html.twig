@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="columns">
+        <div class="column col-2 col-xs-12 text-right">
+            <span class="label">{{ fsc.contact.fullName() }}</span><br/>
+            {% if fsc.contact.empresa %}
+                <span class="label">{{ fsc.contact.empresa }}</span><br/>
+            {% endif %}
+            <img src="{{ fsc.getGravatar(fsc.contact.email) }}" alt="{{ fsc.contact.fullName() }}" class="custom-img-responsive"/><br/>
+            <a href="https://es.gravatar.com/" target="_blank" rel="nofollow">
+                {{ i18n.trans('edit') }}
+            </a>
+        </div>
+        <div class="column">
+            <h1 class="h3">{{ fsc.contact.email }}</h1>
+            <form action="" method="post">
+                <input type="hidden" name="action" value="edit"/>
+                <div class="columns">
+                    <div class="column">
+                        <div class="form-group">
+                            <label class="form-label">{{ i18n.trans('name') }}</label>
+                            <input class="form-input" type="text" name="nombre" value="{{ fsc.contact.nombre }}" autocomplete="off" required=""/>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="form-group">
+                            <label class="form-label">{{ i18n.trans('surname') }}</label>
+                            <input class="form-input" type="text" name="apellidos" value="{{ fsc.contact.apellidos }}" autocomplete="off"/>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <button type="submit" class="btn btn-primary">
+                    {{ i18n.trans('save') }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>

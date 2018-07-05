@@ -39,21 +39,6 @@ class HybridLogin extends PortalController
 {
 
     /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
-    {
-        $pageData = parent::getPageData();
-        $pageData['title'] = 'hybrid-login';
-        $pageData['menu'] = 'web';
-        $pageData['showonmenu'] = false;
-
-        return $pageData;
-    }
-
-    /**
      * Execute the public part of the controller.
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
@@ -137,25 +122,29 @@ class HybridLogin extends PortalController
         }
 
         $email = $this->request->request->get('fsContact', '');
-        $passwd = $this->request->request->get('fsContactPass', '');
-        if ($email !== '') {
-            $contact = new Contacto();
-            $where = [new DataBaseWhere('email', $email)];
-            if ($contact->loadFromCode('', $where) && $contact->verifyPassword($passwd)) {
-                $this->setGeoIpData($contact);
-                $this->contact = $contact;
-                $this->updateCookies($this->contact, true);
-
-                $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
-                $this->response->headers->set('Refresh', '0; ' . $return);
-                return true;
-            }
-
-            $this->miniLog->alert($this->i18n->trans('invalid-email-or-password'));
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->miniLog->alert($this->i18n->trans('not-valid-email', ['%email%' => $email]));
             return false;
         }
 
-        $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $email]));
+        $contact = new Contacto();
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            $this->miniLog->alert($this->i18n->trans('email-not-registered'));
+            return false;
+        }
+
+        $passwd = $this->request->request->get('fsContactPass', '');
+        if ($contact->verifyPassword($passwd)) {
+            $this->setGeoIpData($contact);
+            $this->contact = $contact;
+            $this->updateCookies($this->contact, true);
+
+            $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
+            $this->response->headers->set('Refresh', '0; ' . $return);
+            return true;
+        }
+
+        $this->miniLog->alert($this->i18n->trans('login-password-fail'));
         return false;
     }
 

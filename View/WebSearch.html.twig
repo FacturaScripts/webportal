@@ -27,7 +27,7 @@
                                 <i class="fa {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="tile-content">
-                                <a href="{{ item.link }}" class="tile-title">{{ item.title }}</a>
+                                <a href="{{ item.link }}" class="tile-title">{{ item.title | raw }}</a>
                                 {% if fsc.user %}
                                     <span class="label">{{ item.position }}</span>
                                 {% endif %}
