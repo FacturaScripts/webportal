@@ -86,6 +86,11 @@ abstract class SectionController extends PortalController
 
     protected function addButton(string $sectionName, string $link, string $label, string $icon)
     {
+        if (!isset($this->sections[$sectionName])) {
+            $this->miniLog->critical('Section not found: ' . $sectionName);
+            return;
+        }
+
         $this->sections[$sectionName]['buttons'][] = [
             'icon' => $icon,
             'label' => $this->i18n->trans($label),
@@ -113,6 +118,11 @@ abstract class SectionController extends PortalController
 
     protected function addOrderOption(string $sectionName, string $field, string $label, int $selection = 0)
     {
+        if (!isset($this->sections[$sectionName])) {
+            $this->miniLog->critical('Section not found: ' . $sectionName);
+            return;
+        }
+
         $this->sections[$sectionName]['orderOptions'][] = [
             'field' => $field,
             'label' => $this->i18n->trans($label),
@@ -153,6 +163,11 @@ abstract class SectionController extends PortalController
 
     protected function addSearchOptions(string $sectionName, array $fields)
     {
+        if (!isset($this->sections[$sectionName])) {
+            $this->miniLog->critical('Section not found: ' . $sectionName);
+            return;
+        }
+
         $this->sections[$sectionName]['searchOptions'] = $fields;
     }
 
@@ -293,7 +308,6 @@ abstract class SectionController extends PortalController
         $this->sections[$sectionName]['count'] = $section['model']->count($finalWhere);
         $this->sections[$sectionName]['cursor'] = $section['model']->all($finalWhere, $section['order'], $section['offset']);
         $this->sections[$sectionName]['where'] = $where;
-
         $this->sections[$sectionName]['pages'] = $this->getPagination($this->sections[$sectionName]);
     }
 }
