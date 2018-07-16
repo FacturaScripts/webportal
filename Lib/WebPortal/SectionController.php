@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Lib\ExtendedController;
 
 /**
  * Description of SectionController
@@ -206,6 +207,107 @@ abstract class SectionController extends PortalController
         $this->sections[$sectionName] = $newSection;
         return true;
     }
+    protected function addFilterAutocomplete($viewName, $key, $label, $field, $table, $fieldcode = '', $fieldtitle = '', $where = [])
+    {
+        $value = ($viewName == $this->active) ? $this->request->get($key, '') : '';
+        $fcode = empty($fieldcode) ? $field : $fieldcode;
+        $ftitle = empty($fieldtitle) ? $fcode : $fieldtitle;
+        $this->views[$viewName]->addFilter($key, ListFilter::newAutocompleteFilter($label, $field, $table, $fcode, $ftitle, $value, $where));
+    }
+    
+    /**
+     * Adds a boolean condition type filter to the SectionView.
+     *
+     * @param string $viewName
+     * @param string $key        (Filter identifier)
+     * @param string $label      (Human reader description)
+     * @param string $field      (Field of the model to apply filter)
+     * @param bool   $inverse    (If you need to invert the selected value)
+     * @param mixed  $matchValue (Value to match)
+     */
+    protected function addFilterCheckbox($viewName, $key, $label, $field, $inverse = false, $matchValue = true)
+    {
+        $value = ($viewName == $this->active) ? $this->request->get($key, '') : '';
+        $this->views[$viewName]->addFilter($key, ListFilter::newCheckboxFilter($field, $value, $label, $inverse, $matchValue));
+    }
+    
+    /**
+     * Adds a date type filter to the SectionView.
+     *
+     * @param string $viewName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     */
+    protected function addFilterDatePicker($viewName, $key, $label, $field)
+    {
+        $this->addFilterFromType($viewName, $key, $label, $field, 'datepicker');
+    }
+    
+    /**
+     * Adds a filter to a type of field to the ListView.
+     *
+     * @param string $viewName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param string $type
+     */
+    private function addFilterFromType($viewName, $key, $label, $field, $type)
+    {
+        $config = [
+            'field' => $field,
+            'label' => $label,
+            'valueFrom' => ($viewName == $this->active) ? $this->request->get($key . '-from', '') : '',
+            'operatorFrom' => $this->request->get($key . '-from-operator', '>='),
+            'valueTo' => ($viewName == $this->active) ? $this->request->get($key . '-to', '') : '',
+            'operatorTo' => $this->request->get($key . '-to-operator', '<='),
+        ];
+        
+        $this->views[$viewName]->addFilter($key, ListFilter::newStandardFilter($type, $config));
+    }
+    
+    /**
+     * Adds a numeric type filter to the SectionView.
+     *
+     * @param string $viewName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     */
+    protected function addFilterNumber($viewName, $key, $label, $field)
+    {
+        $this->addFilterFromType($viewName, $key, $label, $field, 'number');
+    }
+    
+    /**
+     * Add a select type filter to a ListView.
+     *
+     * @param string $viewName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param array  $values    (Values to show)
+     */
+    protected function addFilterSelect($viewName, $key, $label, $field, $values = [])
+    {
+        $value = ($viewName == $this->active) ? $this->request->get($key, '') : '';
+        $this->views[$viewName]->addFilter($key, ListFilter::newSelectFilter($label, $field, $values, $value));
+    }
+    
+    /**
+     * Adds a text type filter to the SectionView.
+     *
+     * @param string $viewName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     */
+    protected function addFilterText($viewName, $key, $label, $field)
+    {
+        $this->addFilterFromType($viewName, $key, $label, $field, 'text');
+    }
+    
 
     protected function commonCore()
     {
