@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\webportal\Model;
 
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Dinamic\Model\Contacto;
 
 /**
  * Description of ChatSession
@@ -72,6 +73,12 @@ class ChatSession extends Base\ModelClass
         parent::clear();
         $this->creationtime = time();
         $this->lastmodtime = time();
+    }
+
+    public function install()
+    {
+        new Contacto();
+        return parent::install();
     }
 
     /**
