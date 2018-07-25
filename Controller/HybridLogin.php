@@ -203,6 +203,11 @@ class HybridLogin extends PortalController
      */
     private function setGeoIpData(&$contact)
     {
+        /// we don't need update contact location if we already know
+        if (!empty($contact->ciudad)) {
+            return;
+        }
+
         $ipAddress = $this->request->getClientIp() ?? '::1';
         $geoLocation = new GeoLocation();
         $geoLocation->setGeoIpData($contact, $ipAddress);

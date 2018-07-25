@@ -108,7 +108,8 @@ class PortalRegisterMe extends PortalController
         $this->setGeoIpData($contact);
         if ($contact->save()) {
             $this->updateCookies($contact, true);
-            $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url'));
+            $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
+            $this->response->headers->set('Refresh', '0; ' . $url);
         } else {
             $this->miniLog->alert($this->i18n->trans('record-save-error'));
         }
