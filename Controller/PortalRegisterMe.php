@@ -96,8 +96,8 @@ class PortalRegisterMe extends PortalController
 
         $emailData = \explode('@', $email);
         $contact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
-        $contact->apellidos = $this->request->request->get('apellidos', '');
-        $contact->descripcion = $this->request->request->get('descripcion', '');
+        $contact->apellidos = $this->request->request->get('surname', '');
+        $contact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
         $contact->email = $email;
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
