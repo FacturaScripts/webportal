@@ -96,6 +96,8 @@ class PortalRegisterMe extends PortalController
 
         $emailData = \explode('@', $email);
         $contact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
+        $contact->apellidos = $this->request->request->get('apellidos', '');
+        $contact->descripcion = $this->request->request->get('descripcion', '');
         $contact->email = $email;
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
@@ -117,7 +119,7 @@ class PortalRegisterMe extends PortalController
 
     /**
      * Set geoIP details to contact.
-     * 
+     *
      * @param Contacto $contact
      */
     private function setGeoIpData(&$contact)
