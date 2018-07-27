@@ -196,6 +196,7 @@ abstract class SectionController extends PortalController
             'query' => ($this->active == $sectionName) ? $this->request->get('query', '') : '',
             'searchOptions' => [],
             'template' => 'Section/WebPage.html.twig',
+            'jsfile' => '',
             'where' => [],
         ];
 
@@ -245,14 +246,14 @@ abstract class SectionController extends PortalController
      */
     protected function execAfterAction(string $action)
     {
-        
+
     }
 
     /**
      * Run operations on the data before reading it. Returns false to stop process.
      *
      * @param string $action
-     * 
+     *
      * @return boolean
      */
     protected function execPreviousAction(string $action)
