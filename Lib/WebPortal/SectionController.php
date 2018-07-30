@@ -187,6 +187,7 @@ abstract class SectionController extends PortalController
             'fixed' => $fixed,
             'group' => '',
             'label' => '',
+            'shortlabel' => '',
             'model' => null,
             'name' => $sectionName,
             'offset' => ($this->active == $sectionName) ? $this->request->get('offset', 0) : 0,
