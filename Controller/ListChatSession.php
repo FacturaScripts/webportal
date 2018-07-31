@@ -38,7 +38,7 @@ class ListChatSession extends ExtendedController\ListController
         $pageData = parent::getPageData();
         $pageData['title'] = 'chat-messages';
         $pageData['menu'] = 'web';
-        $pageData['icon'] = 'fa-comments-o';
+        $pageData['icon'] = 'fa-comments';
 
         return $pageData;
     }
@@ -49,13 +49,13 @@ class ListChatSession extends ExtendedController\ListController
     protected function createViews()
     {
         /// sessions
-        $this->addView('ListChatSession', 'ChatSession', 'chat-sessions', 'fa-comments-o');
+        $this->addView('ListChatSession', 'ChatSession', 'chat-sessions', 'fa-comment-dots');
         $this->addOrderBy('ListChatSession', ['idchat'], 'code');
         $this->addOrderBy('ListChatSession', ['creationtime'], 'date', 2);
         $this->addSearchFields('ListChatSession', ['idchat']);
 
         /// messages
-        $this->addView('ListChatMessage', 'ChatMessage', 'chat-messages', 'fa-comments-o');
+        $this->addView('ListChatMessage', 'ChatMessage', 'chat-messages', 'fa-comments');
         $this->addSearchFields('ListChatMessage', ['content']);
         $this->addOrderBy('ListChatMessage', ['idchat'], 'code');
         $this->addOrderBy('ListChatMessage', ['creationtime'], 'date', 2);
