@@ -68,9 +68,6 @@ class EditProfile extends SectionController
         $password = $this->request->get('password', '');
         $repassword = $this->request->get('re-password', '');
 
-        var_dump($password);
-        var_dump($repassword);
-        
         if ('' == $password && $repassword == '') {
             return true;
         }
