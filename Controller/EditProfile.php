@@ -18,7 +18,9 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use FacturaScripts\Core\Model\Pais;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
+
 
 /**
  * Description of EditProfile
@@ -56,12 +58,20 @@ class EditProfile extends SectionController
         return parent::execPreviousAction($action);
     }
 
+    /**
+     * Check if password if valid. If the user don´t write nothing, the password is the same and storage the rest of the changes.
+     *
+     * @return boolean
+     */
     private function changedPassword() : bool
     {
         $password = $this->request->get('password', '');
         $repassword = $this->request->get('re-password', '');
+
+        var_dump($password);
+        var_dump($repassword);
         
-        if ('' !== $password && $repassword !== '') {
+        if ('' == $password && $repassword == '') {
             return true;
         }
 
@@ -78,6 +88,11 @@ class EditProfile extends SectionController
         return true;
     }
 
+    /**
+     * Storage the personal data 
+     *
+     * @return void
+     */
     private function changedPersonalData()
     {
         $this->contact->nombre = $this->request->get('nombre', '');
@@ -88,6 +103,12 @@ class EditProfile extends SectionController
         $this->contact->ciudad = $this->request->get('ciudad', '');
         $this->contact->provincia = $this->request->get('provincia', '');
         $this->contact->codpais = $this->request->get('codpais', '');
+    }
+
+    public function getCountries() : array
+    {
+        $pais = new Pais();
+        return $pais->all([],[],0,0);
     }
 
     protected function loadData(string $sectionName)

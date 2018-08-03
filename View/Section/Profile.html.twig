@@ -15,22 +15,47 @@
             <form action="" method="post">
                 <input type="hidden" name="action" value="edit"/>
                 <div class="columns">
-                    <div class="column">
+                    <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('name') }}</label>
                             <input class="form-input" type="text" name="nombre" value="{{ fsc.contact.nombre }}" autocomplete="off" required=""/>
                         </div>
                     </div>
-                    <div class="column">
+                    <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('surname') }}</label>
                             <input class="form-input" type="text" name="apellidos" value="{{ fsc.contact.apellidos }}" autocomplete="off"/>
                         </div>
                     </div>
-                    <div class="column">
+                    <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('address') }}</label>
                             <input class="form-input" type="text" name="direccion" value="{{ fsc.contact.direccion }}" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="column col-6">
+                        <div class="form-group">
+                            <label class="form-label">{{ i18n.trans('province') }}</label>
+                            <input class="form-input" type="text" name="provincia" value="{{ fsc.contact.provincia }}" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="column col-6">
+                        <div class="form-group">
+                            <label class="form-label">{{ i18n.trans('city') }}</label>
+                            <input class="form-input" type="text" name="ciudad" value="{{ fsc.contact.ciudad }}" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="column col-3">
+                        <div class="form-group">
+                            <label class="form-label">{{ i18n.trans('country') }}</label>
+                            <select class="form-input" name="country">
+                                {% for pais in fsc.getCountries() %} 
+                                    {% if pais.codpais == fsc.contact.codpais %}
+                                        <option value={{pais.codpais}} selected>{{pais.nombre}}</option>
+                                    {% endif %}
+                                    <option value={{pais.codpais}}>{{pais.nombre}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="column">
@@ -45,31 +70,13 @@
                             <input class="form-input" type="number" name="codpostal" value="{{ fsc.contact.codpostal }}" autocomplete="off"/>
                         </div>
                     </div>
-                    <div class="column">
-                        <div class="form-group">
-                            <label class="form-label">{{ i18n.trans('city') }}</label>
-                            <input class="form-input" type="text" name="ciudad" value="{{ fsc.contact.ciudad }}" autocomplete="off"/>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="form-group">
-                            <label class="form-label">{{ i18n.trans('province') }}</label>
-                            <input class="form-input" type="text" name="provincia" value="{{ fsc.contact.provincia }}" autocomplete="off"/>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="form-group">
-                            <label class="form-label">{{ i18n.trans('country') }}</label>
-                            <input class="form-input" type="text" name="codpais" value="{{ fsc.contact.codpais }}" autocomplete="off"/>
-                        </div>
-                    </div>
-                     <div class="column">
+                     <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('password') }}</label>
                             <input class="form-input" type="password" name="password" autocomplete="off"/>
                         </div>
                     </div>
-                     <div class="column">
+                     <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('re-password') }}</label>
                             <input class="form-input" type="password" name="re-password" autocomplete="off"/>
