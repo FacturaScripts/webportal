@@ -80,10 +80,7 @@ class EditProfile extends SectionController
             return false;
         }
 
-        if (!$this->contact->verifyPassword($password)) {
-            $this->miniLog->error($this->i18n->trans('not-can-update-password'));
-            return false;
-        }
+        $this->contact->setPassword($password);
 
         return true;
     }
