@@ -46,7 +46,7 @@ class EditProfile extends SectionController
      * 
      * @return string
      */
-    public function getGravatar(string $email, int $size = 80): string
+    public function getGravatar($email, $size = 80): string
     {
         return "https://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?s=" . $size;
     }
