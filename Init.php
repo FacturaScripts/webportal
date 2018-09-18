@@ -20,6 +20,9 @@ namespace FacturaScripts\Plugins\webportal;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\InitClass;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Model\User;
+use FacturaScripts\Core\Model\Contacto;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 
 /**
@@ -52,5 +55,26 @@ class Init extends InitClass
 
         $updater = new UpdateRoutes();
         $updater->setRoutes();
+
+        $this->createContact();
+    }
+
+    /**
+     * Create contact of all users that contains email.
+     *
+     * @return void
+     */
+    private function createContact()
+    {
+        $user = new User();
+        $users = $user->all([new DataBaseWhere('email', 'NULL', 'IS NOT')],[],0,0);
+        
+        $contact = new Contacto();
+        foreach ($users as $user) {
+            $contact->email = $user->email;
+            $contact->nombre = $user->nick;
+            $contact->descripcion = $user->nick;
+            $contact->save();
+        }
     }
 }
