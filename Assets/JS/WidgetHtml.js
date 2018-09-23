@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
- * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+/*
+ * This file is part of webportal plugin for FacturaScripts
+ * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -12,22 +11,11 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * @author Carlos García Gómez <carlos@facturascripts.com>
--->
+ */
 
-<view>
-    <columns>
-        <group name="data" numcolumns="12">
-            <column name="code" order="100">
-                <widget type="text" fieldname="idchat" required="true" readonly="true" />
-            </column>
-            <column name="date" order="120">
-                <widget type="date" fieldname="creationtime" readonly="true" />
-            </column>
-        </group>
-    </columns>
-</view>
+$(document).ready(function () {
+    $('.widget-html').summernote();
+});

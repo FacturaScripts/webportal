@@ -1,14 +1,13 @@
 {
     "name": "vendor/webportal",
-    "description": "Description of project webportal.",
+    "description": "Adds a web portal to FacturaScripts.",
     "authors": [
         {
-            "name": "carlos",
-            "email": "your@email.here"
+            "name": "Carlos Garcia Gomez",
+            "email": "carlos@facturascripts.com"
         }
     ],
     "require": {
-        "iboldurev/dialogflow": "dev-master",
         "hybridauth/hybridauth": "dev-master"
     }
 }

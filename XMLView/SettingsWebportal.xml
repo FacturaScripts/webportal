@@ -77,13 +77,5 @@
                 <widget type="password" fieldname="twitterappsecret"/>
             </column>
         </group>
-        <group name="dialogflow" title="dialogflow" icon="fa-commenting-o" numcolumns="12">
-            <column name="df-cli-token" title="client-access-token" numcolumns="8" order="100">
-                <widget type="password" fieldname="dfclitoken"/>
-            </column>
-            <column name="df-max-anonymous" title="max-anonymous-comments" numcolumns="4" order="110">
-                <widget type="number" fieldname="dfmaxanonymous"/>
-            </column>
-        </group>
     </columns>
 </view>
