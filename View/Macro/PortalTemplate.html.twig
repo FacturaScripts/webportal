@@ -59,17 +59,17 @@
                         <br/>
                         {% if appSettings.get('webportal','fbappid','') != '' %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
-                                <i class="fa fa-facebook fa-fw" aria-hidden="true"></i> facebook
+                                <i class="fas fa-facebook fa-fw" aria-hidden="true"></i> facebook
                             </a>
                         {% endif %}
                         {% if appSettings.get('webportal','googleappid','') != '' %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
-                                <i class="fa fa-google fa-fw" aria-hidden="true"></i> google
+                                <i class="fas fa-google fa-fw" aria-hidden="true"></i> google
                             </a>
                         {% endif %}
                         {% if appSettings.get('webportal','twitterappid','') != '' %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
-                                <i class="fa fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                                <i class="fas fa-twitter fa-fw" aria-hidden="true"></i> twitter
                             </a>
                         {% endif %}
                         {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
@@ -78,7 +78,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+                                            <i class="fas fa-envelope fa-fw" aria-hidden="true"></i>
                                         </span>
                                         <input type="text" name="fsContact" id="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
                                     </div>
@@ -86,7 +86,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                            <i class="fas fa-key fa-fw" aria-hidden="true"></i>
                                         </span>
                                         <input type="password" name="fsContactPass" id="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
                                     </div>
@@ -108,7 +108,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                                        <i class="fas fa-user fa-fw" aria-hidden="true"></i>
                                     </span>
                                     <input type="text" name="fsNick" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('user') }}" required="" autocomplete="off"/>
                                 </div>
@@ -116,7 +116,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                                        <i class="fas fa-key fa-fw" aria-hidden="true"></i>
                                     </span>
                                     <input type="password" name="fsPassword" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
                                 </div>
@@ -139,17 +139,17 @@
             <div class="modal-header">
                 <a href="#close" onclick="return hideModal('logoutModal');" class="btn btn-clear float-right" aria-label="Close"></a>
                 <div class="modal-title h5">
-                    <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i> {{ fsc.contact.email }}
+                    <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i> {{ fsc.contact.email }}
                 </div>
             </div>
             <div class="modal-body">
                 <div class="content">
                     <a href="{{ constant('FS_ROUTE') }}/EditProfile" class="btn btn-block btn-success">
-                        <i class="fa fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('edit') }}
+                        <i class="fas fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('edit') }}
                     </a>
                     <div class="divider"></div>
                     <a href="{{ constant('FS_ROUTE') }}/?public_logout=TRUE" class="btn btn-block btn-error">
-                        <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> {{ i18n.trans('logout') }}
+                        <i class="fas fa-sign-out fa-fw" aria-hidden="true"></i> {{ i18n.trans('logout') }}
                     </a>
                 </div>
             </div>

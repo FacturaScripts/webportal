@@ -22,7 +22,7 @@
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
         {% endblock %}
         {% block css %}
-            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css','node_modules/font-awesome/css/font-awesome.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
+            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css','node_modules/@fortawesome/fontawesome-free/css/all.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -43,14 +43,14 @@
                 <section class="navbar-center">
                     <div class="dropdown show-xs">
                         <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
-                            <i class="fa fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
+                            <i class="fas fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
                         </a>
                         <ul class="menu">
                             {% for menuItem in fsc.getPublicMenu() %}
                                 {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
                                 <li class="menu-item">
                                     <a class="{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
-                                        <i class="fa {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
+                                        <i class="fas {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -60,27 +60,27 @@
                 </section>
                 <section class="navbar-section">
                     <a class="btn" href="{{ constant('FS_ROUTE') }}/WebSearch">
-                        <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+                        <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         <span class="hide-md">{{ i18n.trans('search') }}</span>
                     </a>
                     &nbsp;
                     {% if fsc.user %}
                         <div class="btn-group">
                             <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
-                                <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+                                <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
-                                <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
                             </a>
                         </div>
                     {% elseif fsc.contact %}
                         <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
-                            <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
                             <span>{{ fsc.contact.nombre }}</span>
                         </a>
                     {% else %}
                         <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
-                            <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
                             <span class="hide-md">{{ i18n.trans('login') }}</span>
                         </a>
                     {% endif %}

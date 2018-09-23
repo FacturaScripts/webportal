@@ -16,7 +16,7 @@
                         <div class="input-group">
                             <input id="queryInput" type="text" name="query" value="{{ fsc.query }}" class="form-input" autocomplete="off" autofocus=""/>
                             <button class="btn btn-primary input-group-btn">
-                                <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+                                <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                             </button>
                         </div>
                     </form>
@@ -24,7 +24,7 @@
                     {% for item in fsc.searchResults %}
                         <div class="tile">
                             <div class="tile-icon">
-                                <i class="fa {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
+                                <i class="fas {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title | raw }}</a>
@@ -46,7 +46,7 @@
                         {% endif %}
                         {% for query in fsc.similarQueries %}
                             <a href="{{ fsc.url() }}?query={{ query }}" class="label label-rounded">
-                                <i class="fa fa-search fa-fw" aria-hidden="true"></i> {{ query }}
+                                <i class="fas fa-search fa-fw" aria-hidden="true"></i> {{ query }}
                             </a>
                         {% endfor %}
                     {% endfor %}

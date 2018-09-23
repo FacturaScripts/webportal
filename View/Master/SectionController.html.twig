@@ -91,11 +91,11 @@
                 {% set btnClass = (section.name == fsc.active) ? 'btn btn-primary' : 'btn' %}
                 {% if section.count > 0 %}
                     <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block badge" data-badge="{{ section.count }}" onclick="return showSection('{{ section.name }}');">
-                        <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
+                        <i class="fas {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
                     </button>
                 {% else %}
                     <button id="secBtn{{ section.name }}" class="section-btn {{ btnClass }} btn-block" onclick="return showSection('{{ section.name }}');">
-                        <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
+                        <i class="fas {{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.label }}
                     </button>
                 {% endif %}
             {% endfor %}
@@ -109,14 +109,14 @@
                 {% elseif section.count > 0 %}
                     <li class="tab-item">
                         <a href="#" id="secBtn{{ section.name }}2" class="section-tab badge {{ tabClass }}" data-badge="{{ section.count }}" onclick="return showSection('{{ section.name }}');">
-                            <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            <i class="fas {{ section.icon }} fa-fw" aria-hidden="true"></i>
                             {% if section.shortlabel %}<span class="d-block">{{ section.shortlabel }}</span>{% endif %}
                         </a>
                     </li>
                 {% else %}
                     <li class="tab-item">
                         <a href="#" id="secBtn{{ section.name }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ section.name }}');">
-                            <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            <i class="fas {{ section.icon }} fa-fw" aria-hidden="true"></i>
                             {% if section.shortlabel %}<span class="d-block">{{ section.shortlabel }}</span>{% endif %}
                         </a>
                     </li>
@@ -132,7 +132,7 @@
             {% for button in section.buttons %}
                 <a href="{{ button.link }}" class="btn">
                     {% if '' != button.icon %}
-                        <i class="fa {{ button.icon }} fa-fw" aria-hidden="true"></i>
+                        <i class="fas {{ button.icon }} fa-fw" aria-hidden="true"></i>
                     {% endif %}
                     <span class="hide-sm">{{ button.label }}</span>
                 </a>
@@ -145,7 +145,7 @@
     {% if section.orderOptions | length > 0 %}
         <div class="input-group">
             <span class="input-group-addon">
-                <i class="fa fa-sort fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-sort fa-fw" aria-hidden="true"></i>
             </span>
             <select name="order" class="form-select" onchange="this.form.submit();">
                 {% for option in section.orderOptions %}
@@ -183,7 +183,7 @@
         <div class="input-group">
             <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
             <button class="btn btn-primary input-group-btn">
-                <i class="fa fa-search fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-search fa-fw" aria-hidden="true"></i>
             </button>
         </div>
     {% endif %}
