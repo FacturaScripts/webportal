@@ -335,4 +335,22 @@ class PortalController extends Controller
             $this->response->headers->setCookie(new Cookie('fsLogkey', $contact->logkey, $expire));
         }
     }
+
+    /**
+     * Return the page details.
+     *
+     * @param string $equivalence
+     *
+     * @return string
+     */
+    public function getPublicUrl(string $equivalence): string
+    {
+        $webPage = new Model\WebPage();
+        $where = [
+            new DataBaseWhere('equivalentpage', $equivalence),
+            new DataBaseWhere('langcode', $this->webPage->langcode)
+        ];
+        $webPage->loadFromCode('', $where);
+        return \FS_ROUTE . $webPage->permalink;
+    }
 }
