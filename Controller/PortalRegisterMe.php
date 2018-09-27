@@ -78,45 +78,51 @@ class PortalRegisterMe extends PortalController
     {
         switch ($action) {
             case 'register':
-                $this->registerContact();
+                if ($this->registerContact()) {
+                    $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
+                    $this->response->headers->set('Refresh', '0; ' . $url);
+                }
                 return false;
         }
 
         return true;
     }
 
-    private function registerContact()
+    protected function registerContact(): bool
     {
         $contact = new Contacto();
         $email = $this->request->request->get('email');
         if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
-            return;
+            return false;
         }
 
         $emailData = \explode('@', $email);
         $contact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
+        $contact->apellidos = $this->request->request->get('surname', '');
+        $contact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
         $contact->email = $email;
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
         if (empty($newPassword) || $newPassword !== $newPassword2) {
             $this->miniLog->alert($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
-            return;
+            return false;
         }
 
         $contact->setPassword($newPassword);
         $this->setGeoIpData($contact);
         if ($contact->save()) {
             $this->updateCookies($contact, true);
-            $this->response->headers->set('Refresh', '0; ' . AppSettings::get('webportal', 'url'));
+            return true;
         } else {
             $this->miniLog->alert($this->i18n->trans('record-save-error'));
+            return false;
         }
     }
 
     /**
      * Set geoIP details to contact.
-     * 
+     *
      * @param Contacto $contact
      */
     private function setGeoIpData(&$contact)

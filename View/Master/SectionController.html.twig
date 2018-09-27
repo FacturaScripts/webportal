@@ -53,6 +53,12 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    {% for section in fsc.sections %}
+        {% if section.jsfile %}
+            <script type="text/javascript" src="{{ asset('Dinamic/Assets/JS/' ~ section.jsfile ~ '.js') }}"></script>
+        {% endif %}
+    {% endfor %}
+
     <script type="text/javascript">
         function showSection(name) {
             $(".section-btn").removeClass("btn-primary");
@@ -104,12 +110,14 @@
                     <li class="tab-item">
                         <a href="#" id="secBtn{{ section.name }}2" class="section-tab badge {{ tabClass }}" data-badge="{{ section.count }}" onclick="return showSection('{{ section.name }}');">
                             <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            {% if section.shortlabel %}<span class="d-block">{{ section.shortlabel }}</span>{% endif %}
                         </a>
                     </li>
                 {% else %}
                     <li class="tab-item">
                         <a href="#" id="secBtn{{ section.name }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ section.name }}');">
                             <i class="fa {{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            {% if section.shortlabel %}<span class="d-block">{{ section.shortlabel }}</span>{% endif %}
                         </a>
                     </li>
                 {% endif %}

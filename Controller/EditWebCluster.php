@@ -40,7 +40,7 @@ class EditWebCluster extends ExtendedController\PanelController
         $pageData['title'] = 'cluster';
         $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
-        $pageData['icon'] = 'fa-newspaper-o';
+        $pageData['icon'] = 'fa-newspaper';
 
         return $pageData;
     }
@@ -50,7 +50,7 @@ class EditWebCluster extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('EditWebCluster', 'WebCluster', 'cluster', 'fa-newspaper-o');
+        $this->addEditView('EditWebCluster', 'WebCluster', 'cluster', 'fa-newspaper');
         $this->addListView('ListWebPage', 'WebPage', 'pages', 'fa-globe');
     }
 

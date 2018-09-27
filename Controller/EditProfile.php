@@ -18,42 +18,116 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use FacturaScripts\Core\Model\Pais;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
 
 /**
  * Description of EditProfile
  *
- * @author carlos
+ * @author Carlos García Gómez
  */
 class EditProfile extends SectionController
 {
 
-    public function getGravatar(string $email, int $size = 80): string
+    /**
+     * 
+     * @return array
+     */
+    public function getCountries(): array
+    {
+        $pais = new Pais();
+        return $pais->all([], [], 0, 0);
+    }
+
+    /**
+     * 
+     * @param string $email
+     * @param int    $size
+     * 
+     * @return string
+     */
+    public function getGravatar($email, $size = 80): string
     {
         return "https://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?s=" . $size;
     }
 
+    /**
+     * Check if password if valid. If the user don´t write nothing, the password is the same and storage the rest of the changes.
+     *
+     * @return boolean
+     */
+    protected function changedPassword(): bool
+    {
+        $password = $this->request->get('password', '');
+        $repassword = $this->request->get('re-password', '');
+
+        if ('' == $password && $repassword == '') {
+            return true;
+        }
+
+        if ($password !== $repassword) {
+            $this->miniLog->error($this->i18n->trans('different-passwords-to-contact-' . $this->contact->nombre));
+            return false;
+        }
+
+        $this->contact->setPassword($password);
+        return true;
+    }
+
+    /**
+     * Storage the personal data 
+     *
+     * @return boolean
+     */
+    protected function changedPersonalData()
+    {
+        $this->contact->nombre = $this->request->get('nombre', '');
+        $this->contact->apellidos = $this->request->get('apellidos', '');
+        $this->contact->direccion = $this->request->get('direccion', '');
+        $this->contact->apartado = $this->request->get('apartado', '');
+        $this->contact->codpostal = $this->request->get('codpostal', '');
+        $this->contact->ciudad = $this->request->get('ciudad', '');
+        $this->contact->provincia = $this->request->get('provincia', '');
+        $this->contact->codpais = $this->request->get('codpais', '');
+        return true;
+    }
+
+    /**
+     * 
+     */
     protected function createSections()
     {
         $this->addSection('plugin', ['fixed' => true, 'template' => 'Section/Profile']);
     }
 
+    /**
+     * 
+     * @param string $action
+     *
+     * @return boolean
+     */
     protected function execPreviousAction(string $action)
     {
-        if ($action === 'edit') {
-            $this->contact->nombre = $this->request->get('nombre', '');
-            $this->contact->apellidos = $this->request->get('apellidos', '');
-            if ($this->contact->save()) {
-                $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-            } else {
-                $this->miniLog->alert($this->i18n->trans('record-save-error'));
-            }
-            return true;
-        }
+        switch ($action) {
+            case 'edit':
+                if ($this->changedPersonalData() && $this->changedPassword()) {
+                    if ($this->contact->save()) {
+                        $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+                    } else {
+                        $this->miniLog->alert($this->i18n->trans('record-save-error'));
+                    }
+                }
+                return true;
 
-        return parent::execPreviousAction($action);
+            default:
+                return parent::execPreviousAction($action);
+        }
     }
 
+    /**
+     * 
+     * @param string $sectionName
+     */
     protected function loadData(string $sectionName)
     {
         

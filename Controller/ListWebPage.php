@@ -91,7 +91,7 @@ class ListWebPage extends ExtendedController\ListController
 
     protected function createViewWebCluster()
     {
-        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper-o');
+        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper');
         $this->addSearchFields('ListWebCluster', ['title', 'description']);
         $this->addOrderBy('ListWebCluster', ['title']);
     }
