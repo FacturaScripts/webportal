@@ -43,10 +43,10 @@
             <widget type="checkbox" fieldname="noindex" />
         </column>
         <column name="sort" display="right" order="160">
-            <widget type="number" fieldname="ordernum" />
+            <widget type="number" fieldname="ordernum" decimal="0" />
         </column>
         <column name="visitcount" title="visit-counter" display="right" order="170">
-            <widget type="number" fieldname="visitcount" />
+            <widget type="number" fieldname="visitcount" decimal="0" />
         </column>
         <column name="lastmod" title="last-update" display="right" order="180">
             <widget type="date" fieldname="lastmod" />
@@ -54,8 +54,8 @@
     </columns>
     <rows>
         <row type="status" fieldname="noindex">
-            <option color="table-warning">1</option>
-            <option color="table-success">0</option>
+            <option color="warning">1</option>
+            <option color="success">0</option>
         </row>
     </rows>
 </view>

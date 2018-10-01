@@ -28,10 +28,10 @@
             <widget type="text" fieldname="query" onclick="WebSearch" />
         </column>
         <column name="results" display="right" order="120">
-            <widget type="number" fieldname="numresults" />
+            <widget type="number" fieldname="numresults" decimal="0" />
         </column>
         <column name="visitcount" title="visit-counter" display="right" order="130">
-            <widget type="number" fieldname="visitcount" />
+            <widget type="number" fieldname="visitcount" decimal="0" />
         </column>
         <column name="lastip" title="last-ip" display="right" order="140">
             <widget type="text" fieldname="lastip" />
@@ -42,7 +42,7 @@
     </columns>
     <rows>
         <row type="status" fieldname="numresults">
-            <option color="table-warning">0</option>
+            <option color="warning">0</option>
         </row>
     </rows>
 </view>

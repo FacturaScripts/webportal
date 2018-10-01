@@ -72,10 +72,10 @@
                 <widget type="text" fieldname="icon" />
             </column>
             <column name="creationdate" title="creation-date" numcolumns="3" order="120">
-                <widget type="text" fieldname="creationdate" readonly="true" />
+                <widget type="date" fieldname="creationdate" readonly="true" />
             </column>
             <column name="lastmod" title="last-update" numcolumns="3" order="130">
-                <widget type="text" fieldname="lastmod" readonly="true" />
+                <widget type="date" fieldname="lastmod" readonly="true" />
             </column>
         </group>
     </columns>

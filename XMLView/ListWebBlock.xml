@@ -33,21 +33,21 @@
             </widget>
         </column>
         <column name="content" order="130">
-            <widget type="text" fieldname="content" />
+            <widget type="textarea" fieldname="content" />
         </column>
         <column name="sort" display="right" order="140">
-            <widget type="number" fieldname="ordernum" />
+            <widget type="number" fieldname="ordernum" decimal="0" />
         </column>
     </columns>
     <rows>
         <row type="status" fieldname="type">
-            <option color="table-warning">meta</option>
-            <option color="table-warning">css</option>
-            <option color="table-warning">javascript</option>
-            <option color="table-warning">javascriptWithCookies</option>
-            <option color="table-success">body</option>
-            <option color="table-success">bodyContainer</option>
-            <option color="table-success">bodyCluster</option>
+            <option color="warning">meta</option>
+            <option color="warning">css</option>
+            <option color="warning">javascript</option>
+            <option color="warning">javascriptWithCookies</option>
+            <option color="success">body</option>
+            <option color="success">bodyContainer</option>
+            <option color="success">bodyCluster</option>
         </row>
     </rows>
 </view>
