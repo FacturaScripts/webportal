@@ -45,10 +45,13 @@
         <column name="sort" display="right" order="160">
             <widget type="number" fieldname="ordernum" decimal="0" />
         </column>
-        <column name="visitcount" title="visit-counter" display="right" order="170">
+        <column name="equivalence" order="170">
+            <widget type="text" fieldname="equivalentpage" />
+        </column>
+        <column name="visitcount" title="visit-counter" display="right" order="180">
             <widget type="number" fieldname="visitcount" decimal="0" />
         </column>
-        <column name="lastmod" title="last-update" display="right" order="180">
+        <column name="lastmod" title="last-update" display="right" order="190">
             <widget type="date" fieldname="lastmod" />
         </column>
     </columns>

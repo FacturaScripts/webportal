@@ -50,6 +50,13 @@ class WebPage extends WebPageClass
     public $description;
 
     /**
+     * Used to identify equivalent pages in different langagues.
+     *
+     * @var string
+     */
+    public $equivalentpage;
+
+    /**
      * Icon to use in cluster.
      *
      * @var string
