@@ -21,7 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
-use FacturaScripts\Plugins\webportal\Lib\WebPortal\SearchEngine;
+use FacturaScripts\Dinamic\Lib\WebPortal\SearchEngine;
 use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 
 /**

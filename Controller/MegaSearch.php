@@ -19,7 +19,7 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Controller\MegaSearch as ParentController;
-use FacturaScripts\Plugins\webportal\Lib\WebPortal\SearchEngine;
+use FacturaScripts\Dinamic\Lib\WebPortal\SearchEngine;
 
 /**
  * Description of MegaSearch
