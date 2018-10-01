@@ -21,8 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
-use FacturaScripts\Plugins\webportal\Model\WebBlock;
-use FacturaScripts\Plugins\webportal\Model\WebPage;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\SearchEngine;
 use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 
 /**
@@ -33,7 +32,6 @@ use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
 class WebSearch extends PortalController
 {
 
-    const MAX_DESCRIPTION_LENGTH = 300;
     const MAX_TOP_QUERIES = 100;
     const MAX_WORD_DISTANCE = 3;
 
@@ -88,83 +86,6 @@ class WebSearch extends PortalController
         $this->initSearch();
     }
 
-    /**
-     * Adds item to search results.
-     * 
-     * @param array  $item
-     * @param string $query
-     * 
-     * @return bool
-     */
-    protected function addSearchResults(array $item, string $query): bool
-    {
-        /// link already in results
-        if (isset($this->searchResults[$item['link']])) {
-            return false;
-        }
-
-        $item['position'] = false;
-        foreach (explode(' ', $query) as $subQuery) {
-            $position = stripos($item['title'] . ' ' . $item['description'], $subQuery);
-            if (false === $position) {
-                $item['position'] = false;
-                break;
-            }
-
-            $item['position'] = max([(int) $item['position'], (int) $position]);
-        }
-
-        $item['icon'] = isset($item['icon']) ? $item['icon'] : 'fa-file-o';
-        $item['title'] = isset($item['title']) ? $item['title'] : 'Title';
-        $item['description'] = $this->fixDescription($item['description']);
-        $item['priority'] = isset($item['priority']) ? $item['priority'] : 0;
-        $this->searchResults[$item['link']] = $item;
-        return true;
-    }
-
-    /**
-     * Fix search results descriptions.
-     * 
-     * @param string $txt
-     * 
-     * @return string
-     */
-    protected static function fixDescription(string $txt): string
-    {
-        if (null === $txt) {
-            return '';
-        }
-
-        $final = trim(Utils::trueTextBreak($txt, self::MAX_DESCRIPTION_LENGTH));
-        return (mb_strlen($final) < self::MAX_DESCRIPTION_LENGTH) ? $final : $final . '...';
-    }
-
-    /**
-     * Returns an array with the query and the same query without accents.
-     * 
-     * @return array
-     */
-    protected function getFinalQueries(): array
-    {
-        $queries = [$this->query];
-        $transform = [
-            'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A',
-            'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
-            'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O',
-            'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y',
-            'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a',
-            'æ' => 'a', 'ç' => 'c', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i',
-            'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
-            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y'
-        ];
-        $newQuery = strtr($this->query, $transform);
-        if ($newQuery != $this->query) {
-            $queries[] = $newQuery;
-        }
-
-        return $queries;
-    }
-
     protected function initSearch()
     {
         $this->setTemplate('WebSearch');
@@ -175,10 +96,8 @@ class WebSearch extends PortalController
             return;
         }
 
-        foreach ($this->getFinalQueries() as $query) {
-            $this->search($query);
-        }
-        $this->sort();
+        $searchEngine = new SearchEngine();
+        $this->searchResults = $searchEngine->search($this->query);
 
         /// load or create search query for statistics
         $webSearch = new WebSearchModel();
@@ -200,47 +119,7 @@ class WebSearch extends PortalController
     {
         $code = $this->request->get('code', '');
         $query = $this->request->get('query', $code);
-        return Utils::noHtml(mb_strtolower($query));
-    }
-
-    /**
-     * Add search results to list.
-     * 
-     * @param string $query
-     */
-    protected function search(string $query)
-    {
-        $webPageModel = new WebPage();
-        $where = [new DataBaseWhere('description|title', $query, 'LIKE')];
-        foreach ($webPageModel->all($where, ['visitcount' => 'DESC']) as $wpage) {
-            $this->addSearchResults([
-                'icon' => $wpage->icon,
-                'title' => $wpage->title,
-                'description' => $wpage->description,
-                'link' => $wpage->url('public')
-                ], $query);
-        }
-
-        $this->searchBlocks($query);
-    }
-
-    protected function searchBlocks(string $query)
-    {
-        $webBlockModel = new WebBlock();
-        $where = [new DataBaseWhere('content', $query, 'LIKE')];
-        foreach ($webBlockModel->all($where) as $wblock) {
-            $link = $wblock->url('public');
-            if (empty($link)) {
-                continue;
-            }
-
-            $this->addSearchResults([
-                'icon' => 'fa-file-o',
-                'title' => $link,
-                'description' => $wblock->content(true),
-                'link' => $link
-                ], $query);
-        }
+        return Utils::noHtml(mb_strtolower($query, 'UTF8'));
     }
 
     /**
@@ -266,46 +145,5 @@ class WebSearch extends PortalController
         foreach ($webSearch->all($where, ['visitcount' => 'DESC'], 0, self::MAX_TOP_QUERIES) as $wsearch) {
             $this->topQueries[] = $wsearch->query;
         }
-    }
-
-    /**
-     * Sorts search results.
-     */
-    protected function sort()
-    {
-        /// we need maximum value of position and priority
-        $maxPosition = 0;
-        $maxPriority = 0;
-        foreach ($this->searchResults as $item) {
-            if ($item['position'] > $maxPosition) {
-                $maxPosition = 1 + $item['position'];
-            }
-
-            if ($item['priority'] > $maxPriority) {
-                $maxPriority = 1 + $item['priority'];
-            }
-        }
-
-        /// add max position when position is FALSE
-        foreach ($this->searchResults as $key => $value) {
-            if (false === $value['position']) {
-                $this->searchResults[$key]['position'] = $maxPosition;
-            }
-
-            if ($value['priority'] < $maxPriority) {
-                $this->searchResults[$key]['position'] += $maxPosition * ($maxPriority - $value['priority']);
-            }
-        }
-
-        /// sort by position
-        usort($this->searchResults, function($item1, $item2) {
-            if ($item1['position'] == $item2['position']) {
-                return 0;
-            } else if ($item1['position'] > $item2['position']) {
-                return 1;
-            }
-
-            return -1;
-        });
     }
 }
