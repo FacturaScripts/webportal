@@ -140,4 +140,30 @@ class WebSearch extends Base\ModelClass
         $this->query = Utils::noHtml($this->query);
         return parent::test();
     }
+
+    /**
+     * 
+     * @param string $type
+     * @param string $list
+     *
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'ListWebPage?activetab=List')
+    {
+        $value = $this->query;
+        $model = $this->modelClassName();
+        switch ($type) {
+            case 'edit':
+                return 'WebSearch?code=' . $value;
+
+            case 'list':
+                return $list . $model;
+
+            case 'new':
+                return 'WebSearch';
+        }
+
+        /// default
+        return empty($value) ? $list . $model : 'WebSearch?code=' . $value;
+    }
 }
