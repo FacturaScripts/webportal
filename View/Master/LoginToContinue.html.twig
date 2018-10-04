@@ -15,19 +15,19 @@
                         <div class="empty-action">
                             {% if appSettings.get('webportal','fbappid','') != '' %}
                                 <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fas fa-facebook fa-fw" aria-hidden="true"></i> facebook
+                                    <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
                                 </a>
                                 <br/>
                             {% endif %}
                             {% if appSettings.get('webportal','googleappid','') != '' %}
                                 <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fas fa-google fa-fw" aria-hidden="true"></i> google
+                                    <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
                                 </a>
                                 <br/>
                             {% endif %}
                             {% if appSettings.get('webportal','twitterappid','') != '' %}
                                 <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fas fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                                    <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
                                 </a>
                                 <br/>
                             {% endif %}
