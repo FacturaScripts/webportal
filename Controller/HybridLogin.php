@@ -22,6 +22,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Lib\EmailTools;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -76,6 +77,10 @@ class HybridLogin extends PortalController
                 $this->contactLogin();
                 break;
 
+            case 'recover':
+                $this->recoverAccount();
+                break;
+
             default:
                 $this->miniLog->alert('no-login-provider');
                 break;
@@ -108,6 +113,66 @@ class HybridLogin extends PortalController
             $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
             $this->response->headers->set('Refresh', '0; ' . $return);
         }
+    }
+
+    /**
+     * Try to recover the contact account
+     *
+     * @return bool
+     */
+    private function recoverAccount(): bool
+    {
+        $status = false;
+        /// Checks that anyone is not trying to  directly access
+        $email = $this->request->get('email', '');
+        $contact = new Contacto();
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            return $status;
+        }
+
+        $baseUrl = AppSettings::get('webportal', 'url');
+        /// If receive key, contact clicked on email link or someone is trying brute-force attack
+        if (!empty($this->request->get('key', ''))) {
+            $logKey = urldecode(base64_decode($this->request->get('key', '')));
+            if ($contact->verifyLogkey($logKey)) {
+                $this->setGeoIpData($contact);
+                if ($contact->save()) {
+                    $this->contact = $contact;
+                    $this->miniLog->notice(
+                        $this->i18n->trans(
+                            'recovered-access-go-to-account',
+                            ['%link%' => $baseUrl . '/EditProfile']
+                        )
+                    );
+                    $this->updateCookies($contact, true);
+                    $status = true;
+                } else {
+                    $this->miniLog->alert($this->i18n->trans('record-save-error'));
+                }
+                return $status;
+            } else {
+                $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
+            }
+        } else {
+            /// Send email to contact with link
+            $logKey = urlencode(base64_encode($contact->logkey));
+            $link = $baseUrl . '/HybridLogin?prov=recover&email=' . urlencode($email)
+                . '&key=' . $logKey;
+            $emailTools = new EmailTools();
+            $mail = $emailTools->newMail();
+            $mail->Subject = $this->i18n->trans('recover-your-account');
+            $mail->addAddress($email);
+            $mail->msgHTML($this->i18n->trans('recover-your-account-body', ['%link%' => $link]));
+
+            if ($emailTools->send($mail)) {
+                $this->miniLog->notice('send-mail-ok');
+                $status = true;
+            } else {
+                $this->miniLog->critical('send-mail-error');
+            }
+        }
+
+        return $status;
     }
 
     /**
@@ -145,6 +210,10 @@ class HybridLogin extends PortalController
         }
 
         $this->miniLog->alert($this->i18n->trans('login-password-fail'));
+
+        $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email=' . urlencode($email);
+        $this->miniLog->info($this->i18n->trans('recover-your-account-access', ['%link%' => $link]));
+
         return false;
     }
 
@@ -198,7 +267,7 @@ class HybridLogin extends PortalController
 
     /**
      * Set geoIP details to contact.
-     * 
+     *
      * @param Contacto $contact
      */
     private function setGeoIpData(&$contact)
