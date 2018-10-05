@@ -50,7 +50,7 @@
                                 {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
                                 <li class="menu-item">
                                     <a class="{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
-                                        <i class="fas {{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
+                                        <i class="{{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
                                     </a>
                                 </li>
                             {% endfor %}

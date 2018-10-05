@@ -125,7 +125,7 @@ class WebPage extends WebPageClass
     public function clear()
     {
         parent::clear();
-        $this->icon = 'fa-file';
+        $this->icon = 'fas fa-file';
         $this->noindex = false;
         $this->showonmenu = true;
         $this->showonfooter = true;

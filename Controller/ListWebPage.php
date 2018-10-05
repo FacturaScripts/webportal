@@ -38,7 +38,7 @@ class ListWebPage extends ExtendedController\ListController
         $pageData = parent::getPageData();
         $pageData['title'] = 'pages';
         $pageData['menu'] = 'web';
-        $pageData['icon'] = 'fa-globe';
+        $pageData['icon'] = 'fas fa-globe';
 
         return $pageData;
     }
@@ -49,7 +49,7 @@ class ListWebPage extends ExtendedController\ListController
     protected function createViews()
     {
         /// Web pages
-        $this->addView('ListWebPage', 'WebPage', 'pages', 'fa-globe');
+        $this->addView('ListWebPage', 'WebPage', 'pages', 'fas fa-globe');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', ['permalink']);
         $this->addOrderBy('ListWebPage', ['title']);
@@ -76,7 +76,7 @@ class ListWebPage extends ExtendedController\ListController
 
     protected function createViewWebBlock()
     {
-        $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
+        $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
         $this->addSearchFields('ListWebBlock', ['content']);
         $this->addOrderBy('ListWebBlock', ['idblock'], 'code');
         $this->addOrderBy('ListWebBlock', ['idpage']);
@@ -91,14 +91,14 @@ class ListWebPage extends ExtendedController\ListController
 
     protected function createViewWebCluster()
     {
-        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fa-newspaper');
+        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fas fa-newspaper');
         $this->addSearchFields('ListWebCluster', ['title', 'description']);
         $this->addOrderBy('ListWebCluster', ['title']);
     }
 
     protected function createViewWebSearch()
     {
-        $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fa-search');
+        $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fas fa-search');
         $this->addSearchFields('ListWebSearch', ['query']);
         $this->addOrderBy('ListWebSearch', ['lastmod'], 'last-update', 2);
         $this->addOrderBy('ListWebSearch', ['visitcount'], 'visit-counter');

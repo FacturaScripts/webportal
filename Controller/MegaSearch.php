@@ -39,7 +39,7 @@ class MegaSearch extends ParentController
         if (!empty($results)) {
             $this->results['webportal'] = [
                 'columns' => ['icon' => 'icon', 'title' => 'title', 'description' => 'description'],
-                'icon' => 'fa-globe',
+                'icon' => 'fas fa-globe',
                 'title' => 'webportal',
                 'results' => $results,
             ];

@@ -40,12 +40,12 @@
                 <widget type="textarea" fieldname="copyright"/>
             </column>
         </group>
-        <group name="ipinfodb-credentials" title="ipinfodb-credentials" icon="fa-map-marker" numcolumns="12">
+        <group name="ipinfodb-credentials" title="ipinfodb-credentials" icon="fas fa-map-marker" numcolumns="12">
             <column name="api-key" numcolumns="12" order="100">
                 <widget type="text" fieldname="ipinfodbkey"/>
             </column>
         </group>
-        <group name="local-login" title="local-login" icon="fa-sign-in" numcolumns="12">
+        <group name="local-login" title="local-login" icon="fas fa-sign-in-alt" numcolumns="12">
             <column name="allow-login-contacts" numcolumns="6" order="100">
                 <widget type="checkbox" fieldname="allowlogincontacts"/>
             </column>
@@ -53,7 +53,7 @@
                 <widget type="checkbox" fieldname="allownewregistrations"/>
             </column>
         </group>
-        <group name="facebook-login" title="facebook-login" icon="fa-facebook" numcolumns="12">
+        <group name="facebook-login" title="facebook-login" icon="fab fa-facebook" numcolumns="12">
             <column name="fb-app-id" title="app-id" numcolumns="6" order="100">
                 <widget type="text" fieldname="fbappid"/>
             </column>
@@ -61,7 +61,7 @@
                 <widget type="password" fieldname="fbappsecret"/>
             </column>
         </group>
-        <group name="google-login" title="google-login" icon="fa-google" numcolumns="12">
+        <group name="google-login" title="google-login" icon="fab fa-google" numcolumns="12">
             <column name="goole-app-id" title="app-id" numcolumns="6" order="100">
                 <widget type="text" fieldname="googleappid"/>
             </column>
@@ -69,7 +69,7 @@
                 <widget type="password" fieldname="googleappsecret"/>
             </column>
         </group>
-        <group name="twitter-login" title="twitter-login" icon="fa-twitter" numcolumns="12">
+        <group name="twitter-login" title="twitter-login" icon="fab fa-twitter" numcolumns="12">
             <column name="twitter-app-id" title="app-id" numcolumns="6" order="100">
                 <widget type="text" fieldname="twitterappid"/>
             </column>

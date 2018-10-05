@@ -54,7 +54,7 @@
     </columns>
     <rows>
         <row type="actions">
-            <button type="action" label="preview" color="info" action="preview" icon="fa-eye" />
+            <button type="action" label="preview" color="info" action="preview" icon="fas fa-eye" />
         </row>
     </rows>
 </view>

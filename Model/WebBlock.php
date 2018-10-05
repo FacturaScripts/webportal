@@ -155,6 +155,6 @@ class WebBlock extends Base\ModelClass
             return '';
         }
 
-        return parent::url($type, 'ListWebPage?active=List');
+        return parent::url($type, 'ListWebPage?activetab=List');
     }
 }

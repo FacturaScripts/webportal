@@ -69,7 +69,7 @@ class WebSearch extends PortalController
         $pageData = parent::getPageData();
         $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
-        $pageData['icon'] = 'fa-search';
+        $pageData['icon'] = 'fas fa-search';
 
         return $pageData;
     }

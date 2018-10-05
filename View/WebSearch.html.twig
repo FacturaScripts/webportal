@@ -24,7 +24,7 @@
                     {% for item in fsc.searchResults %}
                         <div class="tile">
                             <div class="tile-icon">
-                                <i class="fas {{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
+                                <i class="{{ item.icon }} fa-fw fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title | raw }}</a>

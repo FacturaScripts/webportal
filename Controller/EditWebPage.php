@@ -41,7 +41,7 @@ class EditWebPage extends ExtendedController\PanelController
         $pageData['title'] = 'page';
         $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
-        $pageData['icon'] = 'fa-globe';
+        $pageData['icon'] = 'fas fa-globe';
 
         return $pageData;
     }
@@ -51,8 +51,8 @@ class EditWebPage extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('EditWebPage', 'WebPage', 'page', 'fa-globe');
-        $this->addListView('ListWebBlock', 'WebBlock', 'blocks', 'fa-code');
+        $this->addEditView('EditWebPage', 'WebPage', 'page', 'fas fa-globe');
+        $this->addListView('ListWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
     }
 
     /**

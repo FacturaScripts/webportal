@@ -77,7 +77,7 @@ class SearchEngine
             $item['position'] = max([(int) $item['position'], (int) $position]);
         }
 
-        $item['icon'] = isset($item['icon']) ? $item['icon'] : 'fa-file-o';
+        $item['icon'] = isset($item['icon']) ? $item['icon'] : 'fas fa-file';
         $item['title'] = isset($item['title']) ? $item['title'] : 'Title';
         $item['description'] = $this->fixDescription($item['description']);
         $item['priority'] = isset($item['priority']) ? $item['priority'] : 0;
@@ -112,7 +112,7 @@ class SearchEngine
             }
 
             $this->addSearchResults($results, [
-                'icon' => 'fa-file-o',
+                'icon' => 'fas fa-file',
                 'title' => $link,
                 'description' => $wblock->content(true),
                 'link' => $link
