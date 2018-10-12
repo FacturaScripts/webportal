@@ -18,8 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-
 /**
  * Description of SectionController
  *
@@ -27,6 +25,8 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  */
 abstract class SectionController extends PortalController
 {
+
+    const MODEL_NAMESPACE = '\\FacturaScripts\\Dinamic\\Model\\';
 
     /**
      *
@@ -42,7 +42,7 @@ abstract class SectionController extends PortalController
 
     /**
      *
-     * @var array
+     * @var ListSection[]
      */
     public $sections = [];
 
@@ -50,7 +50,7 @@ abstract class SectionController extends PortalController
 
     abstract protected function loadData(string $sectionName);
 
-    public function getCurrentSection(): array
+    public function getCurrentSection()
     {
         return $this->sections[$this->current];
     }
@@ -58,10 +58,8 @@ abstract class SectionController extends PortalController
     public function getSectionGroups()
     {
         $group = [];
-        foreach ($this->sections as $section) {
-            if (!$section['fixed']) {
-                $group[$section['group']][] = $section;
-            }
+        foreach ($this->sections as $name => $section) {
+            $group[$section->group][$name] = $section;
         }
 
         return $group;
@@ -79,141 +77,68 @@ abstract class SectionController extends PortalController
         $this->commonCore();
     }
 
-    public function setCurrentSection(string $sectionName)
+    public function setCurrentSection($sectionName)
     {
         $this->current = $sectionName;
     }
 
-    protected function addButton(string $sectionName, string $link, string $label, string $icon)
+    protected function addButton($sectionName, $link, $label, $icon)
     {
         if (!isset($this->sections[$sectionName])) {
             $this->miniLog->critical('Section not found: ' . $sectionName);
             return;
         }
 
-        $this->sections[$sectionName]['buttons'][] = [
+        $this->sections[$sectionName]->buttons[] = [
             'icon' => $icon,
             'label' => $this->i18n->trans($label),
             'link' => $link
         ];
     }
 
-    protected function addListSection(string $sectionName, string $modelName, string $templateName, string $label, string $icon = 'fa-file-o', string $group = ''): bool
+    protected function addListSection($sectionName, $modelName, $label, $icon = 'fas fa-file', $group = '')
     {
-        $modelClass = '\FacturaScripts\Dinamic\Model\\' . $modelName;
-        if (!class_exists($modelClass)) {
-            $this->miniLog->alert($modelClass . ' not found.');
-            return false;
-        }
-
-        $newSection = [
-            'icon' => $icon,
-            'group' => $group,
-            'label' => $this->i18n->trans($label),
-            'model' => new $modelClass(),
-            'template' => $templateName,
-        ];
-        return $this->addSection($sectionName, $newSection);
+        $newSection = new ListSection($sectionName, $label, self::MODEL_NAMESPACE . $modelName, $icon, $group);
+        $this->addSection($sectionName, $newSection);
     }
 
-    protected function addOrderOption(string $sectionName, string $field, string $label, int $selection = 0)
+    protected function addOrderOption($sectionName, $field, $label, $selection = 0)
+    {
+        if (!isset($this->sections[$sectionName])) {
+            $this->miniLog->critical('Section not found: ' . $sectionName);
+            return;
+        }
+    }
+
+    protected function addSearchOptions($sectionName, $fields)
     {
         if (!isset($this->sections[$sectionName])) {
             $this->miniLog->critical('Section not found: ' . $sectionName);
             return;
         }
 
-        $this->sections[$sectionName]['orderOptions'][] = [
-            'field' => $field,
-            'label' => $this->i18n->trans($label),
-            'order' => 'ASC',
-            'selected' => (1 == $selection),
-        ];
-
-        $this->sections[$sectionName]['orderOptions'][] = [
-            'field' => $field,
-            'label' => $this->i18n->trans($label),
-            'order' => 'DESC',
-            'selected' => (2 == $selection),
-        ];
-
-        switch ($selection) {
-            case 1:
-                $this->sections[$sectionName]['order'] = [$field => 'ASC'];
-                break;
-
-            case 2:
-                $this->sections[$sectionName]['order'] = [$field => 'DESC'];
-                break;
-        }
-
-        $order = $this->request->get('order', '');
-        if ($sectionName === $this->active && '' !== $order) {
-            foreach ($this->sections[$sectionName]['orderOptions'] as $key => $option) {
-                if ($order !== $option['field'] . ' ' . $option['order']) {
-                    $this->sections[$sectionName]['orderOptions'][$key]['selected'] = false;
-                    continue;
-                }
-
-                $this->sections[$sectionName]['order'] = [$option['field'] => $option['order']];
-                $this->sections[$sectionName]['orderOptions'][$key]['selected'] = true;
-            }
-        }
+        $this->sections[$sectionName]->searchFields = $fields;
     }
 
-    protected function addSearchOptions(string $sectionName, array $fields)
+    protected function addSection($sectionName, $newSection)
     {
-        if (!isset($this->sections[$sectionName])) {
-            $this->miniLog->critical('Section not found: ' . $sectionName);
+        if ($sectionName !== $newSection->getViewName()) {
+            $this->miniLog->error('$viewName must be equals to $view->name');
             return;
         }
 
-        $this->sections[$sectionName]['searchOptions'] = $fields;
-    }
-
-    protected function addSection(string $sectionName, array $params): bool
-    {
-        $fixed = isset($params['fixed']) ? $params['fixed'] : false;
-        if ('' === $this->active && !$fixed) {
-            $this->active = $sectionName;
-            $this->current = $sectionName;
-        }
-
-        $newSection = [
-            'icon' => '',
-            'buttons' => [],
-            'count' => 0,
-            'cursor' => [],
-            'fixed' => $fixed,
-            'group' => '',
-            'label' => '',
-            'shortlabel' => '',
-            'model' => null,
-            'name' => $sectionName,
-            'offset' => ($this->active == $sectionName) ? $this->request->get('offset', 0) : 0,
-            'order' => [],
-            'orderOptions' => [],
-            'pages' => [],
-            'query' => ($this->active == $sectionName) ? $this->request->get('query', '') : '',
-            'searchOptions' => [],
-            'template' => 'Section/WebPage.html.twig',
-            'jsfile' => '',
-            'where' => [],
-        ];
-
-        foreach ($params as $key => $value) {
-            $newSection[$key] = ($key === 'template') ? $value . '.html.twig' : $value;
-        }
-
+        $newSection->loadPageOptions();
         $this->sections[$sectionName] = $newSection;
-        return true;
+        if ('' === $this->active) {
+            $this->active = $sectionName;
+        }
     }
 
     protected function commonCore()
     {
         $this->setTemplate('Master/SectionController');
 
-        $this->active = $this->request->get('active', '');
+        $this->active = $this->request->get('activetab', '');
         $this->createSections();
 
         // Get any operations that have to be performed
@@ -229,13 +154,6 @@ abstract class SectionController extends PortalController
             $this->loadData($key);
         }
 
-        // don't combine with previous foreach
-        foreach ($this->sections as $key => $section) {
-            if ($section['count'] === 0) {
-                $this->sections[$key]['count'] = count($section['cursor']);
-            }
-        }
-
         // General operations with the loaded data
         $this->execAfterAction($action);
     }
@@ -247,7 +165,7 @@ abstract class SectionController extends PortalController
      */
     protected function execAfterAction(string $action)
     {
-
+        
     }
 
     /**
@@ -260,56 +178,5 @@ abstract class SectionController extends PortalController
     protected function execPreviousAction(string $action)
     {
         return true;
-    }
-
-    protected function getPagination(array $section): array
-    {
-        $pages = [];
-        $i = $num = 0;
-        $current = 1;
-
-        /// añadimos todas la página
-        while ($num < $section['count']) {
-            $pages[$i] = [
-                'offset' => $i * FS_ITEM_LIMIT,
-                'num' => $i + 1,
-                'current' => ($num == $section['offset'])
-            ];
-            if ($num == $section['offset']) {
-                $current = $i;
-            }
-            $i++;
-            $num += FS_ITEM_LIMIT;
-        }
-
-        /// ahora descartamos
-        foreach (array_keys($pages) as $j) {
-            $enmedio = intval($i / 2);
-            /**
-             * descartamos todo excepto la primera, la última, la de enmedio,
-             * la actual, las 5 anteriores y las 5 siguientes
-             */
-            if (($j > 1 && $j < $current - 5 && $j != $enmedio) || ( $j > $current + 5 && $j < $i - 1 && $j != $enmedio)) {
-                unset($pages[$j]);
-            }
-        }
-
-        return (count($pages) > 1) ? $pages : [];
-    }
-
-    protected function loadListSection(string $sectionName, array $where = [])
-    {
-        $section = $this->sections[$sectionName];
-
-        $finalWhere = $where;
-        if ($sectionName === $this->active && '' !== $section['query']) {
-            $fields = implode('|', $section['searchOptions']);
-            $finalWhere[] = new DataBaseWhere($fields, $section['query'], 'LIKE');
-        }
-
-        $this->sections[$sectionName]['count'] = $section['model']->count($finalWhere);
-        $this->sections[$sectionName]['cursor'] = $section['model']->all($finalWhere, $section['order'], $section['offset']);
-        $this->sections[$sectionName]['where'] = $where;
-        $this->sections[$sectionName]['pages'] = $this->getPagination($this->sections[$sectionName]);
     }
 }

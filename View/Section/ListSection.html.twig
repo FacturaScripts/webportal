@@ -1,0 +1,112 @@
+{% import _self as macros %}
+{% set section = fsc.getCurrentSection() %}
+
+{# -- List form -- #}
+<form id="secForm{{ section.getViewName() }}" action="" method="post">
+    <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+    <input type="hidden" name="offset" value="0"/>
+    <div class="columns">
+        <div class="column">
+            {{ macros.sectionButtons(section) }}
+        </div>
+        <div class="column">
+            {{ macros.sectionSearch(section, i18n) }}
+        </div>
+        <div class="column col-4 col-sm-12">
+            {{ macros.sectionOrder(section) }}
+        </div>
+    </div>
+</form>
+
+{# -- Body section -- #}
+{% block sectionBody %}
+    <div class="custom-scroll">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    {% for column in section.getColumns() %}
+                        {{ column.tableHeader() | raw }}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in section.cursor %}
+                    <tr class="clickableRow" data-href="{{ model.url() }}">
+                        {% for column in section.getColumns() %}
+                            {{ column.tableCell(model) | raw }}
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="bg-warning" colspan="{{ 1 + section.getColumns() | length }}">{{ i18n.trans('no-data') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{# -- Paginacion -- #}
+{{ macros.sectionPagination(section) }}
+
+{# -- Macros -- #}
+{% macro sectionButtons(section) %}
+    {% if section.buttons | length > 0 %}
+        <div class="btn-group">
+            {% for button in section.buttons %}
+                <a href="{{ button.link }}" class="btn">
+                    {% if '' != button.icon %}
+                        <i class="{{ button.icon }} fa-fw" aria-hidden="true"></i>
+                    {% endif %}
+                    <span class="hide-sm">{{ button.label }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro sectionOrder(section) %}
+    {% if section.orderOptions | length > 0 %}
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="fas fa-sort fa-fw" aria-hidden="true"></i>
+            </span>
+            <select name="order" class="form-select" onchange="this.form.submit();">
+                {% for option in section.orderOptions %}
+                    {% if option.selected %}
+                        <option value="{{ option.field }} {{ option.order }}" selected="">{{ option.label }} {{ option.order }}</option>
+                    {% else %}
+                        <option value="{{ option.field }} {{ option.order }}">{{ option.label }} {{ option.order }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro sectionPagination(section) %}
+    <ul class="pagination">
+        {% for page in section.getPagination() %}
+            {% if page.active %}
+                <li class="page-item active">
+                    <a href="#" onclick="return showSectionPage('{{ section.getViewName() }}', '{{ page.offset }}');">{{ page.num }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a href="#" onclick="return showSectionPage('{{ section.getViewName() }}', '{{ page.offset }}');">{{ page.num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% macro sectionSearch(section, i18n) %}
+    {% if section.searchOptions | length > 0 %}
+        <div class="input-group">
+            <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
+            <button class="btn btn-primary input-group-btn">
+                <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endif %}
+{% endmacro %}
