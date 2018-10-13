@@ -19,6 +19,9 @@ class SectionTest extends SectionController
     protected function createSections()
     {
         $this->addListSection('ListProducto', 'Producto', 'products', 'fas fa-cubes');
+        $this->addSearchOptions('ListProducto', ['referencia', 'descripcion']);
+        $this->addOrderOption('ListProducto', ['referencia'], 'reference');
+
         $this->addListSection('ListFabricante', 'Fabricante', 'manufacturers', 'fas fa-columns');
         $this->addListSection('ListFamilia', 'Familia', 'families', 'fas fa-object-group');
     }

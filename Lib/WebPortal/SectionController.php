@@ -102,12 +102,14 @@ abstract class SectionController extends PortalController
         $this->addSection($sectionName, $newSection);
     }
 
-    protected function addOrderOption($sectionName, $field, $label, $selection = 0)
+    protected function addOrderOption($sectionName, $fields, $label, $selection = 0)
     {
         if (!isset($this->sections[$sectionName])) {
             $this->miniLog->critical('Section not found: ' . $sectionName);
             return;
         }
+
+        $this->sections[$sectionName]->addOrderBy($fields, $label, $selection);
     }
 
     protected function addSearchOptions($sectionName, $fields)
@@ -151,6 +153,10 @@ abstract class SectionController extends PortalController
 
         // Loads data for each section
         foreach (array_keys($this->sections) as $key) {
+            if ($this->active == $key) {
+                $this->sections[$key]->processFormData($this->request, 'load');
+            }
+
             $this->loadData($key);
         }
 
