@@ -2,12 +2,15 @@
 {% set section = fsc.getCurrentSection() %}
 
 {# -- List form -- #}
-<form id="secForm{{ section.getViewName() }}" action="" method="post">
+<form id="secForm{{ section.getViewName() }}" method="post">
     <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
     <input type="hidden" name="offset" value="0"/>
     <div class="columns">
         <div class="column">
             {{ macros.sectionButtons(section) }}
+            {# -- Row actions -- #}
+            {% set row = section.getRow('actions') %}
+            {{ row.render(true) | raw }}
         </div>
         <div class="column">
             {{ macros.sectionSearch(section, i18n) }}

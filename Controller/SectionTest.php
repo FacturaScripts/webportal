@@ -22,6 +22,10 @@ class SectionTest extends SectionController
         $this->addSearchOptions('ListProducto', ['referencia', 'descripcion']);
         $this->addOrderOption('ListProducto', ['referencia'], 'reference');
 
+        $this->addListSection('ListAsiento', 'Asiento', 'accounting-entry');
+        $this->addSearchOptions('ListAsiento', ['numero', 'concepto']);
+        $this->addOrderOption('ListAsiento', ['numero'], 'numero');
+
         $this->addListSection('ListFabricante', 'Fabricante', 'manufacturers', 'fas fa-columns');
         $this->addListSection('ListFamilia', 'Familia', 'families', 'fas fa-object-group');
     }
