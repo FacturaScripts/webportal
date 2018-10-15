@@ -6,28 +6,28 @@
     <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
     <input type="hidden" name="offset" value="0"/>
     <div class="columns">
-        <div class="column">
+        <div class="column mb-2">
             {# -- Row actions -- #}
             {% set row = section.getRow('actions') %}
             {{ row.render(true) | raw }}
         </div>
-        <div class="column text-right">
+        <div class="column text-right mb-2">
             {% if section.filters is not empty %}
                 <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
                     <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
                 </a>
             {% endif %}
         </div>
-        <div class="column">
+        <div class="column col-3 col-sm-12 mb-2">
             {{ macros.sectionSearch(section, i18n) }}
         </div>
-        <div class="column col-4 col-sm-12">
+        <div class="column col-3 col-sm-12 mb-2">
             {{ macros.sectionOrder(section) }}
         </div>
     </div>
     {# -- Filters -- #}
     {% set divFiltersStyle = section.showFilters ? '' : 'display: none;' %}
-    <div id="form{{ section.getViewName() }}Filters" class="columns" style="margin-top: 10px;{{ divFiltersStyle }}">
+    <div id="form{{ section.getViewName() }}Filters" class="columns" style="{{ divFiltersStyle }}">
         {% for filterName, filter in section.filters %}
             {{ filter.render() | raw }}
         {% endfor %}

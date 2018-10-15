@@ -29,7 +29,7 @@ class SelectFilter extends ParentFilter
 {
     public function render()
     {
-        return '<div class="column col-3 col-sm-2">'
+        return '<div class="column col-3 col-sm-2 mb-2">'
             . '<div class="form-group">'
             . '<select name="' . $this->name() . '" class="form-select"' . $this->onChange() . '>'
             . $this->getHtmlOptions()
