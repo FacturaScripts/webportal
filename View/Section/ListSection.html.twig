@@ -7,10 +7,16 @@
     <input type="hidden" name="offset" value="0"/>
     <div class="columns">
         <div class="column">
-            {{ macros.sectionButtons(section) }}
             {# -- Row actions -- #}
             {% set row = section.getRow('actions') %}
             {{ row.render(true) | raw }}
+        </div>
+        <div class="column text-right">
+            {% if section.filters is not empty %}
+                <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
+                    <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
+                </a>
+            {% endif %}
         </div>
         <div class="column">
             {{ macros.sectionSearch(section, i18n) }}
@@ -18,6 +24,13 @@
         <div class="column col-4 col-sm-12">
             {{ macros.sectionOrder(section) }}
         </div>
+    </div>
+    {# -- Filters -- #}
+    {% set divFiltersStyle = section.showFilters ? '' : 'display: none;' %}
+    <div id="form{{ section.getViewName() }}Filters" class="columns" style="margin-top: 10px;{{ divFiltersStyle }}">
+        {% for filterName, filter in section.filters %}
+            {{ filter.render() | raw }}
+        {% endfor %}
     </div>
 </form>
 
@@ -53,22 +66,6 @@
 
 {# -- Paginacion -- #}
 {{ macros.sectionPagination(section) }}
-
-{# -- Macros -- #}
-{% macro sectionButtons(section) %}
-    {% if section.buttons | length > 0 %}
-        <div class="btn-group">
-            {% for button in section.buttons %}
-                <a href="{{ button.link }}" class="btn">
-                    {% if '' != button.icon %}
-                        <i class="{{ button.icon }} fa-fw" aria-hidden="true"></i>
-                    {% endif %}
-                    <span class="hide-sm">{{ button.label }}</span>
-                </a>
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endmacro %}
 
 {% macro sectionOrder(section) %}
     {% if section.orderOptions | length > 0 %}

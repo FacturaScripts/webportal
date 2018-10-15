@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
+use FacturaScripts\Core\Model\CodeModel;
 use FacturaScripts\Core\Lib\Widget\VisualItem;
 
 /**
@@ -38,6 +39,12 @@ abstract class SectionController extends PortalController
 
     /**
      *
+     * @var CodeModel
+     */
+    protected $codeModel;
+
+    /**
+     *
      * @var string
      */
     public $current = '';
@@ -51,6 +58,27 @@ abstract class SectionController extends PortalController
     abstract protected function createSections();
 
     abstract protected function loadData(string $sectionName);
+
+    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    {
+        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->codeModel = new CodeModel();
+    }
+
+    /**
+     * Add a select type filter to a ListView.
+     *
+     * @param string $sectionName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param array  $values    (Values to show)
+     */
+    protected function addFilterSelect($sectionName, $key, $label, $field, $values = [])
+    {
+        $filter = new ListFilter\SelectFilter($key, $field, $label, $values);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
 
     /**
      * 
