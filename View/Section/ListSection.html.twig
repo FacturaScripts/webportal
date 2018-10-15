@@ -23,13 +23,12 @@
 
 {# -- Body section -- #}
 {% block sectionBody %}
-    {% set level = fsc.contact ? fsc.contact.level : 0 %}
     <div class="custom-scroll">
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     {% for column in section.getColumns() %}
-                        {{ column.tableHeader(level) | raw }}
+                        {{ column.tableHeader() | raw }}
                     {% endfor %}
                 </tr>
             </thead>
@@ -39,7 +38,7 @@
                     {% set trClass = rowStatus.trClass(model) %}
                     <tr class="{{ trClass }}">
                         {% for column in section.getColumns() %}
-                            {{ column.tableCell(model, level) | raw }}
+                            {{ column.tableCell(model) | raw }}
                         {% endfor %}
                     </tr>
                 {% else %}

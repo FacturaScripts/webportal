@@ -22,7 +22,17 @@ class SectionTest extends SectionController
         $this->addSearchOptions('ListProducto', ['referencia', 'descripcion']);
         $this->addOrderOption('ListProducto', ['referencia'], 'reference');
 
-        $this->addListSection('ListAsiento', 'Asiento', 'accounting-entry');
+        $newButton = [
+            'action' => 'EditProducto',
+            'icon' => 'fas fa-plus',
+            'label' => 'new',
+            'level' => 1,
+            'tag' => 'button',
+            'type' => 'link',
+        ];
+        $this->addButton('ListProducto', $newButton);
+
+        $this->addListSection('ListAsiento', 'Asiento', 'accounting-entries');
         $this->addSearchOptions('ListAsiento', ['numero', 'concepto']);
         $this->addOrderOption('ListAsiento', ['numero'], 'numero');
 

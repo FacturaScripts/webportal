@@ -18,6 +18,8 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
+use FacturaScripts\Core\Lib\Widget\VisualItem;
+
 /**
  * Description of SectionController
  *
@@ -50,11 +52,19 @@ abstract class SectionController extends PortalController
 
     abstract protected function loadData(string $sectionName);
 
+    /**
+     * 
+     * @return ListSection
+     */
     public function getCurrentSection()
     {
         return $this->sections[$this->current];
     }
 
+    /**
+     * 
+     * @return array
+     */
     public function getSectionGroups()
     {
         $group = [];
@@ -77,51 +87,69 @@ abstract class SectionController extends PortalController
         $this->commonCore();
     }
 
+    /**
+     * 
+     * @param string $sectionName
+     */
     public function setCurrentSection($sectionName)
     {
         $this->current = $sectionName;
     }
 
-    protected function addButton($sectionName, $link, $label, $icon)
+    /**
+     * 
+     * @param string $sectionName
+     * @param array  $btnArray
+     */
+    protected function addButton($sectionName, $btnArray)
     {
-        if (!isset($this->sections[$sectionName])) {
-            $this->miniLog->critical('Section not found: ' . $sectionName);
-            return;
+        $row = $this->sections[$sectionName]->getRow('actions');
+        if ($row) {
+            $row->addButton($btnArray);
         }
-
-        $this->sections[$sectionName]->buttons[] = [
-            'icon' => $icon,
-            'label' => $this->i18n->trans($label),
-            'link' => $link
-        ];
     }
 
+    /**
+     * 
+     * @param string $sectionName
+     * @param string $modelName
+     * @param string $label
+     * @param string $icon
+     * @param string $group
+     */
     protected function addListSection($sectionName, $modelName, $label, $icon = 'fas fa-file', $group = '')
     {
         $newSection = new ListSection($sectionName, $label, self::MODEL_NAMESPACE . $modelName, $icon, $group);
         $this->addSection($sectionName, $newSection);
     }
 
+    /**
+     * 
+     * @param string $sectionName
+     * @param array  $fields
+     * @param string $label
+     * @param int    $selection
+     */
     protected function addOrderOption($sectionName, $fields, $label, $selection = 0)
     {
-        if (!isset($this->sections[$sectionName])) {
-            $this->miniLog->critical('Section not found: ' . $sectionName);
-            return;
-        }
-
         $this->sections[$sectionName]->addOrderBy($fields, $label, $selection);
     }
 
+    /**
+     * 
+     * @param string $sectionName
+     * @param array  $fields
+     */
     protected function addSearchOptions($sectionName, $fields)
     {
-        if (!isset($this->sections[$sectionName])) {
-            $this->miniLog->critical('Section not found: ' . $sectionName);
-            return;
-        }
-
         $this->sections[$sectionName]->searchFields = $fields;
     }
 
+    /**
+     * 
+     * @param string      $sectionName
+     * @param ListSection $newSection
+     */
     protected function addSection($sectionName, $newSection)
     {
         if ($sectionName !== $newSection->getViewName()) {
@@ -139,6 +167,7 @@ abstract class SectionController extends PortalController
     protected function commonCore()
     {
         $this->setTemplate('Master/SectionController');
+        $this->setLevel();
 
         $this->active = $this->request->get('activetab', '');
         $this->createSections();
@@ -184,5 +213,15 @@ abstract class SectionController extends PortalController
     protected function execPreviousAction(string $action)
     {
         return true;
+    }
+
+    /**
+     * Sets contact security level to use in render.
+     */
+    protected function setLevel()
+    {
+        if ($this->contact) {
+            VisualItem::setLevel($this->contact->level);
+        }
     }
 }

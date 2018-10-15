@@ -21,8 +21,8 @@ namespace FacturaScripts\Plugins\webportal;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Model\User;
-use FacturaScripts\Core\Model\Contacto;
+use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 
 /**
@@ -67,13 +67,13 @@ class Init extends InitClass
     private function createContact()
     {
         $user = new User();
-        $users = $user->all([new DataBaseWhere('email', 'NULL', 'IS NOT')],[],0,0);
-        
-        $contact = new Contacto();
+        $users = $user->all([new DataBaseWhere('email', 'NULL', 'IS NOT')], [], 0, 0);
+
         foreach ($users as $user) {
+            $contact = new Contacto();
+            $contact->descripcion = $user->nick;
             $contact->email = $user->email;
             $contact->nombre = $user->nick;
-            $contact->descripcion = $user->nick;
             $contact->save();
         }
     }

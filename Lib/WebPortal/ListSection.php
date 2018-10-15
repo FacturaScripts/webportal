@@ -32,16 +32,18 @@ class ListSection extends ListView
 
     /**
      *
-     * @var array
-     */
-    public $buttons = [];
-
-    /**
-     *
      * @var string
      */
     public $group;
 
+    /**
+     * 
+     * @param string $name
+     * @param string $title
+     * @param string $modelName
+     * @param string $icon
+     * @param string $group
+     */
     public function __construct($name, $title, $modelName, $icon, $group = '')
     {
         parent::__construct($name, $title, $modelName, $icon);
@@ -49,6 +51,10 @@ class ListSection extends ListView
         $this->template = 'Section/ListSection.html.twig';
     }
 
+    /**
+     * 
+     * @param mixed $user
+     */
     public function loadPageOptions($user = false)
     {
         $viewName = explode('-', $this->getViewName())[0];
