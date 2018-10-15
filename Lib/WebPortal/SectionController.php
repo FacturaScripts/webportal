@@ -66,7 +66,24 @@ abstract class SectionController extends PortalController
     }
 
     /**
-     * Add a select type filter to a ListView.
+     * Adds a boolean condition type filter to the ListSection.
+     *
+     * @param string $sectionName
+     * @param string $key        (Filter identifier)
+     * @param string $label      (Human reader description)
+     * @param string $field      (Field of the model to apply filter)
+     * @param string $operation  (operation to perform with match value)
+     * @param mixed  $matchValue (Value to match)
+     * @param DataBaseWhere[] $default (where to apply when filter is empty)
+     */
+    protected function addFilterCheckbox($sectionName, $key, $label = '', $field = '', $operation = '=', $matchValue = true, $default = [])
+    {
+        $filter = new ListFilter\CheckboxFilter($key, $field, $label, $operation, $matchValue, $default);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
+
+    /**
+     * Add a select type filter to a ListSection.
      *
      * @param string $sectionName
      * @param string $key       (Filter identifier)
@@ -181,7 +198,7 @@ abstract class SectionController extends PortalController
     protected function addSection($sectionName, $newSection)
     {
         if ($sectionName !== $newSection->getViewName()) {
-            $this->miniLog->error('$viewName must be equals to $view->name');
+            $this->miniLog->error('$sectionName must be equals to $view->name');
             return;
         }
 

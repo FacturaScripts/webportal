@@ -46,6 +46,7 @@ class SectionTest extends SectionController
 
         $families = $this->codeModel->all('familias', 'codfamilia', 'descripcion');
         $this->addFilterSelect('ListProducto', 'codfamilia', 'family', 'codfamilia', $families);
+        $this->addFilterCheckbox('ListProducto', 'nostock', 'no-stock', 'nostock');
 
         $this->addListSection('ListAsiento', 'Asiento', 'accounting-entries');
         $this->addSearchOptions('ListAsiento', ['numero', 'concepto']);
