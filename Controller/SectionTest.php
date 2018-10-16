@@ -51,6 +51,8 @@ class SectionTest extends SectionController
         $this->addListSection('ListAsiento', 'Asiento', 'accounting-entries');
         $this->addSearchOptions('ListAsiento', ['numero', 'concepto']);
         $this->addOrderOption('ListAsiento', ['numero'], 'numero');
+        $this->addFilterDatePicker('ListAsiento', 'fromdate', 'from-date', 'fecha', '>=');
+        $this->addFilterDatePicker('ListAsiento', 'untildate', 'until-date', 'fecha', '<=');
 
         $this->addListSection('ListFabricante', 'Fabricante', 'manufacturers', 'fas fa-columns', 'other');
         $this->addListSection('ListFamilia', 'Familia', 'families', 'fas fa-object-group', 'other');

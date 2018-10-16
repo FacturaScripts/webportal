@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Model\CodeModel;
+use FacturaScripts\Core\Lib\AssetManager;
 use FacturaScripts\Core\Lib\Widget\VisualItem;
 
 /**
@@ -79,6 +80,21 @@ abstract class SectionController extends PortalController
     protected function addFilterCheckbox($sectionName, $key, $label = '', $field = '', $operation = '=', $matchValue = true, $default = [])
     {
         $filter = new ListFilter\CheckboxFilter($key, $field, $label, $operation, $matchValue, $default);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
+
+    /**
+     * Adds a date type filter to the ListView.
+     *
+     * @param string $sectionName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param string $operation (Operation to perform)
+     */
+    protected function addFilterDatePicker($sectionName, $key, $label = '', $field = '', $operation = '>=')
+    {
+        $filter = new ListFilter\DateFilter($key, $field, $label, $operation);
         $this->sections[$sectionName]->filters[$key] = $filter;
     }
 
@@ -236,6 +252,8 @@ abstract class SectionController extends PortalController
 
         // General operations with the loaded data
         $this->execAfterAction($action);
+
+        AssetManager::merge($this->assets, ListSection::getAssets());
     }
 
     /**
