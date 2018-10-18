@@ -22,7 +22,7 @@
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
         {% endblock %}
         {% block css %}
-            <style>{{ assetCombine(['Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css','node_modules/@fortawesome/fontawesome-free/css/all.min.css','Dinamic/Assets/CSS/webportal.css'])|raw }}</style>
+            <style>{{ assetCombine(fsc.assets)|raw }}</style>
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}

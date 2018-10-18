@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Plugins\webportal\Model\WebBlock;
-use FacturaScripts\Plugins\webportal\Model\WebCluster;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
@@ -46,20 +45,12 @@ class PageComposer
     private $webBlock;
 
     /**
-     * A web cluster.
-     * 
-     * @var WebCluster
-     */
-    private $webCluster;
-
-    /**
      * PageComposer constructor.
      */
     public function __construct()
     {
         $this->blocks = [];
         $this->webBlock = new WebBlock();
-        $this->webCluster = new WebCluster();
     }
 
     /**
@@ -116,12 +107,6 @@ class PageComposer
     private function addBlock(WebBlock $block, WebPage $page)
     {
         switch ($block->type) {
-            case 'body-cluster':
-            case 'bodyCluster':
-                $block->type = 'body';
-                $block->content = $this->getClusterHtml($block->content, $page);
-                break;
-
             case 'body-container':
             case 'bodyContainer':
                 $block->type = 'body';
@@ -161,52 +146,6 @@ class PageComposer
             $emptyBlock->content = '<h1>' . $page->title . '</h1><p>' . $page->description . '</p>';
             $this->addBlock($emptyBlock, $page);
         }
-    }
-
-    /**
-     * Returns a cluster of html page.
-     *
-     * @param int     $idcluster
-     * @param WebPage $page
-     *
-     * @return string
-     */
-    private function getClusterHtml(int $idcluster, WebPage $page): string
-    {
-        $cluster = $this->webCluster->get($idcluster);
-        if (!$cluster) {
-            return $this->getHtmlContainer('<h3>Cluster no encontrado</h3>');
-        }
-
-        $html = '<div class="empty"><h3 class="empty-title">' . $cluster->title . '</h3>'
-            . '<p class="empty-subtitle">' . $cluster->description . '</p><div class="container grid-lg">'
-            . '<div class="columns">';
-        foreach ($page->all([new DataBaseWhere('idcluster', $idcluster)]) as $key => $clusterPage) {
-            if ($clusterPage->idpage === $page->idpage) {
-                continue;
-            }
-
-            $html .= '<div class="column col-md-4 col-sm-12">'
-                . '<div class="text-center"><i class="fa ' . $clusterPage->icon . ' fa-4x"></i></div>&nbsp;'
-                . '<a href="' . $clusterPage->url('public') . '" class="btn btn-' . $this->getColorClass($key) . ' btn-block">' . $clusterPage->shorttitle . '</a>'
-                . '<p>' . $clusterPage->description . '</p></div>';
-        }
-        $html .= '</div></div></div>';
-
-        return $html;
-    }
-
-    /**
-     * Returns the color class.
-     *
-     * @param int $key
-     *
-     * @return string
-     */
-    private function getColorClass(int $key = 0): string
-    {
-        $classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-        return isset($classes[$key]) ? $classes[$key] : 'light';
     }
 
     /**

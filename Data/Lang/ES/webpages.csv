@@ -1,4 +1,4 @@
-creationdate;customcontroller;description;icon;idcluster;idpage;langcode;lastip;lastmod;noindex;ordernum;permalink;shorttitle;showonfooter;showonmenu;title;visitcount
-NULL;NULL;"Home description";"fa-file-o";NULL;"1";"es";NULL;NULL;"0";"100";"/";"Home";"0";"1";"Home";"0"
-NULL;NULL;"Cookies description";"fa-file-o";NULL;"2";"es";NULL;NULL;"1";"100";"/cookies";"Cookies";"1";"0";"Cookies";"0"
-NULL;NULL;"Privacy description";"fa-file-o";NULL;"3";"es";NULL;NULL;"1";"100";"/privacy";"Privacy";"1";"0";"Privacy";"0"
+creationdate;customcontroller;description;icon;idpage;langcode;lastip;lastmod;noindex;ordernum;permalink;shorttitle;showonfooter;showonmenu;title;visitcount
+NULL;NULL;"Home description";"fas fa-file";"1";"es";NULL;NULL;"0";"100";"/";"Home";"0";"1";"Home";"0"
+NULL;NULL;"Cookies description";"fas fa-file-o";"2";"es";NULL;NULL;"1";"100";"/cookies";"Cookies";"1";"0";"Cookies";"0"
+NULL;NULL;"Privacy description";"fas fa-file-o";"3";"es";NULL;NULL;"1";"100";"/privacy";"Privacy";"1";"0";"Privacy";"0"

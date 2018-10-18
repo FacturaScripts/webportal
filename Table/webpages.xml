@@ -28,10 +28,6 @@
         <type>character varying(25)</type>
     </column>
     <column>
-        <name>idcluster</name>
-        <type>integer</type>
-    </column>
-    <column>
         <name>idpage</name>
         <type>serial</type>
         <null>NO</null>

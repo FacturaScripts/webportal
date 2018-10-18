@@ -47,7 +47,6 @@
             <option color="warning">javascriptWithCookies</option>
             <option color="success">body</option>
             <option color="success">bodyContainer</option>
-            <option color="success">bodyCluster</option>
         </row>
     </rows>
 </view>

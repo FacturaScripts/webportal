@@ -22,7 +22,7 @@ use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
- * Description of WebCluster
+ * Description of WebBlock
  *
  * @author Carlos García Gómez
  */

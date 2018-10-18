@@ -81,6 +81,14 @@ class PortalController extends Controller
      */
     public $webPage;
 
+    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    {
+        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->assets[] = 'Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css';
+        $this->assets[] = 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+        $this->assets[] = 'Dinamic/Assets/CSS/webportal.css';
+    }
+
     /**
      * Return cookies policy page.
      *
@@ -88,7 +96,8 @@ class PortalController extends Controller
      */
     public function cookiesPage()
     {
-        foreach ($this->webPage->all([new DataBaseWhere('permalink', '/cookies')]) as $cookiePage) {
+        $where = [new DataBaseWhere('permalink', '/cookies')];
+        foreach ($this->webPage->all($where) as $cookiePage) {
             return $cookiePage;
         }
 

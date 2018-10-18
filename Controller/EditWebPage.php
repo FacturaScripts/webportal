@@ -27,8 +27,13 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
  *
  * @author Carlos García Gómez
  */
-class EditWebPage extends ExtendedController\PanelController
+class EditWebPage extends ExtendedController\EditController
 {
+
+    public function getModelClassName()
+    {
+        return 'WebPage';
+    }
 
     /**
      * Returns basic page attributes.
@@ -51,49 +56,8 @@ class EditWebPage extends ExtendedController\PanelController
      */
     protected function createViews()
     {
-        $this->addEditView('EditWebPage', 'WebPage', 'page', 'fas fa-globe');
-        $this->addListView('ListWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
-    }
-
-    /**
-     * Load data view procedure.
-     *
-     * @param string $keyView
-     * @param ExtendedController\BaseView $view
-     */
-    protected function loadData($keyView, $view)
-    {
-        switch ($keyView) {
-            case 'EditWebPage':
-                $code = $this->request->get('code');
-                $view->loadData($code);
-                break;
-
-            case 'ListWebBlock':
-                $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
-                $view->loadData(false, [new DataBaseWhere('idpage', $idpage)], ['ordernum' => 'ASC']);
-                break;
-        }
-    }
-
-    /**
-     * Run the actions that alter data before reading it.
-     *
-     * @param string $action
-     *
-     * @return bool
-     */
-    protected function execPreviousAction($action)
-    {
-        if (!parent::execPreviousAction($action)) {
-            return false;
-        }
-
-        if ($action === 'save' || $action === 'delete') {
-            UpdateRoutes::setRoutes();
-        }
-
-        return true;
+        parent::createViews();
+        $this->addEditListView('EditWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
     }
 
     /**
@@ -118,6 +82,46 @@ class EditWebPage extends ExtendedController\PanelController
 
             default:
                 parent::execAfterAction($action);
+        }
+    }
+
+    /**
+     * Run the actions that alter data before reading it.
+     *
+     * @param string $action
+     *
+     * @return bool
+     */
+    protected function execPreviousAction($action)
+    {
+        if (!parent::execPreviousAction($action)) {
+            return false;
+        }
+
+        if ($action === 'save' || $action === 'delete') {
+            UpdateRoutes::setRoutes();
+        }
+
+        return true;
+    }
+
+    /**
+     * Load data view procedure.
+     *
+     * @param string $keyView
+     * @param ExtendedController\BaseView $view
+     */
+    protected function loadData($keyView, $view)
+    {
+        switch ($keyView) {
+            case 'EditWebBlock':
+                $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
+                $where = [new DataBaseWhere('idpage', $idpage)];
+                $view->loadData('', $where, ['ordernum' => 'ASC']);
+                break;
+
+            default:
+                parent::loadData($keyView, $view);
         }
     }
 }

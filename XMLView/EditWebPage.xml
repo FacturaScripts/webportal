@@ -38,46 +38,39 @@
                 <widget type="textarea" fieldname="description" required="true" />
             </column>
         </group>
-        <group name="visibility" numcolumns="3">
-            <column name="showonmenu" title="show-on-menu" numcolumns="12" order="100">
+        <group name="visibility" numcolumns="12">
+            <column name="showonmenu" title="show-on-menu" numcolumns="4" order="100">
                 <widget type="checkbox" fieldname="showonmenu" />
             </column>
-            <column name="showonfooter" title="show-on-footer" numcolumns="12" order="110">
+            <column name="showonfooter" title="show-on-footer" numcolumns="4" order="110">
                 <widget type="checkbox" fieldname="showonfooter" />
             </column>
-            <column name="noindex" title="no-index" numcolumns="12" order="120">
+            <column name="noindex" title="no-index" numcolumns="4" order="120">
                 <widget type="checkbox" fieldname="noindex" />
             </column>
         </group>
-        <group name="advanced" numcolumns="9">
-            <column name="short-title" numcolumns="3" order="100">
-                <widget type="text" fieldname="shorttitle" required="true" />
-            </column>
-            <column name="sort" numcolumns="3" order="110">
+        <group name="advanced" numcolumns="12">
+            <column name="sort" numcolumns="3" order="100">
                 <widget type="number" fieldname="ordernum" />
             </column>
-            <column name="equivalence" numcolumns="3" order="120" description="equivalent-page-desc">
+            <column name="short-title" numcolumns="3" order="110">
+                <widget type="text" fieldname="shorttitle" required="true" />
+            </column>
+            <column name="icon" numcolumns="3" order="120">
+                <widget type="text" fieldname="icon" />
+            </column>
+            <column name="equivalence" numcolumns="3" order="130" description="equivalent-page-desc">
                 <widget type="text" fieldname="equivalentpage" />
             </column>
-            <column name="custom-controller" numcolumns="3" order="130">
+            <column name="custom-controller" numcolumns="3" order="140">
                 <widget type="select" fieldname="customcontroller">
                     <values source="pages" fieldcode="name" fieldtitle="name"/>
                 </widget>
             </column>
-        </group>
-        <group name="cluster">
-            <column name="cluster" numcolumns="3" order="100">
-                <widget type="select" fieldname="idcluster">
-                    <values source="webclusters" fieldcode="idcluster" fieldtitle="title"/>
-                </widget>
-            </column>
-            <column name="icon" numcolumns="3" order="110">
-                <widget type="text" fieldname="icon" />
-            </column>
-            <column name="creationdate" title="creation-date" numcolumns="3" order="120">
+            <column name="creationdate" title="creation-date" numcolumns="3" order="150">
                 <widget type="date" fieldname="creationdate" readonly="true" />
             </column>
-            <column name="lastmod" title="last-update" numcolumns="3" order="130">
+            <column name="lastmod" title="last-update" numcolumns="3" order="160">
                 <widget type="date" fieldname="lastmod" readonly="true" />
             </column>
         </group>

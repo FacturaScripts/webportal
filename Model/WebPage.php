@@ -57,18 +57,11 @@ class WebPage extends WebPageClass
     public $equivalentpage;
 
     /**
-     * Icon to use in cluster.
+     * Icon to use in page.
      *
      * @var string
      */
     public $icon;
-
-    /**
-     * Cluster id.
-     *
-     * @var int
-     */
-    public $idcluster;
 
     /**
      * Primary key.

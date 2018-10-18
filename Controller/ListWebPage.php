@@ -67,9 +67,6 @@ class ListWebPage extends ExtendedController\ListController
         /// Web blocks
         $this->createViewWebBlock();
 
-        /// Web clusters
-        $this->createViewWebCluster();
-
         /// Searches
         $this->createViewWebSearch();
     }
@@ -87,13 +84,6 @@ class ListWebPage extends ExtendedController\ListController
 
         $pages = $this->codeModel->all('webpages', 'idpage', 'permalink');
         $this->addFilterSelect('ListWebBlock', 'idpage', 'page', 'idpage', $pages);
-    }
-
-    protected function createViewWebCluster()
-    {
-        $this->addView('ListWebCluster', 'WebCluster', 'clusters', 'fas fa-newspaper');
-        $this->addSearchFields('ListWebCluster', ['title', 'description']);
-        $this->addOrderBy('ListWebCluster', ['title']);
     }
 
     protected function createViewWebSearch()

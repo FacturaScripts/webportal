@@ -29,7 +29,6 @@
                 <widget type="select" fieldname="type">
                     <values title="body">body</values>
                     <values title="bodyContainer">bodyContainer</values>
-                    <values title="bodyCluster">bodyCluster</values>
                     <values title="meta">meta</values>
                     <values title="css">css</values>
                     <values title="javascript">javascript</values>
