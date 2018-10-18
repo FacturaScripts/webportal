@@ -72,7 +72,7 @@
 {% macro sectionsButtons(fsc, i18n) %}
     <div class="hide-md">
         {% for name, group in fsc.getSectionGroups() %}
-            <ul class="menu mb-2">
+            <ul class="menu">
                 {% if name != '' %}
                     <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
                     </li>
@@ -92,6 +92,7 @@
                     </li>
                 {% endfor %}
             </ul>
+            <br/>
         {% endfor %}
     </div>
     {# -- Smartphone section dropdown -- #}
