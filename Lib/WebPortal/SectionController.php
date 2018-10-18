@@ -84,7 +84,7 @@ abstract class SectionController extends PortalController
     }
 
     /**
-     * Adds a date type filter to the ListView.
+     * Adds a date type filter to the ListSection.
      *
      * @param string $sectionName
      * @param string $key       (Filter identifier)
@@ -168,6 +168,21 @@ abstract class SectionController extends PortalController
         if ($row) {
             $row->addButton($btnArray);
         }
+    }
+
+    /**
+     * Adds a HTML type section to the controller.
+     *
+     * @param string $sectionName
+     * @param string $title
+     * @param string $fileName
+     * @param string $modelName
+     * @param string $icon
+     */
+    protected function addHtmlSection($sectionName, $title, $fileName = 'Section/WebPage', $modelName = 'WebPage', $icon = 'fab fa-html5', $group = '')
+    {
+        $newSection = new HtmlSection($sectionName, $title, self::MODEL_NAMESPACE . $modelName, $fileName, $icon, $group);
+        $this->addSection($sectionName, $newSection);
     }
 
     /**

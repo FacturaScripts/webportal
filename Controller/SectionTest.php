@@ -30,6 +30,8 @@ class SectionTest extends SectionController
 
     protected function createSections()
     {
+        $this->addHtmlSection('home', 'home');
+
         $this->addListSection('ListProducto', 'Producto', 'products', 'fas fa-cubes');
         $this->addSearchOptions('ListProducto', ['referencia', 'descripcion']);
         $this->addOrderOption('ListProducto', ['referencia'], 'reference');
