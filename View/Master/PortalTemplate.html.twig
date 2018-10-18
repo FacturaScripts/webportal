@@ -34,24 +34,10 @@
         {% block navbar %}
             <header class="navbar navbar-top">
                 <section class="navbar-section hide-xs">
-                    {{ Macros.TopMenu(fsc) }}
+                    {{ Macros.TopMenu(fsc, i18n) }}
                 </section>
                 <section class="navbar-center">
-                    <div class="dropdown show-xs">
-                        <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
-                            <i class="fas fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
-                        </a>
-                        <ul class="menu">
-                            {% for menuItem in fsc.menuComposer.getTopMenu() %}
-                                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
-                                <li class="menu-item">
-                                    <a class="{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
-                                        <i class="{{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ Macros.TopMenuSmall(fsc, i18n) }}
                     <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" class="hide-xs" />
                 </section>
                 <section class="navbar-section">
@@ -120,10 +106,14 @@
                             {% for block in fsc.pageComposer.getBlocks('footer') %}
                                 {{ block.content() | raw }}
                             {% endfor %}
-                            {% for key, menuItem in fsc.menuComposer.getFooterMenu() %}
-                                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
-                                <a href="{{ menuItem.url('public') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
-                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="columns">
+                        {{ Macros.footerMenu(fsc) }}
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            {{ webCopyright }}
                         </div>
                         <div class="column text-right">
                             {% for key, menuItem in fsc.menuComposer.getLanguageRoots() %}
@@ -135,9 +125,6 @@
                             {% endfor %}
                         </div>
                     </div>
-                </div>
-                <div class="text-center">
-                    {{ webCopyright }}
                 </div>
             </div>
         {% endblock %}

@@ -80,8 +80,18 @@ class MenuComposer
      */
     public function getFooterMenu()
     {
+        $footer = [];
         $where = [new DataBaseWhere('showonfooter', true)];
-        return $this->getAuxMenu($where);
+        foreach ($this->getAuxMenu($where) as $wpage) {
+            if (empty($wpage->menu)) {
+                $footer[] = $wpage;
+                continue;
+            }
+
+            $footer[$wpage->menu][] = $wpage;
+        }
+
+        return $footer;
     }
 
     /**

@@ -8,6 +8,28 @@
     </form>
 {% endmacro %}
 
+{% macro footerMenu(fsc) %}
+    {% for menuKey, menuItem in fsc.menuComposer.getFooterMenu() %}
+        <div class="column col-md-3 col-sm-12">
+            {% if menuItem is iterable %}
+                <dl>
+                    <dt>{{ menuKey }}</dt>
+                    {% for childItem in menuItem %}
+                        <dd>
+                            {% set activeClass = (childItem.idpage == fsc.webPage.idpage) ? 'btn' : '' %}
+                            <a href="{{ childItem.url('public') | raw }}" class="{{ activeClass }}">{{ childItem.shorttitle }}</a>
+                        </dd>
+                    {% endfor %}
+                </dl>
+                <hr class="show-sm"/>
+            {% else %}
+                {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+                <a href="{{ menuItem.url('public') | raw }}" class="btn{{ activeClass }}">{{ menuItem.shorttitle }}</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endmacro %}
+
 {% macro loginModal(i18n, appSettings, fsc) %}
     <script type="text/javascript">
         function showLoginModalTab(showName, hideName) {
@@ -157,7 +179,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro topMenu(fsc) %}
+{% macro topMenu(fsc, i18n) %}
     {% for menuKey, menuItem in fsc.menuComposer.getTopMenu() %}
         {% if menuItem is iterable %}
             {% set activeClass = (menuKey == fsc.webPage.menu) ? '' : ' btn-link' %}
@@ -184,4 +206,36 @@
             </a>
         {% endif %}
     {% endfor %}
+{% endmacro %}
+
+{% macro topMenuSmall(fsc, i18n) %}
+    <div class="dropdown show-xs">
+        <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
+            <i class="fas fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
+        </a>
+        <ul class="menu">
+            {% for menuKey, menuItem in fsc.menuComposer.getTopMenu() %}
+                {% if menuItem is iterable %}
+                    <li class="divider" data-content="{{ menuKey }}">
+                    </li>
+                    {% for childItem in menuItem %}
+                        <li class="menu-item">
+                            {% set activeClass = (childItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
+                            <a href="{{ childItem.url('public') | raw }}" class="{{ activeClass }}">
+                                <i class="{{ childItem.icon }} fa-fw" aria-hidden="true"></i>
+                                {{ childItem.shorttitle }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
+                    <li class="menu-item">
+                        <a class="{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
+                            <i class="{{ menuItem.icon }} fa-fw" aria-hidden="true"></i> {{ menuItem.shorttitle }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 {% endmacro %}
