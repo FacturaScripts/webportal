@@ -98,7 +98,8 @@ class EditWebPage extends ExtendedController\EditController
             return false;
         }
 
-        if ($action === 'save' || $action === 'delete') {
+        $actions = ['edit', 'delete', 'insert'];
+        if (in_array($action, $actions)) {
             UpdateRoutes::setRoutes();
         }
 

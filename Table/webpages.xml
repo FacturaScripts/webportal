@@ -46,6 +46,10 @@
         <type>date</type>
     </column>
     <column>
+        <name>menu</name>
+        <type>character varying(40)</type>
+    </column>
+    <column>
         <name>noindex</name>
         <type>boolean</type>
         <null>NO</null>

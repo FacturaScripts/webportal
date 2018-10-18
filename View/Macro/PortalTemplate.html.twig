@@ -8,21 +8,6 @@
     </form>
 {% endmacro %}
 
-<!--
-    Loads and displays a list of messages from the given types
--->
-{% macro message(log, types, style) %}
-    {% set messages = log.read(types) %}
-    {% if messages|length > 0 %}
-        <div class="toast toast-{{ style }}">
-            {% for msg in messages %}
-                {{ msg.message|raw }}
-                {% if not loop.last %}<br />{% endif %}
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endmacro %}
-
 {% macro loginModal(i18n, appSettings, fsc) %}
     <script type="text/javascript">
         function showLoginModalTab(showName, hideName) {
@@ -155,4 +140,48 @@
             </div>
         </div>
     </div>
+{% endmacro %}
+
+<!--
+    Loads and displays a list of messages from the given types
+-->
+{% macro message(log, types, style) %}
+    {% set messages = log.read(types) %}
+    {% if messages|length > 0 %}
+        <div class="toast toast-{{ style }}">
+            {% for msg in messages %}
+                {{ msg.message|raw }}
+                {% if not loop.last %}<br />{% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro topMenu(fsc) %}
+    {% for menuKey, menuItem in fsc.menuComposer.getTopMenu() %}
+        {% if menuItem is iterable %}
+            {% set activeClass = (menuKey == fsc.webPage.menu) ? '' : ' btn-link' %}
+            <div class="dropdown">
+                <a href="#" class="btn{{ activeClass }} dropdown-toggle" tabindex="0">
+                    {{ menuKey }} <i class="fas fa-caret-down"></i>
+                </a>
+                <ul class="menu">
+                    {% for childItem in menuItem %}
+                        <li class="menu-item">
+                            {% set activeClass = (childItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
+                            <a href="{{ childItem.url('public') | raw }}" class="{{ activeClass }}">
+                                <i class="{{ childItem.icon }} fa-fw" aria-hidden="true"></i>
+                                {{ childItem.shorttitle }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? '' : ' btn-link' %}
+            <a class="btn{{ activeClass }}" href="{{ menuItem.url('public') | raw }}">
+                {{ menuItem.shorttitle }}
+            </a>
+        {% endif %}
+    {% endfor %}
 {% endmacro %}

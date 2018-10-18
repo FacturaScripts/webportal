@@ -61,6 +61,12 @@ class PortalController extends Controller
     public $description;
 
     /**
+     *
+     * @var MenuComposer
+     */
+    public $menuComposer;
+
+    /**
      * The page composer.
      *
      * @var PageComposer
@@ -87,39 +93,9 @@ class PortalController extends Controller
         $this->assets[] = 'Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css';
         $this->assets[] = 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
         $this->assets[] = 'Dinamic/Assets/CSS/webportal.css';
-    }
-
-    /**
-     * Return cookies policy page.
-     *
-     * @return string
-     */
-    public function cookiesPage()
-    {
-        $where = [new DataBaseWhere('permalink', '/cookies')];
-        foreach ($this->webPage->all($where) as $cookiePage) {
-            return $cookiePage;
-        }
-
-        return $this->webPage;
-    }
-
-    /**
-     * Return a list of pages clasified by lang code.
-     *
-     * @return array
-     */
-    public function getLanguageRoots()
-    {
-        $roots = [];
-        $where = [new DataBaseWhere('showonmenu', true)];
-        foreach ($this->getAuxMenu($where, false) as $wpage) {
-            if (!isset($roots[$wpage->langcode])) {
-                $roots[$wpage->langcode] = $wpage;
-            }
-        }
-
-        return $roots;
+        $this->menuComposer = new MenuComposer();
+        $this->pageComposer = new PageComposer();
+        $this->webPage = $this->getWebPage();
     }
 
     /**
@@ -134,28 +110,6 @@ class PortalController extends Controller
         $pageData['showonmenu'] = false;
 
         return $pageData;
-    }
-
-    /**
-     * Return public footer.
-     *
-     * @return array
-     */
-    public function getPublicFooter()
-    {
-        $where = [new DataBaseWhere('showonfooter', true)];
-        return $this->getAuxMenu($where);
-    }
-
-    /**
-     * Return public menu.
-     *
-     * @return array
-     */
-    public function getPublicMenu()
-    {
-        $where = [new DataBaseWhere('showonmenu', true)];
-        return $this->getAuxMenu($where);
     }
 
     /**
@@ -248,24 +202,6 @@ class PortalController extends Controller
     }
 
     /**
-     * Return auxiliar menu.
-     *
-     * @param array $where
-     * @param bool $filterLangcode
-     *
-     * @return Model\WebPage[]
-     */
-    private function getAuxMenu(array $where, bool $filterLangcode = true)
-    {
-        if ($this->webPage && $filterLangcode) {
-            $where[] = new DataBaseWhere('langcode', $this->webPage->langcode);
-        }
-
-        $webPageModel = new Model\WebPage();
-        return $webPageModel->all($where, ['ordernum' => 'ASC', 'shorttitle' => 'ASC']);
-    }
-
-    /**
      * Returns the webpage.
      *
      * @return Model\WebPage
@@ -312,10 +248,7 @@ class PortalController extends Controller
     protected function processWebPage()
     {
         $this->setTemplate('Master/PortalTemplate');
-        $this->pageComposer = new PageComposer();
-        $this->webPage = $this->getWebPage();
         $this->i18n->setLangCode($this->webPage->langcode);
-
         $this->title = $this->webPage->title;
         $this->description = $this->webPage->description;
 
@@ -324,6 +257,7 @@ class PortalController extends Controller
             $this->webPage->increaseVisitCount($ipAddress);
         }
 
+        $this->menuComposer->set($this->webPage);
         $this->pageComposer->set($this->webPage);
     }
 
@@ -343,23 +277,5 @@ class PortalController extends Controller
             $this->response->headers->setCookie(new Cookie('fsIdcontacto', $contact->idcontacto, $expire));
             $this->response->headers->setCookie(new Cookie('fsLogkey', $contact->logkey, $expire));
         }
-    }
-
-    /**
-     * Return the page details.
-     *
-     * @param string $equivalence
-     *
-     * @return string
-     */
-    public function getPublicUrl(string $equivalence): string
-    {
-        $webPage = new Model\WebPage();
-        $where = [
-            new DataBaseWhere('equivalentpage', $equivalence),
-            new DataBaseWhere('langcode', $this->webPage->langcode)
-        ];
-        $webPage->loadFromCode('', $where);
-        return \FS_ROUTE . $webPage->permalink;
     }
 }

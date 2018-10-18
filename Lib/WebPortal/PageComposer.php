@@ -73,7 +73,7 @@ class PageComposer
     }
 
     /**
-     * Set a page to blocks.
+     * Sets the page to get blocks from.
      *
      * @param WebPage $page
      */
