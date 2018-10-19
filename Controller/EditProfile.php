@@ -36,7 +36,7 @@ class EditProfile extends SectionController
     public function getCountries(): array
     {
         $pais = new Pais();
-        return $pais->all([], [], 0, 0);
+        return $pais->all([], ['nombre' => 'ASC'], 0, 0);
     }
 
     /**
@@ -97,7 +97,8 @@ class EditProfile extends SectionController
      */
     protected function createSections()
     {
-        $this->addSection('plugin', ['fixed' => true, 'template' => 'Section/Profile']);
+        $this->setTemplate('Master/SectionControllerFixed');
+        $this->addHtmlSection('profile', 'profile', 'Section/Profile');
     }
 
     /**
@@ -122,14 +123,5 @@ class EditProfile extends SectionController
             default:
                 return parent::execPreviousAction($action);
         }
-    }
-
-    /**
-     * 
-     * @param string $sectionName
-     */
-    protected function loadData(string $sectionName)
-    {
-        
     }
 }

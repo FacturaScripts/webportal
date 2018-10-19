@@ -58,8 +58,6 @@ abstract class SectionController extends PortalController
 
     abstract protected function createSections();
 
-    abstract protected function loadData(string $sectionName);
-
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
@@ -291,6 +289,16 @@ abstract class SectionController extends PortalController
     protected function execPreviousAction(string $action)
     {
         return true;
+    }
+
+    /**
+     * Load section data procedure
+     *
+     * @param string $sectionName
+     */
+    protected function loadData(string $sectionName)
+    {
+        $this->sections[$sectionName]->loadData();
     }
 
     /**

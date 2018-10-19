@@ -1,0 +1,144 @@
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block body %}
+    {% import _self as macros %}
+    {% set firstSection = fsc.sections | first %}
+    {% set firstSectionName = firstSection.getViewName() %}
+
+    <div class="body-section">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    {{ fsc.setCurrentSection(firstSectionName) }}
+                    {% include firstSection.template %}
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    {% if fsc.user %}
+                        <a href="{{ fsc.url() }}" class="btn">
+                            <i class="fas fa-sync fa-fw" aria-hidden="true"></i>
+                        </a>
+                        {# -- Options button -- #}
+                        <div class="dropdown">
+                            <a href="#" class="btn dropdown-toggle">
+                                <i class="fas fa-wrench fa-fw" aria-hidden="true"></i> {{ i18n.trans('options') }}
+                            </a>
+                            <ul class="menu">
+                                {% for sectionName, section in fsc.sections %}
+                                    <li class="menu-item">
+                                        <a href="EditPageOption?code={{ sectionName }}" target="_blank">
+                                            <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <br/>
+                        <br/>
+                    {% endif %}
+                    {% if fsc.sections | length > 1 %}
+                        {{ macros.sectionsButtons(fsc, i18n, firstSectionName) }}
+                    {% endif %}
+                </div>
+                <div class="column col-10 col-md-12">
+                    {% for sectionName, section in fsc.sections %}
+                        {% if sectionName != firstSectionName %}
+                            {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
+                            <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
+                                {{ fsc.setCurrentSection(sectionName) }}
+                                {% include section.template %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript">
+        function showSection(name) {
+            $(".section-btn").removeClass("btn-primary");
+            $("#secBtn" + name).addClass("btn-primary");
+
+            $(".section-tab").removeClass("active");
+            $("#secBtn" + name + "2").addClass("active");
+
+            $(".section-div").removeClass("d-hide");
+            $(".section-div").addClass("d-hide");
+            $("#secDiv" + name).removeClass("d-hide");
+            return false;
+        }
+        function showSectionPage(name, offset) {
+            $("#secForm" + name + " input[name=offset]").val(offset);
+            $("#secForm" + name).submit();
+            return false;
+        }
+    </script>
+{% endblock %}
+
+{% macro sectionsButtons(fsc, i18n, firstSectionName) %}
+    <div class="hide-md">
+        {% for name, group in fsc.getSectionGroups() %}
+            <ul class="menu">
+                {% if name != '' %}
+                    <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                    </li>
+                {% endif %}
+                {% for sectionName, section in group %}
+                    {% if sectionName != firstSectionName %}
+                        {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? 'active' : '' %}
+                        <li class="menu-item">
+                            {% if section.count > 0 %}
+                                <div class="menu-badge">
+                                    <label class="label label-primary">{{ section.count }}</label>
+                                </div>
+                            {% endif %}
+                            <a href="#" id="secBtn{{ sectionName }}" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
+                                <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                                {{ section.title }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <br/>
+        {% endfor %}
+    </div>
+    {# -- Smartphone section dropdown -- #}
+    <div class="dropdown show-md mb-2">
+        <div class="btn-group">
+            <a href="#" class="btn dropdown-toggle" tabindex="0">
+                <i class="fas fa-chevron-circle-down fa-fw"></i> {{ i18n.trans('sections') }}
+            </a>
+            <ul class="menu">
+                {% for name, group in fsc.getSectionGroups() %}
+                    {% if name != '' %}
+                        <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                        </li>
+                    {% endif %}
+                    {% for sectionName, section in group %}
+                        {% if sectionName != firstSectionName %}
+                            {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? 'active' : '' %}
+                            <li class="menu-item">
+                                {% if section.count > 0 %}
+                                    <div class="menu-badge">
+                                        <label class="label label-primary">{{ section.count }}</label>
+                                    </div>
+                                {% endif %}
+                                <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
+                                    <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                                    {{ section.title }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endmacro %}

@@ -113,10 +113,16 @@
                     </div>
                     <div class="columns">
                         <div class="column">
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
                             {{ webCopyright }}
                         </div>
                         <div class="column text-right">
-                            {% for key, menuItem in fsc.menuComposer.getLanguageRoots() %}
+                            {% for menuItem in fsc.menuComposer.getLanguageRoots() %}
                                 {% if menuItem.langcode == fsc.webPage.langcode %}
                                     <b>{{ menuItem.langcode }}</b>
                                 {% else %}
