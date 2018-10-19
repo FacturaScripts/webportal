@@ -90,9 +90,9 @@ class PortalController extends Controller
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        $this->assets[] = 'Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css';
-        $this->assets[] = 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-        $this->assets[] = 'Dinamic/Assets/CSS/webportal.css';
+        $this->assets['css'][] = FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css';
+        $this->assets['css'][] = FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+        $this->assets['css'][] = FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css';
         $this->menuComposer = new MenuComposer();
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();

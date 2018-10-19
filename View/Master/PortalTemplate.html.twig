@@ -22,7 +22,8 @@
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}" />
         {% endblock %}
         {% block css %}
-            <style>{{ assetCombine(fsc.assets)|raw }}</style>
+            {# Adds custom CSS assets #}
+            <style>{{ assetCombine(fsc.assets['css']) | raw }}</style>
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -146,6 +147,8 @@
                     element.classList.remove("active");
                     return false;
                 }
+                {# Adds custom JS assets #}
+                {{ assetCombine(fsc.assets['js']) | raw }}
             </script>
             {% for block in fsc.pageComposer.getBlocks('javascript') %}
                 {{ block.content() | raw }}

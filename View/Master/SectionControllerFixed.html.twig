@@ -1,4 +1,4 @@
-{% extends "Master/PortalTemplate.html.twig" %}
+{% extends "Master/SectionController.html.twig" %}
 
 {% block body %}
     {% import _self as macros %}
@@ -55,30 +55,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script type="text/javascript">
-        function showSection(name) {
-            $(".section-btn").removeClass("btn-primary");
-            $("#secBtn" + name).addClass("btn-primary");
-
-            $(".section-tab").removeClass("active");
-            $("#secBtn" + name + "2").addClass("active");
-
-            $(".section-div").removeClass("d-hide");
-            $(".section-div").addClass("d-hide");
-            $("#secDiv" + name).removeClass("d-hide");
-            return false;
-        }
-        function showSectionPage(name, offset) {
-            $("#secForm" + name + " input[name=offset]").val(offset);
-            $("#secForm" + name).submit();
-            return false;
-        }
-    </script>
 {% endblock %}
 
 {% macro sectionsButtons(fsc, i18n, firstSectionName) %}

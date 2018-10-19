@@ -47,6 +47,7 @@ class ListSection extends ListView
     public function __construct($name, $title, $modelName, $icon, $group = '')
     {
         parent::__construct($name, $title, $modelName, $icon);
+        static::$assets['js'] = [];
         $this->group = $group;
         $this->template = 'Section/ListSection.html.twig';
     }
