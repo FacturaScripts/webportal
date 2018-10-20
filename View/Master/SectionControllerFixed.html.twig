@@ -6,13 +6,11 @@
     {% set firstSectionName = firstSection.getViewName() %}
 
     <div class="body-section">
+        {# -- Fixed section -- #}
+        {{ fsc.setCurrentSection(firstSectionName) }}
+        {% include firstSection.template %}
+        {# -- Other sections -- #}
         <div class="container">
-            <div class="columns">
-                <div class="column">
-                    {{ fsc.setCurrentSection(firstSectionName) }}
-                    {% include firstSection.template %}
-                </div>
-            </div>
             <div class="columns">
                 <div class="column">
                     {% if fsc.user %}
@@ -37,11 +35,13 @@
                         <br/>
                         <br/>
                     {% endif %}
+                    {# -- Section selector -- #}
                     {% if fsc.sections | length > 1 %}
                         {{ macros.sectionsButtons(fsc, i18n, firstSectionName) }}
                     {% endif %}
                 </div>
                 <div class="column col-10 col-md-12">
+                    {# -- Section contents -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% if sectionName != firstSectionName %}
                             {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
@@ -62,7 +62,7 @@
         {% for name, group in fsc.getSectionGroups() %}
             <ul class="menu">
                 {% if name != '' %}
-                    <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                    <li class="divider" data-content="{{ i18n.trans(name) }}">
                     </li>
                 {% endif %}
                 {% for sectionName, section in group %}
@@ -94,7 +94,7 @@
             <ul class="menu">
                 {% for name, group in fsc.getSectionGroups() %}
                     {% if name != '' %}
-                        <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                        <li class="divider" data-content="{{ i18n.trans(name) }}">
                         </li>
                     {% endif %}
                     {% for sectionName, section in group %}

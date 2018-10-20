@@ -29,9 +29,11 @@
                         <br/>
                         <br/>
                     {% endif %}
+                    {# -- Section selector -- #}
                     {{ macros.sectionsButtons(fsc, i18n) }}
                 </div>
                 <div class="column col-10 col-md-12">
+                    {# -- Section content -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% set divClass = (sectionName == fsc.active) ? '' : 'd-hide' %}
                         <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
@@ -93,7 +95,7 @@
         {% for name, group in fsc.getSectionGroups() %}
             <ul class="menu">
                 {% if name != '' %}
-                    <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                    <li class="divider" data-content="{{ i18n.trans(name) }}">
                     </li>
                 {% endif %}
                 {% for sectionName, section in group %}
@@ -123,7 +125,7 @@
             <ul class="menu">
                 {% for name, group in fsc.getSectionGroups() %}
                     {% if name != '' %}
-                        <li class="divider text-center" data-content="{{ i18n.trans(name) }}">
+                        <li class="divider" data-content="{{ i18n.trans(name) }}">
                         </li>
                     {% endif %}
                     {% for sectionName, section in group %}

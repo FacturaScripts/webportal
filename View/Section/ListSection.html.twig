@@ -49,7 +49,7 @@
                 {% set rowStatus = section.getRow('status') %}
                 {% for model in section.cursor %}
                     {% set trClass = rowStatus.trClass(model) %}
-                    <tr class="clickableRow c-hand {{ trClass }}" data-href="{{ model.url() }}">
+                    <tr class="clickableRow c-hand {{ trClass }}" data-href="{{ model.url('public') }}">
                         {% for column in section.getColumns() %}
                             {{ column.tableCell(model) | raw }}
                         {% endfor %}

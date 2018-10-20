@@ -292,6 +292,14 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Changes the template to show the first section as fixed.
+     */
+    protected function fixedSection()
+    {
+        $this->setTemplate('Master/SectionControllerFixed');
+    }
+
+    /**
      * Load section data procedure
      *
      * @param string $sectionName
