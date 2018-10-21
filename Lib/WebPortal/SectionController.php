@@ -65,53 +65,6 @@ abstract class SectionController extends PortalController
     }
 
     /**
-     * Adds a boolean condition type filter to the ListSection.
-     *
-     * @param string $sectionName
-     * @param string $key        (Filter identifier)
-     * @param string $label      (Human reader description)
-     * @param string $field      (Field of the model to apply filter)
-     * @param string $operation  (operation to perform with match value)
-     * @param mixed  $matchValue (Value to match)
-     * @param DataBaseWhere[] $default (where to apply when filter is empty)
-     */
-    protected function addFilterCheckbox($sectionName, $key, $label = '', $field = '', $operation = '=', $matchValue = true, $default = [])
-    {
-        $filter = new ListFilter\CheckboxFilter($key, $field, $label, $operation, $matchValue, $default);
-        $this->sections[$sectionName]->filters[$key] = $filter;
-    }
-
-    /**
-     * Adds a date type filter to the ListSection.
-     *
-     * @param string $sectionName
-     * @param string $key       (Filter identifier)
-     * @param string $label     (Human reader description)
-     * @param string $field     (Field of the table to apply filter)
-     * @param string $operation (Operation to perform)
-     */
-    protected function addFilterDatePicker($sectionName, $key, $label = '', $field = '', $operation = '>=')
-    {
-        $filter = new ListFilter\DateFilter($key, $field, $label, $operation);
-        $this->sections[$sectionName]->filters[$key] = $filter;
-    }
-
-    /**
-     * Add a select type filter to a ListSection.
-     *
-     * @param string $sectionName
-     * @param string $key       (Filter identifier)
-     * @param string $label     (Human reader description)
-     * @param string $field     (Field of the table to apply filter)
-     * @param array  $values    (Values to show)
-     */
-    protected function addFilterSelect($sectionName, $key, $label, $field, $values = [])
-    {
-        $filter = new ListFilter\SelectFilter($key, $field, $label, $values);
-        $this->sections[$sectionName]->filters[$key] = $filter;
-    }
-
-    /**
      * 
      * @return ListSection
      */
@@ -166,6 +119,53 @@ abstract class SectionController extends PortalController
         if ($row) {
             $row->addButton($btnArray);
         }
+    }
+
+    /**
+     * Adds a boolean condition type filter to the ListSection.
+     *
+     * @param string $sectionName
+     * @param string $key        (Filter identifier)
+     * @param string $label      (Human reader description)
+     * @param string $field      (Field of the model to apply filter)
+     * @param string $operation  (operation to perform with match value)
+     * @param mixed  $matchValue (Value to match)
+     * @param DataBaseWhere[] $default (where to apply when filter is empty)
+     */
+    protected function addFilterCheckbox($sectionName, $key, $label = '', $field = '', $operation = '=', $matchValue = true, $default = [])
+    {
+        $filter = new ListFilter\CheckboxFilter($key, $field, $label, $operation, $matchValue, $default);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
+
+    /**
+     * Adds a date type filter to the ListSection.
+     *
+     * @param string $sectionName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param string $operation (Operation to perform)
+     */
+    protected function addFilterDatePicker($sectionName, $key, $label = '', $field = '', $operation = '>=')
+    {
+        $filter = new ListFilter\DateFilter($key, $field, $label, $operation);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
+
+    /**
+     * Add a select type filter to a ListSection.
+     *
+     * @param string $sectionName
+     * @param string $key       (Filter identifier)
+     * @param string $label     (Human reader description)
+     * @param string $field     (Field of the table to apply filter)
+     * @param array  $values    (Values to show)
+     */
+    protected function addFilterSelect($sectionName, $key, $label, $field, $values = [])
+    {
+        $filter = new ListFilter\SelectFilter($key, $field, $label, $values);
+        $this->sections[$sectionName]->filters[$key] = $filter;
     }
 
     /**
@@ -307,6 +307,18 @@ abstract class SectionController extends PortalController
     protected function loadData(string $sectionName)
     {
         $this->sections[$sectionName]->loadData();
+    }
+
+    /**
+     * 
+     * @param string $sectionName
+     * @param array  $where
+     */
+    protected function loadListSection(string $sectionName, array $where = [])
+    {
+        $this->miniLog->alert('loadListSection($sectionName, $where) is deprecated. Please, '
+            . 'use $this->sections[$sectionName]->loadData(\'\', $where)');
+        $this->sections[$sectionName]->loadData('', $where);
     }
 
     /**

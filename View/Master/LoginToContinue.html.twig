@@ -38,7 +38,7 @@
                                     </a>
                                     {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
                                         <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                            {{ i18n.trans('register-me') }}
+                                            <i class="fas fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('register-me') }}
                                         </a>
                                     {% endif %}
                                 </div>
