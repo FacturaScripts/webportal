@@ -24,6 +24,7 @@
         {% block css %}
             {# Adds custom CSS assets #}
             <style>{{ assetCombine(fsc.assets['css']) | raw }}</style>
+            {# Adds custom CSS blocks #}
             {% for block in fsc.pageComposer.getBlocks('css') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -147,9 +148,12 @@
                     element.classList.remove("active");
                     return false;
                 }
-                {# Adds custom JS assets #}
-                {{ assetCombine(fsc.assets['js']) | raw }}
             </script>
+            {# Adds custom JS assets #}
+            {% for js in fsc.assets['js'] %}
+                <script src="{{ js }}"></script>
+            {% endfor %}
+            {# Adds custom JS blocks #}
             {% for block in fsc.pageComposer.getBlocks('javascript') %}
                 {{ block.content() | raw }}
             {% endfor %}
