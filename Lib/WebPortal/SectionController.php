@@ -61,6 +61,9 @@ abstract class SectionController extends PortalController
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->assets['css'][] = FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css';
+        $this->assets['js'][] = FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js';
+        $this->assets['js'][] = FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js';
         $this->codeModel = new CodeModel();
     }
 
