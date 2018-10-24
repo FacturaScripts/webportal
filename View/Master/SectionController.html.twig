@@ -7,10 +7,10 @@
         <div class="container">
             <div class="columns">
                 <div class="column">
+                    {# -- Options button -- #}
                     {% if fsc.user %}
-                        {# -- Options button -- #}
                         <div class="dropdown">
-                            <a href="#" class="btn dropdown-toggle">
+                            <a href="#" class="btn btn-link dropdown-toggle">
                                 <i class="fas fa-wrench fa-fw" aria-hidden="true"></i> {{ i18n.trans('options') }}
                             </a>
                             <ul class="menu">
@@ -23,9 +23,8 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <br/>
-                        <br/>
                     {% endif %}
+
                     {# -- Section selector -- #}
                     {{ macros.sectionsButtons(fsc, i18n) }}
                 </div>
