@@ -52,6 +52,12 @@ abstract class SectionController extends PortalController
 
     /**
      *
+     * @var array
+     */
+    public $navigationLinks = [];
+
+    /**
+     *
      * @var ListSection[]
      */
     public $sections = [];
@@ -198,6 +204,16 @@ abstract class SectionController extends PortalController
     {
         $newSection = new ListSection($sectionName, $label, self::MODEL_NAMESPACE . $modelName, $icon, $group);
         $this->addSection($sectionName, $newSection);
+    }
+
+    /**
+     * 
+     * @param string $link
+     * @param string $title
+     */
+    protected function addNavigationLink($link, $title)
+    {
+        $this->navigationLinks[] = ['title' => $title, 'url' => $link];
     }
 
     /**

@@ -35,7 +35,7 @@ class DateFilter extends ParentFilter
             . '<div class="form-group">'
             . '<div class="input-group">'
             . '<span class="input-group-addon" title="' . $label . '">'
-            . '<i class="far fa-calendar-alt" aria-hidden="true"></i>'
+            . '<i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>'
             . '</span>'
             . '<input type="text" name="' . $this->name() . '" value="' . $this->value . '" class="form-input datepicker"'
             . ' placeholder="' . $label . '" autocomplete="off"' . $this->onChange() . '/>'

@@ -6,9 +6,12 @@
     {% set firstSectionName = firstSection.getViewName() %}
 
     <div class="body-section">
+        {{ macros.navigationLinks(fsc.navigationLinks) }}
+
         {# -- Fixed section -- #}
         {{ fsc.setCurrentSection(firstSectionName) }}
         {% include firstSection.template %}
+
         {# -- Other sections -- #}
         <div class="container">
             <div class="columns">
@@ -54,6 +57,26 @@
     </div>
 {% endblock %}
 
+{% macro navigationLinks(links) %}
+    {% if links | length > 0 %}
+        <div class="container">
+            <div class="columns">
+                <div class="column col-2">
+                </div>
+                <div class="column">
+                    <ul class="breadcrumb">
+                        {% for link in links %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ link.url }}">{{ link.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
 {% macro sectionsButtons(fsc, i18n, firstSectionName) %}
     <div class="hide-md">
         {% for name, group in fsc.getSectionGroups() %}
@@ -64,7 +87,7 @@
                 {% endif %}
                 {% for sectionName, section in group %}
                     {% if sectionName != firstSectionName %}
-                        {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? 'active' : '' %}
+                        {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2 and name == '') ? 'active' : '' %}
                         <li class="menu-item">
                             {% if section.count > 0 %}
                                 <div class="menu-badge">
@@ -96,7 +119,7 @@
                     {% endif %}
                     {% for sectionName, section in group %}
                         {% if sectionName != firstSectionName %}
-                            {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? 'active' : '' %}
+                            {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2 and name == '') ? 'active' : '' %}
                             <li class="menu-item">
                                 {% if section.count > 0 %}
                                     <div class="menu-badge">
