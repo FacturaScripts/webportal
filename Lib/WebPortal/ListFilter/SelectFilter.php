@@ -30,17 +30,11 @@ class SelectFilter extends ParentFilter
 
     public function render()
     {
-        $label = static::$i18n->trans($this->label);
         return '<div class="column col-3 col-sm-2 mb-2">'
             . '<div class="form-group">'
-            . '<div class="input-group">'
-            . '<span class="input-group-addon" title="' . $label . '">'
-            . '<i class="fas fa-caret-down fa-fw" aria-hidden="true"></i>'
-            . '</span>'
             . '<select name="' . $this->name() . '" class="form-select"' . $this->onChange() . '>'
             . $this->getHtmlOptions()
             . '</select>'
-            . '</div>'
             . '</div>'
             . '</div>';
     }

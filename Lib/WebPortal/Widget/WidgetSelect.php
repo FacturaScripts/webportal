@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetSelect as ParentClass;
  */
 class WidgetSelect extends ParentClass
 {
-    
+
+    use VisualItemTrait;
 }

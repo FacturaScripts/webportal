@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\GroupItem as ParentClass;
  */
 class GroupItem extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
 }

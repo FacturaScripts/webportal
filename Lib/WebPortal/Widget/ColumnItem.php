@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\ColumnItem as ParentClass;
  */
 class ColumnItem extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
 }

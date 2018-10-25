@@ -53,8 +53,7 @@ class GeoLocation
      */
     private function excludedIp($ipAddress): bool
     {
-        return in_array($ipAddress, ['127.0.0.1', '::1'], true)
-            || $this->ip4InRange($ipAddress, '192.168.0.0', '192.168.255.255') // Clase C
+        return in_array($ipAddress, ['127.0.0.1', '::1'], true) || $this->ip4InRange($ipAddress, '192.168.0.0', '192.168.255.255') // Clase C
             || $this->ip4InRange($ipAddress, '172.16.0.0', '172.31.255.255') // Clase B
             || $this->ip4InRange($ipAddress, '169.254.0.0', '169.254.255.255') // Clase B simple
             || $this->ip4InRange($ipAddress, '10.0.0.0', '10.255.255.255'); // Clase A

@@ -27,5 +27,17 @@ use FacturaScripts\Core\Lib\Widget\WidgetAutocomplete as ParentClass;
  */
 class WidgetAutocomplete extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
+
+    /**
+     * 
+     * @return string
+     */
+    protected function inputGroupClearBtn()
+    {
+        return '<button class="btn btn-error input-group-btn" type="button" onclick="this.form.' . $this->fieldname . '.value = \'\'; this.form.submit();">'
+            . '<i class="fas fa-times" aria-hidden="true"></i>'
+            . '</button>';
+    }
 }

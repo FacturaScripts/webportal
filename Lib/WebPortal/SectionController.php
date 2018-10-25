@@ -131,6 +131,21 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Adds a Edit type section to the controller.
+     *
+     * @param string $sectionName
+     * @param string $modelName
+     * @param string $viewTitle
+     * @param string $viewIcon
+     * @param string $group
+     */
+    protected function addEditSection($sectionName, $modelName, $viewTitle, $viewIcon = 'fas fa-edit', $group = '')
+    {
+        $newSection = new EditSection($sectionName, $viewTitle, self::MODEL_NAMESPACE . $modelName, $viewIcon, $group);
+        $this->addSection($sectionName, $newSection);
+    }
+
+    /**
      * Adds a boolean condition type filter to the ListSection.
      *
      * @param string $sectionName
@@ -185,6 +200,7 @@ abstract class SectionController extends PortalController
      * @param string $fileName
      * @param string $modelName
      * @param string $icon
+     * @param string $group
      */
     protected function addHtmlSection($sectionName, $title, $fileName = 'Section/WebPage', $modelName = 'WebPage', $icon = 'fab fa-html5', $group = '')
     {
@@ -257,6 +273,29 @@ abstract class SectionController extends PortalController
         }
     }
 
+    /**
+     * Run the autocomplete action.
+     * Returns a JSON string for the searched values.
+     *
+     * @return string
+     */
+    protected function autocompleteAction()
+    {
+        $data = [];
+        foreach (['field', 'source', 'fieldcode', 'fieldtitle', 'term', 'formname'] as $value) {
+            $data[$value] = $this->request->get($value);
+        }
+        if ($data['source'] == '') {
+            return $this->getAutocompleteValues($data['formname'], $data['field']);
+        }
+
+        $results = [];
+        foreach ($this->codeModel->search($data['source'], $data['fieldcode'], $data['fieldtitle'], $data['term']) as $value) {
+            $results[] = ['key' => $value->code, 'value' => $value->description];
+        }
+        return $results;
+    }
+
     protected function commonCore()
     {
         $this->setTemplate('Master/SectionController');
@@ -289,13 +328,53 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Runs the data edit action.
+     *
+     * @return bool
+     */
+    protected function editAction()
+    {
+        // loads model data
+        $code = $this->request->request->get('code', '');
+        if (!$this->sections[$this->active]->model->loadFromCode($code)) {
+            $this->miniLog->error($this->i18n->trans('record-not-found'));
+            return false;
+        }
+
+        // loads form data
+        $this->sections[$this->active]->processFormData($this->request, 'edit');
+
+        // has PK value been changed?
+        $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
+        if ($code != $this->sections[$this->active]->newCode) {
+            $pkColumn = $this->sections[$this->active]->model->primaryColumn();
+            $this->sections[$this->active]->model->{$pkColumn} = $code;
+            // change in database
+            if (!$this->sections[$this->active]->model->changePrimaryColumnValue($this->sections[$this->active]->newCode)) {
+                $this->miniLog->error($this->i18n->trans('record-save-error'));
+                return false;
+            }
+        }
+
+        // save in database
+        if ($this->sections[$this->active]->model->save()) {
+            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            $this->sections[$this->active]->model->clear();
+            return true;
+        }
+
+        $this->miniLog->error($this->i18n->trans('record-save-error'));
+        return false;
+    }
+
+    /**
      * General operations with the loaded data.
      *
      * @param string $action
      */
     protected function execAfterAction(string $action)
     {
-        
+        ;
     }
 
     /**
@@ -307,6 +386,18 @@ abstract class SectionController extends PortalController
      */
     protected function execPreviousAction(string $action)
     {
+        switch ($action) {
+            case 'autocomplete':
+                $this->setTemplate(false);
+                $results = $this->autocompleteAction();
+                $this->response->setContent(json_encode($results));
+                return false;
+
+            case 'edit':
+                $this->editAction();
+                break;
+        }
+
         return true;
     }
 

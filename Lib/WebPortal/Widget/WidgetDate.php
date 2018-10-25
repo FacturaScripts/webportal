@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetDate as ParentClass;
  */
 class WidgetDate extends ParentClass
 {
-    
+
+    use VisualItemTrait;
 }

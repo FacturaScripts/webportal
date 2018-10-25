@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetTextarea as ParentClass;
  */
 class WidgetTextarea extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
 }

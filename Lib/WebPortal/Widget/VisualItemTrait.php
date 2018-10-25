@@ -18,15 +18,36 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget;
 
-use FacturaScripts\Core\Lib\Widget\WidgetText as ParentClass;
-
-/**
- * Description of WidgetText
- *
- * @author Carlos García Gómez
- */
-class WidgetText extends ParentClass
+trait VisualItemTrait
 {
 
-    use VisualItemTrait;
+    /**
+     * 
+     * @param string $class
+     *
+     * @return string
+     */
+    protected function css($class)
+    {
+        switch ($class) {
+            case 'col':
+                return 'column';
+
+            case 'col-md-':
+                return 'column col-';
+
+            case 'form-control':
+                return 'form-input';
+
+            case 'input-group-prepend':
+                return 'input-group-addon';
+
+            case 'row':
+            case 'form-row':
+                return 'columns mb-2';
+
+            default:
+                return $class;
+        }
+    }
 }

@@ -1,0 +1,96 @@
+{% import _self as macros %}
+{% set section = fsc.getCurrentSection() %}
+{% set action = section.model.exists() ? 'edit' : 'insert' %}
+
+<script type="text/javascript">
+    function editSectionDelete(viewName) {
+        bootbox.confirm({
+            title: "{{ i18n.trans('confirm-delete') }}",
+            message: "{{ i18n.trans('are-you-sure') }}",
+            closeButton: false,
+            buttons: {
+                cancel: {
+                    label: '<i class="fas fa-times"></i> {{ i18n.trans('cancel') }}'
+                },
+                confirm: {
+                    label: '<i class="fas fa-check"></i> {{ i18n.trans('confirm') }}',
+                    className: "btn-danger"
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $("#form" + viewName + " :input[name=\"action\"]").val("delete");
+                    $("#form" + viewName).submit();
+                }
+            }
+        });
+
+        return false;
+    }
+</script>
+
+{# -- Row header -- #}
+<div class="columns">
+    {% set row = section.getRow('header') %}
+    {{ row.render(section.getViewName(), '', fsc) | raw }}
+</div>
+
+<form id="form{{ section.getViewName() }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="{{ action }}"/>
+    <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+    <input type="hidden" name="code" value="{{ section.model.primaryColumnValue() }}"/>
+    <div class="card">
+        <div class="card-body">
+            <div class="columns">
+                <div class="column col-12 text-right">
+                    {# -- Row statistics -- #}
+                    {% set row = section.getRow('statistics') %}
+                    {{ row.render(fsc) | raw }}
+                </div>
+            </div>
+            <div class="columns mb-2">
+                {% for group in section.getColumns() %}
+                    {{ group.edit(section.model) | raw }}
+                {% endfor %}
+            </div>
+            <div class="columns">
+                {% if fsc.hasData and section.settings.btnDelete %}
+                    <div class="column">
+                        <button type="button" class="btn btn-error" onclick="editSectionDelete('{{ section.getViewName() }}');">
+                            <i class="fas fa-trash fa-fw" aria-hidden="true"></i>
+                            {{ i18n.trans('delete') }}
+                        </button>
+                    </div>
+                {% endif %}
+                <div class="column">
+                    {# -- Row actions -- #}
+                    {% set row = section.getRow('actions') %}
+                    {{ row.render() | raw }}
+                </div>
+                <div class="column text-right">
+                    <button class="btn" type="reset">
+                        <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
+                        {{ i18n.trans('undo') }}
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-save fa-fw" aria-hidden="true"></i>
+                        {{ i18n.trans('save') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br/>
+
+{# -- Row footer -- #}
+<div class="columns">
+    {% set row = section.getRow('footer') %}
+    {{ row.render(section.getViewName(), '', fsc) | raw }}
+</div>
+
+{# -- Modals -- #}
+{% for group in section.getModals() %}
+    {{ group.modal(section.model, section.getViewName()) | raw }}
+{% endfor %}

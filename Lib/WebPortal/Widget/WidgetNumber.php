@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetNumber as ParentClass;
  */
 class WidgetNumber extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
 }

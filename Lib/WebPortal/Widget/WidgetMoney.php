@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetMoney as ParentClass;
  */
 class WidgetMoney extends ParentClass
 {
-    //put your code here
+
+    use VisualItemTrait;
 }
