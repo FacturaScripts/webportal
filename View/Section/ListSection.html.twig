@@ -67,6 +67,7 @@
 {# -- Paginacion -- #}
 {{ macros.sectionPagination(section) }}
 
+{# -- Macros -- #}
 {% macro sectionOrder(section) %}
     {% if section.orderOptions | length > 0 %}
         <div class="input-group">
@@ -75,7 +76,7 @@
             </span>
             <select name="order" class="form-select" onchange="this.form.submit();">
                 {% for key, option in section.orderOptions %}
-                    {% if option.selected %}
+                    {% if section.orderKey == key %}
                         <option value="{{ key }}" selected="">{{ option.label }} {{ option.type }}</option>
                     {% else %}
                         <option value="{{ key }}">{{ option.label }} {{ option.type }}</option>
