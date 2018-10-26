@@ -18,25 +18,31 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget;
 
-use FacturaScripts\Core\Lib\Widget\GroupItem as ParentClass;
+use FacturaScripts\Core\Lib\Widget\WidgetCheckbox as ParentClass;
 
 /**
- * Description of GroupItem
+ * Description of WidgetCheckbox
  *
  * @author Carlos García Gómez
  */
-class GroupItem extends ParentClass
+class WidgetCheckbox extends ParentClass
 {
 
     use VisualItemTrait;
 
-    protected function legend()
+    public function edit($model, $title = '', $description = '', $titleurl = '')
     {
-        $icon = empty($this->icon) ? '' : '<i class="' . $this->icon . ' fa-fw"></i> ';
-        return '<div class="column">'
-            . '<h4>' . $icon . static::$i18n->trans($this->title) . '</h4>'
-            . '</div>'
-            . '</div>'
-            . '<div class="columns mb-2">';
+        $this->setValue($model);
+        $checked = $this->value ? ' checked=""' : '';
+
+        $inputHtml = '<input type="checkbox" name="' . $this->fieldname . '" value="TRUE"' . $checked . '/>';
+        $descriptionHtml = empty($description) ? '' : '<small class="form-text text-muted">' . static::$i18n->trans($description) . '</small>';
+
+        return '<div class="form-group">'
+            . '<label class="form-switch">'
+            . $inputHtml . '<i class="form-icon"></i> ' . static::$i18n->trans($title)
+            . '</label>'
+            . $descriptionHtml
+            . '</div>';
     }
 }

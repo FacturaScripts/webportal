@@ -29,4 +29,31 @@ class WidgetSelect extends ParentClass
 {
 
     use VisualItemTrait;
+    
+    
+
+    /**
+     *
+     * @param string $type
+     * @param string $extraClass
+     *
+     * @return string
+     */
+    protected function inputHtml($type = 'text', $extraClass = '')
+    {
+        if ($this->readonly === 'true' || ($this->readonly === 'dinamic' && !empty($this->value))) {
+            return parent::inputHtml($type, $extraClass);
+        }
+
+        $html = '<select name="' . $this->fieldname . '" class="form-select"' . $this->inputHtmlExtraParams() . '>';
+        foreach ($this->values as $option) {
+            /// don't use strict comparation (===)
+            $selected = ($option['value'] == $this->value) ? ' selected="selected" ' : '';
+            $title = empty($option['title']) ? $option['value'] : $option['title'];
+            $html .= '<option value="' . $option['value'] . '" ' . $selected . '>' . $title . '</option>';
+        }
+
+        $html .= '</select>';
+        return $html;
+    }
 }
