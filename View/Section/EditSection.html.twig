@@ -4,26 +4,11 @@
 
 <script type="text/javascript">
     function editSectionDelete(viewName) {
-        bootbox.confirm({
-            title: "{{ i18n.trans('confirm-delete') }}",
-            message: "{{ i18n.trans('are-you-sure') }}",
-            closeButton: false,
-            buttons: {
-                cancel: {
-                    label: '<i class="fas fa-times"></i> {{ i18n.trans('cancel') }}'
-                },
-                confirm: {
-                    label: '<i class="fas fa-check"></i> {{ i18n.trans('confirm') }}',
-                    className: "btn-danger"
-                }
-            },
-            callback: function (result) {
-                if (result) {
-                    $("#form" + viewName + " :input[name=\"action\"]").val("delete");
-                    $("#form" + viewName).submit();
-                }
-            }
-        });
+        var value = confirm("{{ i18n.trans('confirm-delete') }} {{ i18n.trans('are-you-sure') }}");
+        if (value == true) {
+            $("#form" + viewName + " :input[name=\"action\"]").val("delete");
+            $("#form" + viewName).submit();
+        }
 
         return false;
     }
@@ -54,7 +39,7 @@
                 {% endfor %}
             </div>
             <div class="columns">
-                {% if fsc.hasData and section.settings.btnDelete %}
+                {% if section.settings.btnDelete %}
                     <div class="column">
                         <button type="button" class="btn btn-error" onclick="editSectionDelete('{{ section.getViewName() }}');">
                             <i class="fas fa-trash fa-fw" aria-hidden="true"></i>

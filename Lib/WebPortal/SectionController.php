@@ -328,6 +328,25 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Action to delete data.
+     *
+     * @return bool
+     */
+    protected function deleteAction()
+    {
+        $model = $this->sections[$this->active]->model;
+        $code = $this->request->request->get('code', '');
+        if ($model->loadFromCode($code) && $model->delete()) {
+            // deleting a single row?
+            $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
+            return true;
+        }
+
+        $this->miniLog->warning($this->i18n->trans('record-deleted-error'));
+        return false;
+    }
+
+    /**
      * Runs the data edit action.
      *
      * @return bool
@@ -392,6 +411,10 @@ abstract class SectionController extends PortalController
                 $results = $this->autocompleteAction();
                 $this->response->setContent(json_encode($results));
                 return false;
+
+            case 'delete':
+                $this->deleteAction();
+                break;
 
             case 'edit':
                 $this->editAction();
