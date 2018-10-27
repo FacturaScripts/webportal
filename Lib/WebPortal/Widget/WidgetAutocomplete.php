@@ -31,6 +31,46 @@ class WidgetAutocomplete extends ParentClass
     use VisualItemTrait;
 
     /**
+     *
+     * @var array
+     */
+    protected static $allowed = [];
+
+    /**
+     * 
+     * @param array $data
+     */
+    public function __construct($data)
+    {
+        parent::__construct($data);
+        self::$allowed[] = [
+            'source' => $this->source,
+            'fieldcode' => $this->fieldcode,
+            'fieldtitle' => $this->fieldtitle,
+        ];
+    }
+
+    /**
+     * Returns true if this search has been authorized.
+     *
+     * @param string $source
+     * @param string $fieldcode
+     * @param string $fieldtitle
+     * 
+     * @return bool
+     */
+    public static function allowed($source, $fieldcode, $fieldtitle)
+    {
+        foreach (self::$allowed as $line) {
+            if ($source === $line['source'] && $fieldcode === $line['fieldcode'] && $fieldtitle === $line['fieldtitle']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * 
      * @return string
      */

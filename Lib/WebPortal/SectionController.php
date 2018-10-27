@@ -21,6 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 use FacturaScripts\Core\Model\CodeModel;
 use FacturaScripts\Core\Lib\AssetManager;
 use FacturaScripts\Core\Lib\Widget\VisualItem;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget\WidgetAutocomplete;
 
 /**
  * Description of SectionController
@@ -289,6 +290,11 @@ abstract class SectionController extends PortalController
             return $this->getAutocompleteValues($data['formname'], $data['field']);
         }
 
+        /// is this search allowed?
+        if (!WidgetAutocomplete::allowed($data['source'], $data['fieldcode'], $data['fieldtitle'])) {
+            return [];
+        }
+
         $results = [];
         foreach ($this->codeModel->search($data['source'], $data['fieldcode'], $data['fieldtitle'], $data['term']) as $value) {
             $results[] = ['key' => $value->code, 'value' => $value->description];
@@ -430,6 +436,26 @@ abstract class SectionController extends PortalController
     protected function fixedSection()
     {
         $this->setTemplate('Master/SectionControllerFixed');
+    }
+
+    /**
+     * Return values from Widget Values for autocomplete action
+     *
+     * @param string $sectionName
+     * @param string $fieldName
+     *
+     * @return array
+     */
+    protected function getAutocompleteValues(string $sectionName, string $fieldName): array
+    {
+        $result = [];
+        $column = $this->sections[$sectionName]->columnForField($fieldName);
+        if (!empty($column)) {
+            foreach ($column->widget->values as $value) {
+                $result[] = ['key' => $this->i18n->trans($value['title']), 'value' => $value['value']];
+            }
+        }
+        return $result;
     }
 
     /**
