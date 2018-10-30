@@ -21,7 +21,7 @@
 
 <view>
     <columns>
-        <group name="default" numcolumns="12">
+        <group name="default" icon="fas fa-globe-americas" numcolumns="12">
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" required="true" />
             </column>

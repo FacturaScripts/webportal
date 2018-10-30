@@ -38,7 +38,7 @@ class ListWebPage extends ExtendedController\ListController
         $pageData = parent::getPageData();
         $pageData['title'] = 'pages';
         $pageData['menu'] = 'web';
-        $pageData['icon'] = 'fas fa-globe';
+        $pageData['icon'] = 'fas fa-globe-americas';
 
         return $pageData;
     }
@@ -49,7 +49,7 @@ class ListWebPage extends ExtendedController\ListController
     protected function createViews()
     {
         /// Web pages
-        $this->addView('ListWebPage', 'WebPage', 'pages', 'fas fa-globe');
+        $this->addView('ListWebPage', 'WebPage', 'pages', 'fas fa-globe-americas');
         $this->addSearchFields('ListWebPage', ['title', 'description']);
         $this->addOrderBy('ListWebPage', ['permalink']);
         $this->addOrderBy('ListWebPage', ['title']);

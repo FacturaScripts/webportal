@@ -322,6 +322,8 @@ abstract class SectionController extends PortalController
         foreach (array_keys($this->sections) as $key) {
             if ($this->active == $key) {
                 $this->sections[$key]->processFormData($this->request, 'load');
+            } else {
+                $this->sections[$key]->processFormData($this->request, 'preload');
             }
 
             $this->loadData($key);
