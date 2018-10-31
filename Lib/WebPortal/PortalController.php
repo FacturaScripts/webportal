@@ -22,6 +22,7 @@ use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Model;
@@ -90,9 +91,9 @@ class PortalController extends Controller
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        $this->assets['css'][] = FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css';
-        $this->assets['css'][] = FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-        $this->assets['css'][] = FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css';
+        AssetManager::add('css', FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css', 3);
+        AssetManager::add('css', FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css', 3);
+        AssetManager::add('css', FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css', 2);
         $this->menuComposer = new MenuComposer();
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();

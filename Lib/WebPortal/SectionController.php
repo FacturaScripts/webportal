@@ -68,9 +68,9 @@ abstract class SectionController extends PortalController
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        $this->assets['css'][] = FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css';
-        $this->assets['js'][] = FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js';
-        $this->assets['js'][] = FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js';
+        AssetManager::add('css', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css');
+        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js');
+        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js');
         $this->codeModel = new CodeModel();
     }
 
@@ -307,11 +307,11 @@ abstract class SectionController extends PortalController
         $this->setTemplate('Master/SectionController');
         $this->setLevel();
 
-        $this->active = $this->request->get('activetab', '');
+        $this->active = $this->request->request->get('activetab', $this->request->query->get('activetab', ''));
         $this->createSections();
 
         // Get any operations that have to be performed
-        $action = $this->request->get('action', '');
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
 
         // Run operations on the data before reading it
         if (!$this->execPreviousAction($action)) {
@@ -331,8 +331,6 @@ abstract class SectionController extends PortalController
 
         // General operations with the loaded data
         $this->execAfterAction($action);
-
-        AssetManager::merge($this->assets, ListSection::getAssets());
     }
 
     /**

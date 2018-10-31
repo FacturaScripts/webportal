@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\Widget;
 
+use FacturaScripts\Core\Lib\AssetManager;
 use FacturaScripts\Core\Lib\Widget\WidgetTextarea;
 
 /**
@@ -35,9 +36,16 @@ class WidgetHtml extends WidgetTextarea
     public function __construct($data)
     {
         parent::__construct($data);
-        static::$assets['css'][] = FS_ROUTE . '/Plugins/webportal/node_modules/summernote/dist/summernote-bs4.css';
-        static::$assets['js'][] = FS_ROUTE . '/Plugins/webportal/node_modules/summernote/dist/summernote-bs4.js';
-        static::$assets['js'][] = FS_ROUTE . '/Dinamic/Assets/JS/WidgetHtml.js';
+    }
+
+    /**
+     * Adds needed assets to the asset manager.
+     */
+    protected function assets()
+    {
+        AssetManager::add('css', FS_ROUTE . '/Plugins/webportal/node_modules/summernote/dist/summernote-bs4.css');
+        AssetManager::add('js', FS_ROUTE . '/Plugins/webportal/node_modules/summernote/dist/summernote-bs4.js');
+        AssetManager::add('js', FS_ROUTE . '/Dinamic/Assets/JS/WidgetHtml.js');
     }
 
     /**

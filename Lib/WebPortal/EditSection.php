@@ -47,7 +47,6 @@ class EditSection extends EditView
     public function __construct($name, $title, $modelName, $icon, $group = '')
     {
         parent::__construct($name, $title, $modelName, $icon);
-        static::$assets['js'] = [];
         $this->group = $group;
         $this->template = 'Section/EditSection.html.twig';
     }
@@ -66,5 +65,13 @@ class EditSection extends EditView
 
         VisualItemLoadEngine::setNamespace('\\FacturaScripts\\Dinamic\\Lib\\WebPortal\\Widget\\');
         VisualItemLoadEngine::loadArray($this->columns, $this->modals, $this->rows, $this->pageOption);
+    }
+
+    /**
+     * Adds needed assets to the asset manager.
+     */
+    protected function assets()
+    {
+        ;
     }
 }
