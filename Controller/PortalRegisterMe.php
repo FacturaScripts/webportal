@@ -114,10 +114,10 @@ class PortalRegisterMe extends PortalController
         if ($contact->save()) {
             $this->updateCookies($contact, true);
             return true;
-        } else {
-            $this->miniLog->alert($this->i18n->trans('record-save-error'));
-            return false;
         }
+
+        $this->miniLog->alert($this->i18n->trans('record-save-error'));
+        return false;
     }
 
     /**
