@@ -77,13 +77,23 @@
                     <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('new-password') }}</label>
-                            <input class="form-input" type="password" name="password" autocomplete="off"/>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fas fa-key fa-fw"></i>
+                                </span>
+                                <input class="form-input" type="password" name="password" autocomplete="off"/>
+                            </div>
                         </div>
                     </div>
                     <div class="column col-6">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('repeat-new-password') }}</label>
-                            <input class="form-input" type="password" name="re-password" autocomplete="off"/>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fas fa-key fa-fw"></i>
+                                </span>
+                                <input class="form-input" type="password" name="re-password" autocomplete="off"/>
+                            </div>
                         </div>
                     </div>
                 </div>
