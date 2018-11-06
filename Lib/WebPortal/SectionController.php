@@ -345,6 +345,12 @@ abstract class SectionController extends PortalController
         if ($model->loadFromCode($code) && $model->delete()) {
             // deleting a single row?
             $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
+
+            // redirect to some previous page?
+            foreach ($this->navigationLinks as $link) {
+                $this->response->headers->set('Refresh', '0; ' . $link['url']);
+                break;
+            }
             return true;
         }
 
