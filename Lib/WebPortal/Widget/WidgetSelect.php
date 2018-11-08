@@ -29,8 +29,6 @@ class WidgetSelect extends ParentClass
 {
 
     use VisualItemTrait;
-    
-    
 
     /**
      *

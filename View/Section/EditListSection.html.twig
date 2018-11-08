@@ -1,0 +1,148 @@
+{% import _self as macros %}
+{% set section = fsc.getCurrentSection() %}
+
+<script type="text/javascript">
+    function editListSectionDelete(formName) {
+        var value = confirm("{{ i18n.trans('confirm-delete') }} {{ i18n.trans('are-you-sure') }}");
+        if (value == true) {
+            $("#form" + formName + " :input[name=\"action\"]").val("delete");
+            $("#form" + formName).submit();
+        }
+
+        return false;
+    }
+</script>
+
+{# -- Row header -- #}
+<div class="columns">
+    {% set row = section.getRow('header') %}
+    {{ row.render(section.getViewName(), '', fsc) | raw }}
+</div>
+
+{# -- New form -- #}
+{% if section.settings.btnNew %}
+    {% set formName = 'form' ~ section.getViewName() ~ 'New' %}
+    <form id="{{ formName }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="insert"/>
+        <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+        <div class="mb-2">
+            <button class="btn btn-block btn-success" type="button" onclick="showModal('modal{{ formName }}');">
+                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                {{ i18n.trans('new') }}
+            </button>
+        </div>
+        <div class="modal modal-lg" id="modal{{ formName }}">
+            <a href="#close" class="modal-overlay" aria-label="Close"></a>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <a href="#close" class="btn btn-clear float-right" aria-label="Close" onclick="return hideModal('modal{{ formName }}');"></a>
+                    <div class="modal-title h5">{{ i18n.trans('new') }}</div>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        {% for group in section.getColumns() %}
+                            {{ group.edit(section.model) | raw }}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-save fa-fw" aria-hidden="true"></i>
+                        {{ i18n.trans('save') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
+{# -- Row statistics -- #}
+<div>
+    {% set row = section.getRow('statistics') %}
+    {{ row.render(fsc) | raw }}
+</div>
+
+{# -- Forms -- #}
+{% for counter, model in section.cursor %}
+    {% set formName = 'form' ~ section.getViewName() ~ counter %}
+    <form id="{{ formName }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="edit"/>
+        <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+        <input type="hidden" name="code" value="{{ model.primaryColumnValue() }}"/>
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="columns">
+                    {% for group in section.getColumns() %}
+                        {{ group.edit(model) | raw }}
+                    {% endfor %}
+                </div>
+                <div class="columns">
+                    {% if section.settings.btnDelete %}
+                        <div class="column">
+                            <button type="button" class="btn btn-error" onclick="editListSectionDelete('{{ section.getViewName() ~ counter }}');">
+                                <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
+                                {{ i18n.trans('delete') }}
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="column">
+                        {# -- Row actions -- #}
+                        {% set row = section.getRow('actions') %}
+                        {{ row.render() | raw }}
+                    </div>
+                    <div class="column text-right">
+                        <button class="btn btn-secondary" type="reset">
+                            <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
+                            {{ i18n.trans('undo') }}
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save fa-fw" aria-hidden="true"></i>
+                            {{ i18n.trans('save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% else %}
+    <div class="toast toast-warning">
+        {{ i18n.trans('no-data') }}
+    </div>
+{% endfor %}
+
+<br/>
+
+{# -- Pagination -- #}
+{% set formName = 'form' ~ section.getViewName() ~ 'Offset' %}
+<form id="{{ formName }}" method="post">
+    <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+    <input type="hidden" name="offset" value="{{ section.offset }}"/>
+    <div class="text-center">
+        <div class="btn-group">
+            {% for page in section.getPagination() %}
+                {% if page.active %}
+                    <button type="button" class="btn btn-light active" onclick="EditListViewSetOffset('{{ section.getViewName() }}', '{{ page.offset }}');">
+                        {{ page.num }}
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-light" onclick="EditListViewSetOffset('{{ section.getViewName() }}', '{{ page.offset }}');">
+                        {{ page.num }}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+<br/>
+
+{# -- Row footer -- #}
+<div class="columns">
+    {% set row = section.getRow('footer') %}
+    {{ row.render(section.getViewName(), '', fsc) | raw }}
+</div>
+
+{# -- Modals -- #}
+{% for group in section.getModals() %}
+    {{ group.modal(section.model, section.getViewName()) | raw }}
+{% endfor %}

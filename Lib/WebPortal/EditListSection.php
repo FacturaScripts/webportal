@@ -19,15 +19,15 @@
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Lib\ExtendedController\EditView;
+use FacturaScripts\Core\Lib\ExtendedController\EditListView;
 use FacturaScripts\Core\Lib\Widget\VisualItemLoadEngine;
 
 /**
- * Description of EditSection
+ * Description of EditListSection
  *
  * @author Carlos García Gómez
  */
-class EditSection extends EditView
+class EditListSection extends EditListView
 {
 
     /**
@@ -48,7 +48,7 @@ class EditSection extends EditView
     {
         parent::__construct($name, $title, $modelName, $icon);
         $this->group = $group;
-        $this->template = 'Section/EditSection.html.twig';
+        $this->template = 'Section/EditListSection.html.twig';
     }
 
     /**
@@ -67,9 +67,6 @@ class EditSection extends EditView
         VisualItemLoadEngine::loadArray($this->columns, $this->modals, $this->rows, $this->pageOption);
     }
 
-    /**
-     * Adds needed assets to the asset manager.
-     */
     protected function assets()
     {
         ;

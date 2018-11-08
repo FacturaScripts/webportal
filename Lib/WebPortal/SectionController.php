@@ -147,6 +147,21 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Adds a EditList type section to the controller.
+     *
+     * @param string $sectionName
+     * @param string $modelName
+     * @param string $viewTitle
+     * @param string $viewIcon
+     * @param string $group
+     */
+    protected function addEditListSection($sectionName, $modelName, $viewTitle, $viewIcon = 'fas fa-edit', $group = '')
+    {
+        $newSection = new EditListSection($sectionName, $viewTitle, self::MODEL_NAMESPACE . $modelName, $viewIcon, $group);
+        $this->addSection($sectionName, $newSection);
+    }
+
+    /**
      * Adds a boolean condition type filter to the ListSection.
      *
      * @param string $sectionName
@@ -345,12 +360,6 @@ abstract class SectionController extends PortalController
         if ($model->loadFromCode($code) && $model->delete()) {
             // deleting a single row?
             $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
-
-            // redirect to some previous page?
-            foreach ($this->navigationLinks as $link) {
-                $this->response->headers->set('Refresh', '0; ' . $link['url']);
-                break;
-            }
             return true;
         }
 
@@ -431,6 +440,10 @@ abstract class SectionController extends PortalController
             case 'edit':
                 $this->editAction();
                 break;
+
+            case 'insert':
+                $this->insertAction();
+                break;
         }
 
         return true;
@@ -462,6 +475,37 @@ abstract class SectionController extends PortalController
             }
         }
         return $result;
+    }
+
+    /**
+     * Runs data insert action.
+     */
+    protected function insertAction()
+    {
+        // loads form data
+        $this->sections[$this->active]->processFormData($this->request, 'edit');
+        if ($this->sections[$this->active]->model->exists()) {
+            $this->miniLog->error($this->i18n->trans('duplicate-record'));
+            return false;
+        }
+
+        // empty primary key?
+        if (empty($this->sections[$this->active]->model->primaryColumnValue())) {
+            $model = $this->sections[$this->active]->model;
+            // assign a new value
+            $this->sections[$this->active]->model->{$model->primaryColumn()} = $model->newCode();
+        }
+
+        // save in database
+        if ($this->sections[$this->active]->model->save()) {
+            $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
+            $this->sections[$this->active]->model->clear();
+            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            return true;
+        }
+
+        $this->miniLog->error($this->i18n->trans('record-save-error'));
+        return false;
     }
 
     /**

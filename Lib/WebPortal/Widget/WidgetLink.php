@@ -27,5 +27,6 @@ use FacturaScripts\Core\Lib\Widget\WidgetLink as ParentClass;
  */
 class WidgetLink extends ParentClass
 {
+
     use VisualItemTrait;
 }

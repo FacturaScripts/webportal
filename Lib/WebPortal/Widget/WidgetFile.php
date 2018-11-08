@@ -18,37 +18,15 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget;
 
-trait VisualItemTrait
+use FacturaScripts\Core\Lib\Widget\WidgetFile as ParentClass;
+
+/**
+ * Description of WidgetFile
+ *
+ * @author Carlos García Gómez
+ */
+class WidgetFile extends ParentClass
 {
 
-    /**
-     * 
-     * @param string $class
-     *
-     * @return string
-     */
-    protected function css($class)
-    {
-        switch ($class) {
-            case 'col':
-                return 'column';
-
-            case 'col-md-':
-                return 'column col-';
-
-            case 'form-control':
-            case 'form-control-file':
-                return 'form-input';
-
-            case 'input-group-prepend':
-                return 'input-group-addon';
-
-            case 'row':
-            case 'form-row':
-                return 'columns mb-2';
-
-            default:
-                return $class;
-        }
-    }
+    use VisualItemTrait;
 }
