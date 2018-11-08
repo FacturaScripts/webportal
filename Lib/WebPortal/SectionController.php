@@ -317,6 +317,18 @@ abstract class SectionController extends PortalController
         return $results;
     }
 
+    /**
+     * Returns true if we can safely edit this model object.
+     *
+     * @param object $model
+     *
+     * @return boolean
+     */
+    protected function checkModelSecurity($model)
+    {
+        return true;
+    }
+
     protected function commonCore()
     {
         $this->setTemplate('Master/SectionController');
@@ -357,7 +369,7 @@ abstract class SectionController extends PortalController
     {
         $model = $this->sections[$this->active]->model;
         $code = $this->request->request->get('code', '');
-        if ($model->loadFromCode($code) && $model->delete()) {
+        if ($model->loadFromCode($code) && $this->checkModelSecurity($model) && $model->delete()) {
             // deleting a single row?
             $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
             return true;
@@ -383,6 +395,13 @@ abstract class SectionController extends PortalController
 
         // loads form data
         $this->sections[$this->active]->processFormData($this->request, 'edit');
+
+        // checks security
+        if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
+            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->sections[$this->active]->model->clear();
+            return false;
+        }
 
         // has PK value been changed?
         $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
@@ -494,6 +513,13 @@ abstract class SectionController extends PortalController
             $model = $this->sections[$this->active]->model;
             // assign a new value
             $this->sections[$this->active]->model->{$model->primaryColumn()} = $model->newCode();
+        }
+
+        // checks security
+        if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
+            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->sections[$this->active]->model->clear();
+            return false;
         }
 
         // save in database
