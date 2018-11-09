@@ -61,16 +61,18 @@ class Init extends InitClass
 
     /**
      * Create contact of all users that contains email.
-     *
-     * @return void
      */
     private function createContact()
     {
         $user = new User();
-        $users = $user->all([new DataBaseWhere('email', 'NULL', 'IS NOT')], [], 0, 0);
-
-        foreach ($users as $user) {
+        $where = [new DataBaseWhere('email', 'NULL', 'IS NOT')];
+        foreach ($user->all($where, [], 0, 0) as $user) {
+            $where2 = [new DataBaseWhere('email', $user->email)];
             $contact = new Contacto();
+            if ($contact->loadFromCode('', $where2)) {
+                continue;
+            }
+
             $contact->descripcion = $user->nick;
             $contact->email = $user->email;
             $contact->nombre = $user->nick;
