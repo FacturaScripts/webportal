@@ -51,4 +51,30 @@ trait VisualItemTrait
                 return $class;
         }
     }
+
+    /**
+     *
+     * @param string $color
+     * @param string $prefix
+     *
+     * @return string
+     */
+    protected function colorToClass($color, $prefix)
+    {
+        switch ($color) {
+            case 'danger':
+                return $prefix . 'error';
+
+            case 'dark':
+            case 'info':
+            case 'light':
+            case 'primary':
+            case 'secondary':
+            case 'success':
+            case 'warning':
+                return $prefix . $color;
+        }
+
+        return '';
+    }
 }
