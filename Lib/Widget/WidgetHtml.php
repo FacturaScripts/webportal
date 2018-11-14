@@ -59,4 +59,9 @@ class WidgetHtml extends WidgetTextarea
     {
         return parent::inputHtml($type, $extraClass);
     }
+
+    protected function show()
+    {
+        return htmlentities(parent::show());
+    }
 }
