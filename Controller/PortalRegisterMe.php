@@ -19,9 +19,10 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
+use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Core\Lib\EmailTools;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -111,13 +112,45 @@ class PortalRegisterMe extends PortalController
 
         $contact->setPassword($newPassword);
         $this->setGeoIpData($contact);
+        
         if ($contact->save()) {
-            $this->updateCookies($contact, true);
+            $contact->loadFromCode('',[new DataBaseWhere('email', $contact->email)]);
+            $url = AppSettings::get('webportal', 'url') . '/ConfirmContact?email=' . $contact->email;
+
+            if (!$this->sendEmail($url, $this->i18n->trans('confirm-email'), $contact->email)) {
+                $contact->delete();
+                $this->miniLog->alert($this->i18n->trans('try-again'));
+                return false;
+            }
             return true;
         }
 
         $this->miniLog->alert($this->i18n->trans('record-save-error'));
         return false;
+    }
+
+    /**
+     * Send and email with data posted from form.
+     *
+     * @param string $body
+     * @param string $subject
+     * @param string $email
+     * 
+     * @return bool
+     */
+    private function sendEmail(string $body, string $subject, string $email)
+    {
+        $emailTools = new EmailTools();
+        $mail = $emailTools->newMail();
+        $mail->Subject = $subject;
+        $mail->msgHTML($body);
+        $mail->addCC($email);
+
+        if (!$emailTools->send($mail)) {
+            return false;
+        } 
+
+        return true;
     }
 
     /**
