@@ -132,36 +132,6 @@ abstract class SectionController extends PortalController
     }
 
     /**
-     * Adds a Edit type section to the controller.
-     *
-     * @param string $sectionName
-     * @param string $modelName
-     * @param string $viewTitle
-     * @param string $viewIcon
-     * @param string $group
-     */
-    protected function addEditSection($sectionName, $modelName, $viewTitle, $viewIcon = 'fas fa-edit', $group = '')
-    {
-        $newSection = new EditSection($sectionName, $viewTitle, self::MODEL_NAMESPACE . $modelName, $viewIcon, $group);
-        $this->addSection($sectionName, $newSection);
-    }
-
-    /**
-     * Adds a EditList type section to the controller.
-     *
-     * @param string $sectionName
-     * @param string $modelName
-     * @param string $viewTitle
-     * @param string $viewIcon
-     * @param string $group
-     */
-    protected function addEditListSection($sectionName, $modelName, $viewTitle, $viewIcon = 'fas fa-edit', $group = '')
-    {
-        $newSection = new EditListSection($sectionName, $viewTitle, self::MODEL_NAMESPACE . $modelName, $viewIcon, $group);
-        $this->addSection($sectionName, $newSection);
-    }
-
-    /**
      * Adds a boolean condition type filter to the ListSection.
      *
      * @param string $sectionName
@@ -317,18 +287,6 @@ abstract class SectionController extends PortalController
         return $results;
     }
 
-    /**
-     * Returns true if we can safely edit this model object.
-     *
-     * @param object $model
-     *
-     * @return boolean
-     */
-    protected function checkModelSecurity($model)
-    {
-        return true;
-    }
-
     protected function commonCore()
     {
         $this->setTemplate('Master/SectionController');
@@ -361,72 +319,6 @@ abstract class SectionController extends PortalController
     }
 
     /**
-     * Action to delete data.
-     *
-     * @return bool
-     */
-    protected function deleteAction()
-    {
-        $model = $this->sections[$this->active]->model;
-        $code = $this->request->request->get('code', '');
-        if ($model->loadFromCode($code) && $this->checkModelSecurity($model) && $model->delete()) {
-            // deleting a single row?
-            $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
-            return true;
-        }
-
-        $this->miniLog->warning($this->i18n->trans('record-deleted-error'));
-        return false;
-    }
-
-    /**
-     * Runs the data edit action.
-     *
-     * @return bool
-     */
-    protected function editAction()
-    {
-        // loads model data
-        $code = $this->request->request->get('code', '');
-        if (!$this->sections[$this->active]->model->loadFromCode($code)) {
-            $this->miniLog->error($this->i18n->trans('record-not-found'));
-            return false;
-        }
-
-        // loads form data
-        $this->sections[$this->active]->processFormData($this->request, 'edit');
-
-        // checks security
-        if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
-            $this->sections[$this->active]->model->clear();
-            return false;
-        }
-
-        // has PK value been changed?
-        $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
-        if ($code != $this->sections[$this->active]->newCode) {
-            $pkColumn = $this->sections[$this->active]->model->primaryColumn();
-            $this->sections[$this->active]->model->{$pkColumn} = $code;
-            // change in database
-            if (!$this->sections[$this->active]->model->changePrimaryColumnValue($this->sections[$this->active]->newCode)) {
-                $this->miniLog->error($this->i18n->trans('record-save-error'));
-                return false;
-            }
-        }
-
-        // save in database
-        if ($this->sections[$this->active]->model->save()) {
-            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-            $this->sections[$this->active]->model->clear();
-            return true;
-        }
-
-        $this->miniLog->error($this->i18n->trans('record-save-error'));
-        return false;
-    }
-
-    /**
      * General operations with the loaded data.
      *
      * @param string $action
@@ -451,18 +343,6 @@ abstract class SectionController extends PortalController
                 $results = $this->autocompleteAction();
                 $this->response->setContent(json_encode($results));
                 return false;
-
-            case 'delete':
-                $this->deleteAction();
-                break;
-
-            case 'edit':
-                $this->editAction();
-                break;
-
-            case 'insert':
-                $this->insertAction();
-                break;
         }
 
         return true;
@@ -494,44 +374,6 @@ abstract class SectionController extends PortalController
             }
         }
         return $result;
-    }
-
-    /**
-     * Runs data insert action.
-     */
-    protected function insertAction()
-    {
-        // loads form data
-        $this->sections[$this->active]->processFormData($this->request, 'edit');
-        if ($this->sections[$this->active]->model->exists()) {
-            $this->miniLog->error($this->i18n->trans('duplicate-record'));
-            return false;
-        }
-
-        // empty primary key?
-        if (empty($this->sections[$this->active]->model->primaryColumnValue())) {
-            $model = $this->sections[$this->active]->model;
-            // assign a new value
-            $this->sections[$this->active]->model->{$model->primaryColumn()} = $model->newCode();
-        }
-
-        // checks security
-        if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
-            $this->sections[$this->active]->model->clear();
-            return false;
-        }
-
-        // save in database
-        if ($this->sections[$this->active]->model->save()) {
-            $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
-            $this->sections[$this->active]->model->clear();
-            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-            return true;
-        }
-
-        $this->miniLog->error($this->i18n->trans('record-save-error'));
-        return false;
     }
 
     /**
