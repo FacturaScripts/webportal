@@ -114,7 +114,7 @@ class PortalRegisterMe extends PortalController
                 return false;
             }
         } else {
-            $this->miniLog->error($this->i18n->trans('email-not-exist'));
+            $this->miniLog->error($this->i18n->trans('error-verify-contact'));
             return false;
         }
 
