@@ -80,14 +80,12 @@ class PortalRegisterMe extends PortalController
         switch ($action) {
             case 'register':
                 return $this->registerContact();
-                break;
             case 'activate':
                 if ($this->activeContact()) {
                     $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
                     $this->response->headers->set('Refresh', '0; ' . $url);
                 }
                 return false;
-                break;
         }
 
         return true;
@@ -101,12 +99,13 @@ class PortalRegisterMe extends PortalController
     protected function activeContact()
     {
         $email = $this->request->get('email', '');
-        if (empty($email)) {
+        $cod = $this->request->get('cod', '');
+        if (empty($email || empty($cod))) {
             return false;
         }
 
         $contact = new Contacto();
-        if($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+        if($contact->loadFromCode('', [new DataBaseWhere('email', $email)]) && $cod === sha1($contact->idcontacto + $contact->password)) {
             $contact->verificado = true;
             if($contact->save()) {
                 $this->updateCookies($contact, true);
@@ -148,7 +147,8 @@ class PortalRegisterMe extends PortalController
         
         if ($contact->save()) {
             $contact->loadFromCode('',[new DataBaseWhere('email', $contact->email)]);
-            $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate&email=' . $contact->email;
+            $url = AppSettings::get('webportal', 'url');
+            $url .= '/PortalRegisterMe?action=activate&cod=' . sha1($contact->idcontacto + $contact->password) . '&email=' . $contact->email;
             $body = $this->i18n->trans('url-verification'). ': ' . $url;
             if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $contact->email)) {
                 $contact->delete();
