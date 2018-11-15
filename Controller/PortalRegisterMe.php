@@ -111,9 +111,12 @@ class PortalRegisterMe extends PortalController
             if($contact->save()) {
                 $this->updateCookies($contact, true);
             } else {
-                $this->miniLog->alert($this->i18n->trans('error-verificate-contact'));
+                $this->miniLog->error($this->i18n->trans('error-verify-contact'));
                 return false;
             }
+        } else {
+            $this->miniLog->error($this->i18n->trans('email-not-exist'));
+            return false;
         }
 
         return true;
@@ -146,13 +149,13 @@ class PortalRegisterMe extends PortalController
         if ($contact->save()) {
             $contact->loadFromCode('',[new DataBaseWhere('email', $contact->email)]);
             $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate&email=' . $contact->email;
-
-            if (!$this->sendEmailConfirmation($url, $this->i18n->trans('confirm-email'), $contact->email)) {
+            $body = $this->i18n->trans('url-verification'). ': ' . $url;
+            if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $contact->email)) {
                 $contact->delete();
                 $this->miniLog->alert($this->i18n->trans('try-again'));
                 return false;
             }
-            $this->miniLog->advice($this->i18n->trans('confirm-email'));
+            $this->miniLog->notice($this->i18n->trans('confirm-email'));
             return true;
         }
 
