@@ -79,11 +79,41 @@ class PortalRegisterMe extends PortalController
     {
         switch ($action) {
             case 'register':
-                if ($this->registerContact()) {
+                return $this->registerContact();
+                break;
+            case 'activate':
+                if ($this->activeContact()) {
                     $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
                     $this->response->headers->set('Refresh', '0; ' . $url);
                 }
                 return false;
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * Active the contact using the url sended previously.
+     * 
+     * @return bool
+     */
+    protected function activeContact()
+    {
+        $email = $this->request->get('email', '');
+        if (empty($email)) {
+            return false;
+        }
+
+        $contact = new Contacto();
+        if($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            $contact->verificado = true;
+            if($contact->save()) {
+                $this->updateCookies($contact, true);
+            } else {
+                $this->miniLog->alert($this->i18n->trans('error-verificate-contact'));
+                return false;
+            }
         }
 
         return true;
@@ -115,13 +145,14 @@ class PortalRegisterMe extends PortalController
         
         if ($contact->save()) {
             $contact->loadFromCode('',[new DataBaseWhere('email', $contact->email)]);
-            $url = AppSettings::get('webportal', 'url') . '/ConfirmContact?email=' . $contact->email;
+            $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate&email=' . $contact->email;
 
-            if (!$this->sendEmail($url, $this->i18n->trans('confirm-email'), $contact->email)) {
+            if (!$this->sendEmailConfirmation($url, $this->i18n->trans('confirm-email'), $contact->email)) {
                 $contact->delete();
                 $this->miniLog->alert($this->i18n->trans('try-again'));
                 return false;
             }
+            $this->miniLog->advice($this->i18n->trans('confirm-email'));
             return true;
         }
 
@@ -138,7 +169,7 @@ class PortalRegisterMe extends PortalController
      * 
      * @return bool
      */
-    private function sendEmail(string $body, string $subject, string $email)
+    private function sendEmailConfirmation(string $body, string $subject, string $email)
     {
         $emailTools = new EmailTools();
         $mail = $emailTools->newMail();
