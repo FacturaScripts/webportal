@@ -31,11 +31,12 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of PortalRegisterMe
  *
- * @author Francesc Pineda Segarra <francesc.pineda@x-netdigital.com>
- * @author Cristo M. Estévez Hernández <cristom.estevez@gmail.com>
+ * @author Francesc Pineda Segarra      <francesc.pineda@x-netdigital.com>
+ * @author Cristo M. Estévez Hernández  <cristom.estevez@gmail.com>
  */
 class PortalRegisterMe extends PortalController
 {
+
     /**
      * New contact
      *
@@ -66,13 +67,38 @@ class PortalRegisterMe extends PortalController
         parent::publicCore($response);
         $this->setTemplate('PortalRegisterMe');
 
-        // Get any operations that have to be performed
         $action = $this->request->get('action', '');
+        $this->execPreviousAction($action);
+    }
 
-        // Run operations on the data before reading it
-        if (!$this->execPreviousAction($action)) {
-            return;
+    /**
+     * Active the contact using the url sended previously.
+     * 
+     * @return bool
+     */
+    protected function activeContact()
+    {
+        $cod = $this->request->get('cod', '');
+        $email = $this->request->get('email', '');
+        if (empty($email) || empty($cod)) {
+            return false;
         }
+
+        $contact = new Contacto();
+        $where = [new DataBaseWhere('email', $email)];
+        if ($contact->loadFromCode('', $where) && $cod === sha1($contact->idcontacto . $contact->password)) {
+            $contact->verificado = true;
+            if ($contact->save()) {
+                $this->updateCookies($contact, true);
+                return true;
+            }
+
+            $this->miniLog->error($this->i18n->trans('data-save-error'));
+            return false;
+        }
+
+        $this->miniLog->error($this->i18n->trans('error-verify-contact'));
+        return false;
     }
 
     /**
@@ -85,50 +111,25 @@ class PortalRegisterMe extends PortalController
     protected function execPreviousAction($action)
     {
         switch ($action) {
-            case 'register':
-                $this->newContact = new Contacto();
-                return $this->registerContact();
             case 'activate':
                 if ($this->activeContact()) {
                     $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
                     $this->response->headers->set('Refresh', '0; ' . $url);
                 }
                 return false;
+
+            case 'register':
+                $this->newContact = new Contacto();
+                return $this->registerContact();
         }
 
         return true;
     }
 
     /**
-     * Active the contact using the url sended previously.
      * 
      * @return bool
      */
-    protected function activeContact()
-    {
-        $email = $this->request->get('email', '');
-        $cod = $this->request->get('cod', '');
-        if (empty($email) || empty($cod)) {
-            return false;
-        }
-
-        $contact = new Contacto();
-        if($contact->loadFromCode('', [new DataBaseWhere('email', $email)]) && $cod === sha1($contact->idcontacto + $contact->password)) {
-            $contact->verificado = true;
-            if($contact->save()) {
-                $this->updateCookies($contact, true);
-            } else {
-                $this->miniLog->error($this->i18n->trans('error-verify-contact'));
-                return false;
-            }
-        } else {
-            $this->miniLog->error($this->i18n->trans('error-verify-contact'));
-            return false;
-        }
-
-        return true;
-    }
-
     protected function registerContact(): bool
     {
         $email = $this->request->request->get('email');
@@ -142,7 +143,7 @@ class PortalRegisterMe extends PortalController
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
         $this->newContact->email = $email;
-        
+
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
         if (empty($newPassword) || $newPassword !== $newPassword2) {
@@ -152,18 +153,19 @@ class PortalRegisterMe extends PortalController
 
         $this->newContact->setPassword($newPassword);
         $this->setGeoIpData($this->newContact);
-        
+
         if ($this->newContact->save()) {
-            $this->newContact->loadFromCode('',[new DataBaseWhere('email', $this->newContact->email)]);
-            $url = AppSettings::get('webportal', 'url');
-            $url .= '/PortalRegisterMe?action=activate&cod=' . sha1($this->newContact->idcontacto + $this->newContact->password) . '&email=' . $this->newContact->email;
-            $body = $this->i18n->trans('url-verification'). ': ' . $url;
-            
+            $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate'
+                . '&cod=' . sha1($this->newContact->idcontacto . $this->newContact->password)
+                . '&email=' . $this->newContact->email;
+            $body = $this->i18n->trans('verification-url') . ': ' . $url;
+
             if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $this->newContact->email)) {
                 $this->newContact->delete();
                 $this->miniLog->alert($this->i18n->trans('try-again'));
                 return false;
             }
+
             $this->miniLog->notice($this->i18n->trans('confirm-email'));
             return true;
         }
@@ -189,7 +191,7 @@ class PortalRegisterMe extends PortalController
         $mail->msgHTML($body);
         $mail->addCC($email);
 
-       return $emailTools->send($mail);
+        return $emailTools->send($mail);
     }
 
     /**
