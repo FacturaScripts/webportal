@@ -100,7 +100,7 @@ class PortalRegisterMe extends PortalController
     {
         $email = $this->request->get('email', '');
         $cod = $this->request->get('cod', '');
-        if (empty($email || empty($cod))) {
+        if (empty($email) || empty($cod)) {
             return false;
         }
 
@@ -172,7 +172,7 @@ class PortalRegisterMe extends PortalController
      * 
      * @return bool
      */
-    private function sendEmailConfirmation(string $body, string $subject, string $email)
+    protected function sendEmailConfirmation(string $body, string $subject, string $email)
     {
         $emailTools = new EmailTools();
         $mail = $emailTools->newMail();
@@ -180,11 +180,7 @@ class PortalRegisterMe extends PortalController
         $mail->msgHTML($body);
         $mail->addCC($email);
 
-        if (!$emailTools->send($mail)) {
-            return false;
-        } 
-
-        return true;
+       return $emailTools->send($mail);
     }
 
     /**
