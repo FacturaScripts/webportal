@@ -32,9 +32,16 @@ use Symfony\Component\HttpFoundation\Response;
  * Description of PortalRegisterMe
  *
  * @author Francesc Pineda Segarra <francesc.pineda@x-netdigital.com>
+ * @author Cristo M. Estévez Hernández <cristom.estevez@gmail.com>
  */
 class PortalRegisterMe extends PortalController
 {
+    /**
+     * New contact
+     *
+     * @var Contacto
+     */
+    protected $newContact;
 
     /**
      * Runs the controller's private logic.
@@ -79,6 +86,7 @@ class PortalRegisterMe extends PortalController
     {
         switch ($action) {
             case 'register':
+                $this->newContact = new Contacto();
                 return $this->registerContact();
             case 'activate':
                 if ($this->activeContact()) {
@@ -123,18 +131,18 @@ class PortalRegisterMe extends PortalController
 
     protected function registerContact(): bool
     {
-        $contact = new Contacto();
         $email = $this->request->request->get('email');
-        if ($contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+        if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
             return false;
         }
 
         $emailData = \explode('@', $email);
-        $contact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
-        $contact->apellidos = $this->request->request->get('surname', '');
-        $contact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
-        $contact->email = $email;
+        $this->newContact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
+        $this->newContact->apellidos = $this->request->request->get('surname', '');
+        $this->newContact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
+        $this->newContact->email = $email;
+        
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
         if (empty($newPassword) || $newPassword !== $newPassword2) {
@@ -142,16 +150,17 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
-        $contact->setPassword($newPassword);
-        $this->setGeoIpData($contact);
+        $this->newContact->setPassword($newPassword);
+        $this->setGeoIpData($this->newContact);
         
-        if ($contact->save()) {
-            $contact->loadFromCode('',[new DataBaseWhere('email', $contact->email)]);
+        if ($this->newContact->save()) {
+            $this->newContact->loadFromCode('',[new DataBaseWhere('email', $this->newContact->email)]);
             $url = AppSettings::get('webportal', 'url');
-            $url .= '/PortalRegisterMe?action=activate&cod=' . sha1($contact->idcontacto + $contact->password) . '&email=' . $contact->email;
+            $url .= '/PortalRegisterMe?action=activate&cod=' . sha1($this->newContact->idcontacto + $this->newContact->password) . '&email=' . $this->newContact->email;
             $body = $this->i18n->trans('url-verification'). ': ' . $url;
-            if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $contact->email)) {
-                $contact->delete();
+            
+            if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $this->newContact->email)) {
+                $this->newContact->delete();
                 $this->miniLog->alert($this->i18n->trans('try-again'));
                 return false;
             }
