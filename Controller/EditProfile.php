@@ -98,7 +98,7 @@ class EditProfile extends SectionController
     protected function createSections()
     {
         $this->fixedSection();
-        $this->addHtmlSection('profile', 'profile', 'Section/Profile');
+        $this->addHtmlSection('profile', 'profile', 'Section/EditProfile');
     }
 
     /**

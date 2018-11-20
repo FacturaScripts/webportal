@@ -166,7 +166,7 @@ class PortalRegisterMe extends PortalController
                 return false;
             }
 
-            $this->miniLog->notice($this->i18n->trans('confirm-email'));
+            $this->miniLog->notice($this->i18n->trans('activation-email-sent'));
             return true;
         }
 
