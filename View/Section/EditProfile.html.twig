@@ -7,7 +7,7 @@
                 <span class="label">{{ fsc.contact.empresa }}</span>
                 <br/>
             {% endif %}
-            <img src="{{ fsc.getGravatar(fsc.contact.email) }}" alt="{{ fsc.contact.fullName() }}" class="custom-img-responsive"/>
+            <img src="{{ fsc.contact.gravatar() }}" alt="{{ fsc.contact.fullName() }}" class="custom-img-responsive"/>
             <br/>
             <a href="https://es.gravatar.com/" target="_blank" rel="nofollow">
                 {{ i18n.trans('edit') }}

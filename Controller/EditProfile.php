@@ -40,18 +40,6 @@ class EditProfile extends SectionController
     }
 
     /**
-     * 
-     * @param string $email
-     * @param int    $size
-     * 
-     * @return string
-     */
-    public function getGravatar($email, $size = 80): string
-    {
-        return "https://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?s=" . $size;
-    }
-
-    /**
      * Check if password if valid. If the user don´t write nothing, the password is the same and storage the rest of the changes.
      *
      * @return boolean
