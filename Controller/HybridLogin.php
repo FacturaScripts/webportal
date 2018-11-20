@@ -186,7 +186,7 @@ class HybridLogin extends PortalController
             return false;
         }
 
-        $email = $this->request->request->get('fsContact', '');
+        $email = \strtolower($this->request->request->get('fsContact', ''));
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->miniLog->alert($this->i18n->trans('not-valid-email', ['%email%' => $email]));
             return false;
