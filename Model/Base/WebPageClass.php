@@ -119,6 +119,10 @@ abstract class WebPageClass extends ModelClass
     public function test()
     {
         $this->lastmod = (true === $this->lastmoddisable) ? $this->lastmod : date('d-m-Y H:i:s');
+        if (empty($this->creationdate)) {
+            $this->creationdate = date('d-m-Y');
+        }
+
         return parent::test();
     }
 }
