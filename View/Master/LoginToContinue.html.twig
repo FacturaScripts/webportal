@@ -6,45 +6,53 @@
         <div class="container grid-lg">
             <div class="columns">
                 <div class="column col-12">
-                    <div class="empty">
-                        <div class="empty-icon">
-                            <i class="fas fa-user-circle fa-3x" aria-hidden="true"></i>
+                    {% if fsc.contact %}
+                        <div class="empty">
+                            <div class="empty-icon">
+                                <i class="fas fa-check-circle fa-5x" aria-hidden="true"></i>
+                            </div>
                         </div>
-                        <h1 class="empty-title h5">{{ i18n.trans('login-to-continue') }}</h1>
-                        <p class="empty-subtitle">{{ i18n.trans('login-to-continue-paragraph') }}</p>
-                        <div class="empty-action">
-                            {% if appSettings.get('webportal','fbappid','') != '' %}
-                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
-                                </a>
-                                <br/>
-                            {% endif %}
-                            {% if appSettings.get('webportal','googleappid','') != '' %}
-                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
-                                </a>
-                                <br/>
-                            {% endif %}
-                            {% if appSettings.get('webportal','twitterappid','') != '' %}
-                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
-                                    <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
-                                </a>
-                                <br/>
-                            {% endif %}
-                            {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                                <div class="btn-group btn-group-block">
-                                    <a href="#" class="btn btn-primary" onclick="return showModal('loginModal');">
-                                        <i class="fas fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
+                    {% else %}
+                        <div class="empty">
+                            <div class="empty-icon">
+                                <i class="fas fa-user-circle fa-3x" aria-hidden="true"></i>
+                            </div>
+                            <h1 class="empty-title h5">{{ i18n.trans('login-to-continue') }}</h1>
+                            <p class="empty-subtitle">{{ i18n.trans('login-to-continue-paragraph') }}</p>
+                            <div class="empty-action">
+                                {% if appSettings.get('webportal','fbappid','') != '' %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
                                     </a>
-                                    {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                        <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                            <i class="fas fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('register-me') }}
+                                    <br/>
+                                {% endif %}
+                                {% if appSettings.get('webportal','googleappid','') != '' %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
+                                    </a>
+                                    <br/>
+                                {% endif %}
+                                {% if appSettings.get('webportal','twitterappid','') != '' %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                                    </a>
+                                    <br/>
+                                {% endif %}
+                                {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                                    <div class="btn-group btn-group-block">
+                                        <a href="#" class="btn btn-primary" onclick="return showModal('loginModal');">
+                                            <i class="fas fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
                                         </a>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
+                                        {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+                                            <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                                <i class="fas fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('register-me') }}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

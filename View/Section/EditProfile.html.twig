@@ -1,12 +1,8 @@
 <div class="container">
     <div class="columns">
         <div class="column col-2 col-xs-12 text-right">
-            <span class="label">{{ fsc.contact.fullName() }}</span>
+            <span class="label">{{ fsc.contact.alias() }}</span>
             <br/>
-            {% if fsc.contact.empresa %}
-                <span class="label">{{ fsc.contact.empresa }}</span>
-                <br/>
-            {% endif %}
             <img src="{{ fsc.contact.gravatar() }}" alt="{{ fsc.contact.fullName() }}" class="custom-img-responsive"/>
             <br/>
             <a href="https://es.gravatar.com/" target="_blank" rel="nofollow">
@@ -15,7 +11,7 @@
         </div>
         <div class="column">
             <h1 class="h3">{{ fsc.contact.email }}</h1>
-            <form action="" method="post">
+            <form method="post">
                 <input type="hidden" name="action" value="edit"/>
                 <div class="columns">
                     <div class="column col-6">
