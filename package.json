@@ -18,6 +18,7 @@
   "homepage": "https://github.com/FacturaScripts/webportal#readme",
   "dependencies": {
     "spectre.css": "^0.5.x",
-    "summernote": "^0.8.x"
+    "summernote": "^0.8.x",
+    "easymde": "^2.4.x"
   }
 }

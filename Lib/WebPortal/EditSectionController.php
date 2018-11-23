@@ -30,7 +30,7 @@ abstract class EditSectionController extends SectionController
 
     abstract public function contactCanSee();
 
-    abstract public function getMainModel();
+    abstract public function getMainModel($reload = false);
 
     /**
      * Adds a Edit type section to the controller.
