@@ -8,6 +8,7 @@
         }
     ],
     "require": {
+        "erusev/parsedown": "dev-master",
         "hybridauth/hybridauth": "dev-master"
     }
 }

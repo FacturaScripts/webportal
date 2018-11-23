@@ -18,6 +18,8 @@
  */
 namespace FacturaScripts\Plugins\webportal;
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
