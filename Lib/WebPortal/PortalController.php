@@ -128,6 +128,10 @@ class PortalController extends Controller
         $contact = new Contacto();
         if (!empty($this->user->email) && $contact->loadFromCode('', [new DataBaseWhere('email', $this->user->email)])) {
             $this->contact = $contact;
+            if (\time() - \strtotime($this->contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
+                $this->contact->lastactivity = date('d-m-Y H:i:s');
+                $this->contact->save();
+            }
         }
 
         $this->processWebPage();
