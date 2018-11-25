@@ -17,7 +17,7 @@
  */
 
 $(document).ready(function () {
-    $('.markdown-editor').each(function () {
+    $(".markdown-editor").each(function () {
         var easymde = new EasyMDE({element: $(this)[0]});
     });
 });

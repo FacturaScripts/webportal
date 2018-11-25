@@ -17,5 +17,5 @@
  */
 
 $(document).ready(function () {
-    $('.widget-html').summernote();
+    $(".widget-html").summernote();
 });

@@ -43,7 +43,7 @@ class SearchEngine
     {
         $results = [];
         foreach ($this->getFinalQueries($query) as $string) {
-            $this->findResults($results, $query);
+            $this->findResults($results, $string);
         }
 
         $this->sort($results);
