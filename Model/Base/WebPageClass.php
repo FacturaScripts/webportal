@@ -61,7 +61,7 @@ abstract class WebPageClass extends ModelClass
      *
      * @var bool
      */
-    private $lastmoddisable;
+    protected $lastmoddisable;
 
     /**
      * Position number.
