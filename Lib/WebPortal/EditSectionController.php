@@ -18,6 +18,8 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Description of EditSectionController
  *
@@ -83,6 +85,7 @@ abstract class EditSectionController extends SectionController
     {
         if (!$this->contactCanEdit()) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-delete'));
+            $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
 
@@ -107,6 +110,7 @@ abstract class EditSectionController extends SectionController
     {
         if (!$this->contactCanEdit()) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
 
@@ -177,6 +181,7 @@ abstract class EditSectionController extends SectionController
     {
         if (!$this->contactCanEdit()) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
 

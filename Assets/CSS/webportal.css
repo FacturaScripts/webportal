@@ -66,6 +66,10 @@ p {
     word-wrap: break-word;
 }
 
+.ui-autocomplete {
+    z-index: 500;
+}
+
 @media screen and (max-width: 600px) {
     .custom-scroll {
         overflow-x: auto;
