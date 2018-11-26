@@ -264,6 +264,13 @@ class PortalController extends Controller
 
         $this->menuComposer->set($this->webPage);
         $this->pageComposer->set($this->webPage);
+
+        /// txt block?
+        foreach ($this->pageComposer->getBlocks('txt') as $block) {
+            $this->setTemplate(false);
+            $this->response->setContent($block->content);
+            return;
+        }
     }
 
     /**

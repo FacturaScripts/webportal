@@ -34,6 +34,7 @@
                     <values title="javascript">javascript</values>
                     <values title="javascriptWithCookies">javascriptWithCookies</values>
                     <values title="footer">footer</values>
+                    <values title="txt">txt</values>
                 </widget>
             </column>
             <column name="idpage" title="page" numcolumns="4" order="120">

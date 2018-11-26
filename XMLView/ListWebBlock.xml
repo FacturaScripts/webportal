@@ -45,6 +45,7 @@
             <option color="warning">css</option>
             <option color="warning">javascript</option>
             <option color="warning">javascriptWithCookies</option>
+            <option color="warning">txt</option>
             <option color="success">body</option>
             <option color="success">bodyContainer</option>
         </row>
