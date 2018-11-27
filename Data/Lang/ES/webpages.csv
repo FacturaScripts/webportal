@@ -2,3 +2,4 @@ creationdate;customcontroller;description;icon;idpage;langcode;lastip;lastmod;no
 NULL;NULL;"Home description";"fas fa-file";"1";"es";NULL;NULL;"0";"100";"/";"Home";"0";"1";"Home";"0"
 NULL;NULL;"Cookies description";"fas fa-file-o";"2";"es";NULL;NULL;"1";"100";"/cookies";"Cookies";"1";"0";"Cookies";"0"
 NULL;NULL;"Privacy description";"fas fa-file-o";"3";"es";NULL;NULL;"1";"100";"/privacy";"Privacy";"1";"0";"Privacy";"0"
+NULL;"Sitemap";"Sitemap";"fas fa-file";"4";"es";NULL;NULL;"1";"100";"/sitemap.xml";"Sitemap";"0";"0";"Sitemap";"0"

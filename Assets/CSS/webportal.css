@@ -33,6 +33,10 @@
     height: auto;
 }
 
+.font-weight-bold {
+    font-weight: bold;
+}
+
 .footer-section {
     padding: 20px 10px 50px 10px;
     background-color: #F8F9FA;
