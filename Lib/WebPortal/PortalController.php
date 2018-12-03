@@ -268,6 +268,7 @@ class PortalController extends Controller
         /// txt block?
         foreach ($this->pageComposer->getBlocks('txt') as $block) {
             $this->setTemplate(false);
+            $this->response->headers->set('Content-type', 'text/plain');
             $this->response->setContent($block->content);
             return;
         }

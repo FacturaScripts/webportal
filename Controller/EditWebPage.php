@@ -30,6 +30,10 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 class EditWebPage extends ExtendedController\EditController
 {
 
+    /**
+     * 
+     * @return string
+     */
     public function getModelClassName()
     {
         return 'WebPage';
