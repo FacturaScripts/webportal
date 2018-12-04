@@ -333,7 +333,7 @@ abstract class SectionController extends PortalController
      *
      * @param string $action
      *
-     * @return boolean
+     * @return bool
      */
     protected function execPreviousAction(string $action)
     {

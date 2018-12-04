@@ -42,7 +42,7 @@ class EditProfile extends SectionController
     /**
      * Check if password if valid. If the user don´t write nothing, the password is the same and storage the rest of the changes.
      *
-     * @return boolean
+     * @return bool
      */
     protected function changedPassword(): bool
     {
@@ -65,7 +65,7 @@ class EditProfile extends SectionController
     /**
      * Storage the personal data 
      *
-     * @return boolean
+     * @return bool
      */
     protected function changedPersonalData()
     {
@@ -93,7 +93,7 @@ class EditProfile extends SectionController
      * 
      * @param string $action
      *
-     * @return boolean
+     * @return bool
      */
     protected function execPreviousAction(string $action)
     {

@@ -69,7 +69,7 @@ abstract class EditSectionController extends SectionController
      *
      * @param object $model
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkModelSecurity($model)
     {
