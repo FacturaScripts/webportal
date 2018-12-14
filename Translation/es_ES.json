@@ -60,5 +60,9 @@
     "unmatched": "Sin coincidencia",
     "visit-counter": "Contador de visitas",
     "web-block": "Bloque web",
-    "webportal": "WebPortal"
+    "webportal": "WebPortal",
+    "activation-email-sent": "Correo de activación enviado correctamente",
+    "login-contact-not-found": "El contacto del login no encontrado",
+    "verification-url": "URL a verificar",
+    "sections": "Secciones"
 }

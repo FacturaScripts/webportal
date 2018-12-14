@@ -59,5 +59,9 @@
     "unmatched": "Unmatched",
     "visit-counter": "Visit counter",
     "web-block": "Web block",
-    "webportal": "WebPortal"
+    "webportal": "WebPortal",
+    "activation-email-sent": "Activation email sent correctly",
+    "login-contact-not-found": "Login contact not found",
+    "verification-url": "URL verification",
+    "sections": "Sections"
 }
