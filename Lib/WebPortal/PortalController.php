@@ -202,7 +202,7 @@ class PortalController extends Controller
             return false;
         }
 
-        $this->miniLog->alert($this->i18n->trans('login-contact-not-found'));
+        $this->miniLog->debug($this->i18n->trans('login-contact-not-found'));
         return false;
     }
 
