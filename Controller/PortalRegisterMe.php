@@ -73,7 +73,7 @@ class PortalRegisterMe extends PortalController
 
     /**
      * Active the contact using the url sended previously.
-     * 
+     *
      * @return bool
      */
     protected function activeContact()
@@ -127,7 +127,7 @@ class PortalRegisterMe extends PortalController
     }
 
     /**
-     * 
+     *
      * @return bool
      */
     protected function registerContact(): bool
@@ -162,7 +162,7 @@ class PortalRegisterMe extends PortalController
 
             if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $this->newContact->email)) {
                 $this->newContact->delete();
-                $this->miniLog->alert($this->i18n->trans('try-again'));
+                $this->miniLog->alert($this->i18n->trans('activation-email-sent-error'));
                 return false;
             }
 
@@ -180,7 +180,7 @@ class PortalRegisterMe extends PortalController
      * @param string $body
      * @param string $subject
      * @param string $email
-     * 
+     *
      * @return bool
      */
     protected function sendEmailConfirmation(string $body, string $subject, string $email)

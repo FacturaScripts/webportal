@@ -61,6 +61,7 @@
     "web-block": "Web block",
     "webportal": "WebPortal",
     "activation-email-sent": "Activation email sent correctly",
+    "activation-email-sent-error": "Can't sent activation email",
     "login-contact-not-found": "Login contact not found",
     "verification-url": "URL verification",
     "sections": "Sections"
