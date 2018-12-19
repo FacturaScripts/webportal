@@ -21,6 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\EmailTools;
+use FacturaScripts\Dinamic\Lib\IPFilter;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -37,6 +38,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class HybridLogin extends PortalController
 {
+
+    /**
+     *
+     * @var IPFilter
+     */
+    protected $ipFilter;
+
+    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    {
+        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->ipFilter = new IPFilter();
+    }
 
     /**
      * Execute the public part of the controller.
@@ -61,27 +74,23 @@ class HybridLogin extends PortalController
         $prov = $this->request->get('prov', '');
         switch ($prov) {
             case 'facebook':
-                $this->facebookLogin();
-                break;
+                return $this->facebookLogin();
 
             case 'google':
-                $this->googleLogin();
-                break;
+                return $this->googleLogin();
 
             case 'twitter':
-                $this->twitterLogin();
-                break;
+                return $this->twitterLogin();
 
             case 'fs':
-                $this->contactLogin();
-                break;
+                return $this->contactLogin();
 
             case 'recover':
-                $this->recoverAccount();
-                break;
+                return $this->recoverAccount();
 
             default:
                 $this->miniLog->alert('no-login-provider');
+                $this->ipFilter->setAttempt($this->request->getClientIp());
                 break;
         }
     }
@@ -92,7 +101,8 @@ class HybridLogin extends PortalController
     private function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->alert($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
+            $this->miniLog->warning($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
+            $this->ipFilter->setAttempt($this->request->getClientIp());
             return;
         }
 
@@ -125,12 +135,13 @@ class HybridLogin extends PortalController
         $email = $this->request->get('email', '');
         $contact = new Contacto();
         if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            $this->ipFilter->setAttempt($this->request->getClientIp());
             return false;
         }
 
         $baseUrl = AppSettings::get('webportal', 'url');
 
-        /// no jey? then send email
+        /// no key? then send email
         if (empty($this->request->get('key', ''))) {
             /// Send email to contact with link
             $logKey = urlencode(base64_encode($contact->logkey));
@@ -169,6 +180,7 @@ class HybridLogin extends PortalController
         }
 
         $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
+        $this->ipFilter->setAttempt($this->request->getClientIp());
         return false;
     }
 
@@ -185,13 +197,15 @@ class HybridLogin extends PortalController
 
         $email = \strtolower($this->request->request->get('fsContact', ''));
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->alert($this->i18n->trans('not-valid-email', ['%email%' => $email]));
+            $this->miniLog->warning($this->i18n->trans('not-valid-email', ['%email%' => $email]));
+            $this->ipFilter->setAttempt($this->request->getClientIp());
             return false;
         }
 
         $contact = new Contacto();
         if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
-            $this->miniLog->alert($this->i18n->trans('email-not-registered'));
+            $this->miniLog->warning($this->i18n->trans('email-not-registered'));
+            $this->ipFilter->setAttempt($this->request->getClientIp());
             return false;
         }
 
@@ -207,6 +221,7 @@ class HybridLogin extends PortalController
         }
 
         $this->miniLog->alert($this->i18n->trans('login-password-fail'));
+        $this->ipFilter->setAttempt($this->request->getClientIp());
 
         $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email=' . urlencode($email);
         $this->miniLog->info($this->i18n->trans('recover-your-account-access', ['%link%' => $link]));
@@ -234,6 +249,7 @@ class HybridLogin extends PortalController
             $this->checkContact($userProfile);
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
+            $this->ipFilter->setAttempt($this->request->getClientIp());
         }
     }
 
@@ -258,6 +274,7 @@ class HybridLogin extends PortalController
             $this->checkContact($userProfile);
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
+            $this->ipFilter->setAttempt($this->request->getClientIp());
         }
     }
 
@@ -300,6 +317,7 @@ class HybridLogin extends PortalController
             $this->checkContact($userProfile);
         } catch (\Exception $exc) {
             $this->miniLog->error($exc->getMessage());
+            $this->ipFilter->setAttempt($this->request->getClientIp());
         }
     }
 }
