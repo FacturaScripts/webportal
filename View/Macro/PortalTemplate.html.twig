@@ -64,23 +64,29 @@
                     </ul>
                     <div id="divLoginModalCustomers">
                         <br/>
-                        {% if appSettings.get('webportal','fbappid','') != '' %}
+                        {% set facebook = appSettings.get('webportal','fbappid','') %}
+                        {% set google = appSettings.get('webportal','googleappid','') %}
+                        {% set twitter = appSettings.get('webportal','twitterappid','') %}
+                        {% set fsLogin = appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                        {% if facebook %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','googleappid','') != '' %}
+                        {% if google %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','twitterappid','') != '' %}
+                        {% if twitter %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                            <br/>
+                        {% if fsLogin and (facebook or google or twitter) %}
+                            <p>{{ i18n.trans('login-with-social-or-email') }}</p>
+                        {% endif %}
+                        {% if fsLogin %}
                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -97,6 +103,7 @@
                                         </span>
                                         <input type="password" name="fsContactPass" id="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
                                     </div>
+                                    <p class="form-input-hint">{{ i18n.trans('webportal-forgotten-password') }}</p>
                                 </div>
                                 <button type="submit" class="btn btn-block btn-primary">
                                     {{ i18n.trans('login') }}

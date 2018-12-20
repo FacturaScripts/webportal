@@ -26,8 +26,9 @@
     "javascript": "JavaScript",
     "javascriptWithCookies": "JavaScript con cookies",
     "last-update": "Última actualización",
-    "login-to-continue": "Identifícate para continuar",
-    "login-to-continue-paragraph": "Necesitas identificarte para continuar con esta acción",
+    "login-to-continue": "Identifíquese para continuar",
+    "login-to-continue-paragraph": "Necesita identificarse para continuar con esta acción",
+    "login-with-social-or-email": "Identifíquese mediante sus redes sociales o bien con su email.",
     "local-login": "Login local",
     "meta": "Meta",
     "new-registrations-are-closed": "Nuevos registros están cerrados actualmente",
@@ -38,8 +39,8 @@
     "preview": "Previsualizar",
     "query": "Consulta",
     "read-more": "Leer más",
-    "recover-your-account": "Recuperación de acceso a tu cuenta",
-    "recover-your-account-access": "Recuperar acceso a tu cuenta, pulsa <a href='%link%'>aquí</a> para recibir un email con el enlace",
+    "recover-your-account": "Recuperación de acceso a su cuenta",
+    "recover-your-account-access": "¿Ha olvidado la contraseña? Pulse <a href='%link%'>aquí</a> para recibir un email con el enlace.",
     "recover-your-account-body": "Pulsa en <a href='%link%'>este enlace</a> para recuperar el acceso a tu cuenta, cuando estés identificado cambia tu contraseña.",
     "recovered-access-go-to-account": "Has recuperado el acceso a tu cuenta, ve a <a href='%link%'>tu perfil</a> y actualiza la contraseña.",
     "recovery-timed-out": "Recuperación caducada o ya realizada. Si no has sido tu, <a href='%link%'>reestablece tu contraseña</a>.",
@@ -53,5 +54,6 @@
     "show-on-menu": "Mostrar en menú",
     "visit-counter": "Contador de visitas",
     "web-block": "Bloque web",
-    "webportal": "WebPortal"
+    "webportal": "WebPortal",
+    "webportal-forgotten-password": "¿Ha olvidado la contraseña? Escriba una cualquiera, le enviaremos un email para continuar."
 }

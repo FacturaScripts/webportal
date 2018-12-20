@@ -28,6 +28,7 @@
     "last-update": "Last update",
     "login-to-continue": "Login to continue",
     "login-to-continue-paragraph": "You need to login to continue with this action",
+    "login-with-social-or-email": "Identify yourself through your social networks or with your email.",
     "local-login": "Local login",
     "meta": "Meta",
     "new-registrations-are-closed": "New registrations are closed at this time",
@@ -53,5 +54,6 @@
     "show-on-menu": "Show on menu",
     "visit-counter": "Visit counter",
     "web-block": "Web block",
-    "webportal": "WebPortal"
+    "webportal": "WebPortal",
+    "webportal-forgotten-password": "Have you forgotten the password? Write one, we will send you an email to continue."
 }

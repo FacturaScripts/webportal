@@ -98,7 +98,7 @@ class HybridLogin extends PortalController
     /**
      * Check contact data and update if needed.
      */
-    private function checkContact(Profile $userProfile)
+    protected function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
             $this->miniLog->warning($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
@@ -129,7 +129,7 @@ class HybridLogin extends PortalController
      *
      * @return bool
      */
-    private function recoverAccount(): bool
+    protected function recoverAccount(): bool
     {
         /// Checks email
         $email = $this->request->get('email', '');
@@ -189,7 +189,7 @@ class HybridLogin extends PortalController
      *
      * @return bool Returns false if fails, or return true and set headers to redirect.
      */
-    private function contactLogin(): bool
+    protected function contactLogin(): bool
     {
         if (AppSettings::get('webportal', 'allowlogincontacts', 'false') === 'false') {
             return false;
@@ -231,7 +231,7 @@ class HybridLogin extends PortalController
     /**
      * Manager Facebook login
      */
-    private function facebookLogin()
+    protected function facebookLogin()
     {
         $config = [
             'callback' => AppSettings::get('webportal', 'url') . '/HybridLogin?prov=facebook',
@@ -256,7 +256,7 @@ class HybridLogin extends PortalController
     /**
      * Manage Google login
      */
-    private function googleLogin()
+    protected function googleLogin()
     {
         $config = [
             'callback' => AppSettings::get('webportal', 'url') . '/HybridLogin?prov=google',
@@ -298,7 +298,7 @@ class HybridLogin extends PortalController
     /**
      * Manage Twitter login
      */
-    private function twitterLogin()
+    protected function twitterLogin()
     {
         $config = [
             'callback' => AppSettings::get('webportal', 'url') . '/HybridLogin?prov=twitter',
