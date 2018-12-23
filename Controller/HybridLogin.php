@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Dinamic\Lib\EmailTools;
 use FacturaScripts\Dinamic\Lib\IPFilter;
 use FacturaScripts\Dinamic\Model\Contacto;
@@ -76,17 +77,17 @@ class HybridLogin extends PortalController
             case 'facebook':
                 return $this->facebookLogin();
 
-            case 'google':
-                return $this->googleLogin();
-
-            case 'twitter':
-                return $this->twitterLogin();
-
             case 'fs':
                 return $this->contactLogin();
 
+            case 'google':
+                return $this->googleLogin();
+
             case 'recover':
                 return $this->recoverAccount();
+
+            case 'twitter':
+                return $this->twitterLogin();
 
             default:
                 $this->miniLog->alert('no-login-provider');
@@ -122,66 +123,6 @@ class HybridLogin extends PortalController
             $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
             $this->response->headers->set('Refresh', '0; ' . $return);
         }
-    }
-
-    /**
-     * Try to recover the contact account
-     *
-     * @return bool
-     */
-    protected function recoverAccount(): bool
-    {
-        /// Checks email
-        $email = $this->request->get('email', '');
-        $contact = new Contacto();
-        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
-            $this->ipFilter->setAttempt($this->request->getClientIp());
-            return false;
-        }
-
-        $baseUrl = AppSettings::get('webportal', 'url');
-
-        /// no key? then send email
-        if (empty($this->request->get('key', ''))) {
-            /// Send email to contact with link
-            $logKey = urlencode(base64_encode($contact->logkey));
-            $link = $baseUrl . '/HybridLogin?prov=recover&email=' . urlencode($email) . '&key=' . $logKey;
-            $emailTools = new EmailTools();
-            $mail = $emailTools->newMail();
-            $mail->Subject = $this->i18n->trans('recover-your-account');
-            $mail->addAddress($email);
-            $mail->msgHTML($this->i18n->trans('recover-your-account-body', ['%link%' => $link]));
-            if ($emailTools->send($mail)) {
-                $this->miniLog->notice('send-mail-ok');
-                return true;
-            }
-
-            $this->miniLog->critical('send-mail-error');
-            return false;
-        }
-
-        /// key is ok?
-        $logKey = urldecode(base64_decode($this->request->get('key', '')));
-        if ($contact->verifyLogkey($logKey)) {
-            $this->setGeoIpData($contact);
-            if ($contact->save()) {
-                $this->contact = $contact;
-                $this->miniLog->notice(
-                    $this->i18n->trans(
-                        'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
-                    )
-                );
-                $this->updateCookies($contact, true);
-                return true;
-            }
-
-            $this->miniLog->alert($this->i18n->trans('record-save-error'));
-            return false;
-        }
-
-        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
-        $this->ipFilter->setAttempt($this->request->getClientIp());
-        return false;
     }
 
     /**
@@ -254,6 +195,22 @@ class HybridLogin extends PortalController
     }
 
     /**
+     * 
+     * @param Contacto $contact
+     *
+     * @return string
+     */
+    protected function getContactRecoverykey($contact)
+    {
+        if (empty($contact->logkey)) {
+            $contact->logkey = Utils::randomString(99);
+            $contact->save();
+        }
+
+        return urlencode(base64_encode($contact->logkey));
+    }
+
+    /**
      * Manage Google login
      */
     protected function googleLogin()
@@ -276,6 +233,67 @@ class HybridLogin extends PortalController
             $this->miniLog->error($exc->getMessage());
             $this->ipFilter->setAttempt($this->request->getClientIp());
         }
+    }
+
+    /**
+     * Try to recover the contact account
+     *
+     * @return bool
+     */
+    protected function recoverAccount(): bool
+    {
+        /// Checks email
+        $email = $this->request->get('email', '');
+        $contact = new Contacto();
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+            $this->ipFilter->setAttempt($this->request->getClientIp());
+            return false;
+        }
+
+        $baseUrl = AppSettings::get('webportal', 'url');
+
+        /// no key? then send email
+        if (empty($this->request->get('key', ''))) {
+            /// Send email to contact with link
+            $link = $baseUrl . '/HybridLogin?prov=recover&email=' . urlencode($email)
+                . '&key=' . $this->getContactRecoverykey($contact);
+
+            $emailTools = new EmailTools();
+            $mail = $emailTools->newMail();
+            $mail->Subject = $this->i18n->trans('recover-your-account');
+            $mail->addAddress($email);
+            $mail->msgHTML($this->i18n->trans('recover-your-account-body', ['%link%' => $link]));
+            if ($emailTools->send($mail)) {
+                $this->miniLog->notice('send-mail-ok');
+                return true;
+            }
+
+            $this->miniLog->critical('send-mail-error');
+            return false;
+        }
+
+        /// key is ok?
+        $recoveryKey = urldecode(base64_decode($this->request->get('key', '')));
+        if ($contact->verifyLogkey($recoveryKey)) {
+            $this->setGeoIpData($contact);
+            if ($contact->save()) {
+                $this->contact = $contact;
+                $this->miniLog->notice(
+                    $this->i18n->trans(
+                        'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
+                    )
+                );
+                $this->updateCookies($contact, true);
+                return true;
+            }
+
+            $this->miniLog->alert($this->i18n->trans('record-save-error'));
+            return false;
+        }
+
+        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
+        $this->ipFilter->setAttempt($this->request->getClientIp());
+        return false;
     }
 
     /**
