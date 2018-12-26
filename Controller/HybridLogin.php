@@ -90,7 +90,7 @@ class HybridLogin extends PortalController
                 return $this->twitterLogin();
 
             default:
-                $this->miniLog->alert('no-login-provider');
+                $this->miniLog->warning('no-login-provider');
                 $this->ipFilter->setAttempt($this->request->getClientIp());
                 break;
         }
@@ -161,7 +161,7 @@ class HybridLogin extends PortalController
             return true;
         }
 
-        $this->miniLog->alert($this->i18n->trans('login-password-fail'));
+        $this->miniLog->warning($this->i18n->trans('login-password-fail'));
         $this->ipFilter->setAttempt($this->request->getClientIp());
 
         $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email=' . urlencode($email);

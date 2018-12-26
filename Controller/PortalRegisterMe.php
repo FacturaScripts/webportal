@@ -153,7 +153,7 @@ class PortalRegisterMe extends PortalController
     {
         $email = $this->request->request->get('email');
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
-            $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
+            $this->miniLog->warning($this->i18n->trans('email-contact-already-used'));
             $this->ipFilter->setAttempt($this->request->getClientIp());
             return false;
         }
@@ -167,7 +167,7 @@ class PortalRegisterMe extends PortalController
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
         if (empty($newPassword) || $newPassword !== $newPassword2) {
-            $this->miniLog->alert($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
+            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
             return false;
         }
 
