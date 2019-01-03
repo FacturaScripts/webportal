@@ -54,7 +54,7 @@ class EditProfile extends SectionController
         }
 
         if ($password !== $repassword) {
-            $this->miniLog->error($this->i18n->trans('different-passwords-to-contact-' . $this->contact->nombre));
+            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
             return false;
         }
 

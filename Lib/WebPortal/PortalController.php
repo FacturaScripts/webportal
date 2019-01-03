@@ -197,7 +197,7 @@ class PortalController extends Controller
                 return true;
             }
 
-            $this->miniLog->alert($this->i18n->trans('login-cookie-fail'));
+            $this->miniLog->warning($this->i18n->trans('login-cookie-fail'));
             $this->response->headers->clearCookie('fsIdcontacto');
             return false;
         }
