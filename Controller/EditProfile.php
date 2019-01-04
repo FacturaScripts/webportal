@@ -54,7 +54,7 @@ class EditProfile extends SectionController
         }
 
         if ($password !== $repassword) {
-            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
+            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $this->contact->email]));
             return false;
         }
 
@@ -99,6 +99,11 @@ class EditProfile extends SectionController
     {
         switch ($action) {
             case 'edit':
+                if (!$this->contact->exists()) {
+                    /// we must prevent from unauthorized contact creation
+                    return true;
+                }
+
                 if ($this->changedPersonalData() && $this->changedPassword()) {
                     if ($this->contact->save()) {
                         $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
