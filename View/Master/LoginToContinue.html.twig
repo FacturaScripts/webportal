@@ -19,37 +19,67 @@
                             </div>
                             <h1 class="empty-title h5">{{ i18n.trans('login-to-continue') }}</h1>
                             <p class="empty-subtitle">{{ i18n.trans('login-to-continue-paragraph') }}</p>
-                            <div class="empty-action">
-                                {% if appSettings.get('webportal','fbappid','') != '' %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
-                                    </a>
-                                    <br/>
-                                {% endif %}
-                                {% if appSettings.get('webportal','googleappid','') != '' %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
-                                    </a>
-                                    <br/>
-                                {% endif %}
-                                {% if appSettings.get('webportal','twitterappid','') != '' %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
-                                    </a>
-                                    <br/>
-                                {% endif %}
-                                {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                                    <div class="btn-group btn-group-block">
-                                        <a href="#" class="btn btn-primary" onclick="return showModal('loginModal');">
-                                            <i class="fas fa-key fa-fw" aria-hidden="true"></i> {{ i18n.trans('password') }}
-                                        </a>
-                                        {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                            <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                                <i class="fas fa-edit fa-fw" aria-hidden="true"></i> {{ i18n.trans('register-me') }}
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
+                            {% set facebook = appSettings.get('webportal','fbappid','') %}
+                            {% set google = appSettings.get('webportal','googleappid','') %}
+                            {% set twitter = appSettings.get('webportal','twitterappid','') %}
+                            {% set fsLogin = appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                            <div class="container">
+                                <div class="columns">
+                                    {% if fsLogin and (facebook or google or twitter) %}
+                                        <div class="column">
+                                            <br/>
+                                            {% if facebook %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
+                                                </a>
+                                            {% endif %}
+                                            {% if google %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
+                                                </a>
+                                            {% endif %}
+                                            {% if twitter %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                                                </a>
+                                            {% endif %}
+                                            <p>{{ i18n.trans('login-with-social-or-email') }}</p>
+                                        </div>
+                                        <div class="divider-vert"></div>
+                                    {% endif %}
+                                    {% if fsLogin %}
+                                        <div class="column">
+                                            <br/>
+                                            <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fas fa-envelope fa-fw" aria-hidden="true"></i>
+                                                        </span>
+                                                        <input type="text" name="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fas fa-key fa-fw" aria-hidden="true"></i>
+                                                        </span>
+                                                        <input type="password" name="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                                        <button type="submit" class="btn btn-primary input-group-btn">
+                                                            <i class="fas fa-sign-in-alt fa-fw"></i>
+                                                        </button>
+                                                    </div>
+                                                    <p class="form-input-hint">{{ i18n.trans('webportal-forgotten-password') }}</p>
+                                                </div>
+                                                {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+                                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                                        <i class="fas fa-edit fa-fw"></i> {{ i18n.trans('register-me') }}
+                                                    </a>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     {% endif %}

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -164,8 +164,11 @@ class HybridLogin extends PortalController
         $this->miniLog->warning($this->i18n->trans('login-password-fail'));
         $this->ipFilter->setAttempt($this->request->getClientIp());
 
-        $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email=' . urlencode($email);
-        $this->miniLog->info($this->i18n->trans('recover-your-account-access', ['%link%' => $link]));
+        /// Send email to contact with link
+        $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email='
+            . urlencode($email) . '&key=' . $this->getContactRecoverykey($contact);
+
+        $this->sendRecoveryMail($email, $link);
         return false;
     }
 
@@ -258,18 +261,7 @@ class HybridLogin extends PortalController
             $link = $baseUrl . '/HybridLogin?prov=recover&email=' . urlencode($email)
                 . '&key=' . $this->getContactRecoverykey($contact);
 
-            $emailTools = new EmailTools();
-            $mail = $emailTools->newMail();
-            $mail->Subject = $this->i18n->trans('recover-your-account');
-            $mail->addAddress($email);
-            $mail->msgHTML($this->i18n->trans('recover-your-account-body', ['%link%' => $link]));
-            if ($emailTools->send($mail)) {
-                $this->miniLog->notice('send-mail-ok');
-                return true;
-            }
-
-            $this->miniLog->critical('send-mail-error');
-            return false;
+            return $this->sendRecoveryMail($email, $link);
         }
 
         /// key is ok?
@@ -293,6 +285,37 @@ class HybridLogin extends PortalController
 
         $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
         $this->ipFilter->setAttempt($this->request->getClientIp());
+        return false;
+    }
+
+    /**
+     * 
+     * @param string $email
+     * @param string $link
+     *
+     * @return bool
+     */
+    protected function sendRecoveryMail($email, $link)
+    {
+        $emailTools = new EmailTools();
+
+        $mail = $emailTools->newMail();
+        $mail->Subject = $this->i18n->trans('recover-your-account');
+        $mail->addAddress($email);
+
+        $params = [
+            'body' => $this->i18n->trans('recover-your-account-body', ['%link%' => $link]),
+            'company' => AppSettings::get('webportal', 'title'),
+            'footer' => AppSettings::get('webportal', 'copyright'),
+            'title' => $mail->Subject,
+        ];
+        $mail->msgHTML($emailTools->getTemplateHtml($params));
+        if ($emailTools->send($mail)) {
+            $this->miniLog->notice($this->i18n->trans('recover-email-send-ok'));
+            return true;
+        }
+
+        $this->miniLog->critical($this->i18n->trans('send-mail-error'));
         return false;
     }
 
