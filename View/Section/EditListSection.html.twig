@@ -1,18 +1,6 @@
 {% import _self as macros %}
 {% set section = fsc.getCurrentSection() %}
 
-<script type="text/javascript">
-    function editListSectionDelete(formName) {
-        var value = confirm("{{ i18n.trans('confirm-delete') }} {{ i18n.trans('are-you-sure') }}");
-        if (value == true) {
-            $("#form" + formName + " :input[name=\"action\"]").val("delete");
-            $("#form" + formName).submit();
-        }
-
-        return false;
-    }
-</script>
-
 {# -- Row header -- #}
 <div class="columns">
     {% set row = section.getRow('header') %}
@@ -79,7 +67,7 @@
                 <div class="columns">
                     {% if section.settings.btnDelete %}
                         <div class="column">
-                            <button type="button" class="btn btn-error" onclick="editListSectionDelete('{{ section.getViewName() ~ counter }}');">
+                            <button type="button" class="btn btn-error" onclick="showSectionDelete('{{ section.getViewName() ~ counter }}');">
                                 <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
                                 {{ i18n.trans('delete') }}
                             </button>
@@ -109,7 +97,7 @@
 <br/>
 
 {# -- Pagination -- #}
-{% set formName = 'form' ~ section.getViewName() ~ 'Offset' %}
+{% set formName = 'secForm' ~ section.getViewName() %}
 <form id="{{ formName }}" method="post">
     <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
     <input type="hidden" name="offset" value="{{ section.offset }}"/>
