@@ -1,5 +1,5 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
         <div class="toast toast-primary cookies">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
@@ -31,7 +31,7 @@
 {% endmacro %}
 
 {% macro loginModal(i18n, appSettings, fsc) %}
-    <script type="text/javascript">
+    <script>
         function showLoginModalTab(showName, hideName) {
             var showBtn = document.getElementById("btnLoginModal" + showName);
             showBtn.classList.add("active");
@@ -44,7 +44,6 @@
             return false;
         }
     </script>
-
     <div class="modal modal-sm" id="loginModal">
         <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>
         <div class="modal-container">
@@ -169,9 +168,6 @@
     </div>
 {% endmacro %}
 
-<!--
-    Loads and displays a list of messages from the given types
--->
 {% macro message(log, types, style) %}
     {% set messages = log.read(types) %}
     {% if messages|length > 0 %}
