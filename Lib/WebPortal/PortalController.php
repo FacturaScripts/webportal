@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -46,6 +46,12 @@ class PortalController extends Controller
      * Period to update contact activity and cookies = 1 hour.
      */
     const PUBLIC_UPDATE_ACTIVITY_PERIOD = 3600;
+    
+    /**
+     *
+     * @var string
+     */
+    public $canonicalUrl;
 
     /**
      * The associated contact.
@@ -256,6 +262,7 @@ class PortalController extends Controller
         $this->i18n->setLangCode($this->webPage->langcode);
         $this->title = $this->webPage->title;
         $this->description = $this->webPage->description;
+        $this->canonicalUrl = $this->webPage->url('public');
 
         if (null !== $this->webPage->idpage) {
             $ipAddress = $this->request->getClientIp() ?? '::1';

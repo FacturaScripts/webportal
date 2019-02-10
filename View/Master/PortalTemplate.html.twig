@@ -11,8 +11,11 @@
             <meta name="description" content="{{ fsc.description | raw }}" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="generator" content="FacturaScripts" />
-            {% if fsc.webPage.noindex %}<meta name="robots" content="noindex" />{% endif %}
-            <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.url('public') }}" />
+            {% if fsc.webPage.noindex %}
+                <meta name="robots" content="noindex" />
+            {% else %}
+                <link rel="canonical" href="{{ webUrl }}{{ fsc.canonicalUrl }}" />
+            {% endif %}
             {% for block in fsc.pageComposer.getBlocks('meta') %}
                 {{ block.content() | raw }}
             {% endfor %}
