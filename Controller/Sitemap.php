@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,6 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
@@ -95,14 +96,16 @@ class Sitemap extends Controller
     {
         $this->setTemplate(false);
         $this->response->headers->set('Content-type', 'text/xml');
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        $domain = AppSettings::get('webportal', 'url', '');
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+            . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
         foreach ($this->getSitemapItems() as $item) {
-            $xml .= '<url>
-            <loc>' . $item['loc'] . '</loc>
-            <lastmod>' . $item['lastmod'] . '</lastmod>
-            <changefreq>' . $item['changefreq'] . '</changefreq>
-            <priority>' . $item['priority'] . '</priority>
-         </url>';
+            $xml .= '<url><loc>' . $domain . $item['loc'] . '</loc>'
+                . '<lastmod>' . $item['lastmod'] . '</lastmod>'
+                . '<changefreq>' . $item['changefreq'] . '</changefreq>'
+                . '<priority>' . $item['priority'] . '</priority>'
+                . '</url>' . "\n";
         }
         $xml .= '</urlset>';
 
@@ -117,7 +120,6 @@ class Sitemap extends Controller
     protected function getSitemapItems(): array
     {
         $items = [];
-
         $webpageModel = new WebPage();
         foreach ($webpageModel->all([], [], 0, 0) as $wpage) {
             if ($wpage->noindex || substr($wpage->permalink, -1) === '*') {
