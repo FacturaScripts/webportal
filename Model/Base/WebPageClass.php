@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -61,7 +61,7 @@ abstract class WebPageClass extends ModelClass
      *
      * @var bool
      */
-    protected $lastmoddisable;
+    public $lastmoddisable;
 
     /**
      * Position number.
@@ -92,11 +92,15 @@ abstract class WebPageClass extends ModelClass
 
     /**
      * Increase visit counter and save. To improve performancem this will only happen every 2 or 10 times.
+     * 
+     * @param string $ipAddress
+     *
+     * @return bool
      */
     public function increaseVisitCount(string $ipAddress = '')
     {
         if ($ipAddress == $this->lastip) {
-            return;
+            return false;
         }
 
         $this->lastip = $ipAddress;
@@ -108,7 +112,9 @@ abstract class WebPageClass extends ModelClass
             $this->visitcount += 10;
             $this->save();
         }
+
         $this->lastmoddisable = false;
+        return true;
     }
 
     /**

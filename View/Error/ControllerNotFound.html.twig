@@ -1,0 +1,22 @@
+{% extends "Master/MicroTemplate.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <br/><br/>
+                <div class="jumbotron">
+                    <h1>
+                        <i class="fas fa-bug" aria-hidden="true"></i> {{ i18n.trans('page-not-found') }}:
+                    </h1>
+                    <hr class="my-4">
+                    <b>{{ controllerName }}</b>
+                    <br/><br/>
+                    <a href="{{ appSettings.get('webportal','url') }}" class="btn btn-primary">
+                        <i class="fas fa-home fa-fw" aria-hidden="true"></i> {{ i18n.trans('home') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
