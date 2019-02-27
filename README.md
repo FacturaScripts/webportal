@@ -1,2 +1,4 @@
 # webportal
-WebPortal plugin for FacturaScripts
+WebPortal plugin for FacturaScripts.
+
+https://www.facturascripts.com/plugins/webportal

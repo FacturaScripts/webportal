@@ -18,7 +18,7 @@
                             <ul class="menu">
                                 {% for sectionName, section in fsc.sections %}
                                     <li class="menu-item">
-                                        <a href="EditPageOption?code={{ sectionName }}" target="_blank">
+                                        <a href="{{ asset('EditPageOption?code=' ~ sectionName) }}" target="_blank">
                                             <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.title }}
                                         </a>
                                     </li>
@@ -58,6 +58,15 @@
             $(".section-div").removeClass("d-hide");
             $(".section-div").addClass("d-hide");
             $("#secDiv" + name).removeClass("d-hide");
+            return false;
+        }
+        function showSectionDelete(formName) {
+            var value = confirm("{{ i18n.trans('confirm-delete') }} {{ i18n.trans('are-you-sure') }}");
+            if (value == true) {
+                $("#form" + formName + " :input[name=\"action\"]").val("delete");
+                $("#form" + formName).submit();
+            }
+
             return false;
         }
         function showSectionPage(name, offset) {
@@ -100,7 +109,7 @@
     {% if links | length > 0 %}
         <div class="container">
             <div class="columns">
-                <div class="column col-2">
+                <div class="column col-2 col-xs-12">
                 </div>
                 <div class="column">
                     <ul class="breadcrumb">

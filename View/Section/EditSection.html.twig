@@ -2,18 +2,6 @@
 {% set section = fsc.getCurrentSection() %}
 {% set action = section.model.exists() ? 'edit' : 'insert' %}
 
-<script type="text/javascript">
-    function editSectionDelete(formName) {
-        var value = confirm("{{ i18n.trans('confirm-delete') }} {{ i18n.trans('are-you-sure') }}");
-        if (value == true) {
-            $("#form" + formName + " :input[name=\"action\"]").val("delete");
-            $("#form" + formName).submit();
-        }
-
-        return false;
-    }
-</script>
-
 {# -- Row header -- #}
 <div class="columns">
     {% set row = section.getRow('header') %}
@@ -41,7 +29,7 @@
             <div class="columns">
                 {% if section.settings.btnDelete %}
                     <div class="column">
-                        <button type="button" class="btn btn-error" onclick="editSectionDelete('{{ section.getViewName() }}');">
+                        <button type="button" class="btn btn-error" onclick="showSectionDelete('{{ section.getViewName() }}');">
                             <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
                             {{ i18n.trans('delete') }}
                         </button>

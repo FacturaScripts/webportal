@@ -19,10 +19,11 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
-use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Lib\EmailTools;
+use FacturaScripts\Dinamic\Lib\EmailTools;
+use FacturaScripts\Dinamic\Lib\IPFilter;
+use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -38,11 +39,29 @@ class PortalRegisterMe extends PortalController
 {
 
     /**
+     *
+     * @var IPFilter
+     */
+    protected $ipFilter;
+
+    /**
      * New contact
      *
      * @var Contacto
      */
     protected $newContact;
+
+    /**
+     *
+     * @var bool
+     */
+    public $registrationOK = false;
+
+    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    {
+        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->ipFilter = new IPFilter();
+    }
 
     /**
      * Runs the controller's private logic.
@@ -68,12 +87,12 @@ class PortalRegisterMe extends PortalController
         $this->setTemplate('PortalRegisterMe');
 
         $action = $this->request->get('action', '');
-        $this->execPreviousAction($action);
+        $this->execAction($action);
     }
 
     /**
      * Active the contact using the url sended previously.
-     * 
+     *
      * @return bool
      */
     protected function activeContact()
@@ -93,22 +112,23 @@ class PortalRegisterMe extends PortalController
                 return true;
             }
 
-            $this->miniLog->error($this->i18n->trans('data-save-error'));
+            $this->miniLog->error($this->i18n->trans('record-save-error'));
             return false;
         }
 
-        $this->miniLog->error($this->i18n->trans('error-verify-contact'));
+        $this->miniLog->error($this->i18n->trans('record-not-found'));
+        $this->ipFilter->setAttempt($this->request->getClientIp());
         return false;
     }
 
     /**
-     * Run the actions that alter data before reading it.
+     * Run the actions.
      *
      * @param string $action
      *
      * @return bool
      */
-    protected function execPreviousAction($action)
+    protected function execAction($action)
     {
         switch ($action) {
             case 'activate':
@@ -116,38 +136,38 @@ class PortalRegisterMe extends PortalController
                     $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
                     $this->response->headers->set('Refresh', '0; ' . $url);
                 }
-                return false;
+                break;
 
             case 'register':
                 $this->newContact = new Contacto();
-                return $this->registerContact();
+                $this->registrationOK = $this->registerContact();
+                break;
         }
-
-        return true;
     }
 
     /**
-     * 
+     *
      * @return bool
      */
     protected function registerContact(): bool
     {
         $email = $this->request->request->get('email');
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
-            $this->miniLog->error($this->i18n->trans('email-contact-already-used'));
+            $this->miniLog->warning($this->i18n->trans('email-contact-already-used'));
+            $this->ipFilter->setAttempt($this->request->getClientIp());
             return false;
         }
 
         $emailData = \explode('@', $email);
         $this->newContact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
         $this->newContact->apellidos = $this->request->request->get('surname', '');
-        $this->newContact->descripcion = $this->request->request->get('description', $this->i18n->trans('my-address'));
+        $this->newContact->descripcion = $this->request->request->get('description', '');
         $this->newContact->email = $email;
 
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');
         if (empty($newPassword) || $newPassword !== $newPassword2) {
-            $this->miniLog->alert($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
+            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $email]));
             return false;
         }
 
@@ -158,38 +178,44 @@ class PortalRegisterMe extends PortalController
             $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate'
                 . '&cod=' . sha1($this->newContact->idcontacto . $this->newContact->password)
                 . '&email=' . $this->newContact->email;
-            $body = $this->i18n->trans('verification-url') . ': ' . $url;
 
-            if (!$this->sendEmailConfirmation($body, $this->i18n->trans('confirm-email'), $this->newContact->email)) {
-                $this->newContact->delete();
-                $this->miniLog->alert($this->i18n->trans('try-again'));
-                return false;
+            if ($this->sendEmailConfirmation($this->newContact->email, $url)) {
+                return true;
             }
 
-            $this->miniLog->notice($this->i18n->trans('activation-email-sent'));
-            return true;
+            $this->newContact->delete();
+            $this->miniLog->alert($this->i18n->trans('try-again'));
+            return false;
         }
 
-        $this->miniLog->alert($this->i18n->trans('record-save-error'));
+        $this->miniLog->error($this->i18n->trans('record-not-found'));
         return false;
     }
 
     /**
      * Send and email with data posted from form.
      *
-     * @param string $body
-     * @param string $subject
      * @param string $email
-     * 
+     * @param string $url
+     *
      * @return bool
      */
-    protected function sendEmailConfirmation(string $body, string $subject, string $email)
+    protected function sendEmailConfirmation(string $email, string $url)
     {
         $emailTools = new EmailTools();
+
         $mail = $emailTools->newMail();
-        $mail->Subject = $subject;
-        $mail->msgHTML($body);
         $mail->addCC($email);
+        $mail->Subject = $this->i18n->trans('confirm-email');
+
+        $params = [
+            'body' => '<h1>' . $mail->Subject . '</h1>' . $this->i18n->trans('please-click-on-confirm-email')
+            . ' <a href="' . $url . '">' . $mail->Subject . '</a>',
+            'company' => AppSettings::get('webportal', 'title'),
+            'footer' => AppSettings::get('webportal', 'copyright'),
+            'title' => $mail->Subject,
+        ];
+        $mail->msgHTML($emailTools->getTemplateHtml($params));
 
         return $emailTools->send($mail);
     }

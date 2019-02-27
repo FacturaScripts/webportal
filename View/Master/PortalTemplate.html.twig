@@ -11,8 +11,11 @@
             <meta name="description" content="{{ fsc.description | raw }}" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="generator" content="FacturaScripts" />
-            {% if fsc.webPage.noindex %}<meta name="robots" content="noindex" />{% endif %}
-            <link rel="canonical" href="{{ webUrl }}{{ fsc.webPage.url('public') }}" />
+            {% if fsc.webPage.noindex %}
+                <meta name="robots" content="noindex" />
+            {% else %}
+                <link rel="canonical" href="{{ webUrl }}{{ fsc.canonicalUrl }}" />
+            {% endif %}
             {% for block in fsc.pageComposer.getBlocks('meta') %}
                 {{ block.content() | raw }}
             {% endfor %}
@@ -34,15 +37,15 @@
     <body>
         {% import 'Macro/PortalTemplate.html.twig' as Macros %}
         {% block navbar %}
-            <header class="navbar navbar-top">
-                <section class="navbar-section hide-xs">
+            <div class="navbar navbar-top">
+                <div class="navbar-section hide-xs">
                     {{ Macros.TopMenu(fsc, i18n) }}
-                </section>
-                <section class="navbar-center">
+                </div>
+                <div class="navbar-center">
                     {{ Macros.TopMenuSmall(fsc, i18n) }}
                     <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" class="hide-xs" />
-                </section>
-                <section class="navbar-section">
+                </div>
+                <div class="navbar-section">
                     <a class="btn" href="{{ constant('FS_ROUTE') }}/WebSearch">
                         <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         <span class="hide-md">{{ i18n.trans('search') }}</span>
@@ -68,8 +71,8 @@
                             <span class="hide-md">{{ i18n.trans('login') }}</span>
                         </a>
                     {% endif %}
-                </section>
-            </header>
+                </div>
+            </div>
             <div class="divider text-center" data-content="{{ webTitle }}"></div>
         {% endblock %}
         {% block messages %}
@@ -137,7 +140,7 @@
             </div>
         {% endblock %}
         {% block javascripts %}
-            <script type="text/javascript">
+            <script>
                 function showModal(idModal) {
                     var element = document.getElementById(idModal);
                     element.classList.add("active");

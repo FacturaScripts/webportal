@@ -1,5 +1,5 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
         <div class="toast toast-primary cookies">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
@@ -31,7 +31,7 @@
 {% endmacro %}
 
 {% macro loginModal(i18n, appSettings, fsc) %}
-    <script type="text/javascript">
+    <script>
         function showLoginModalTab(showName, hideName) {
             var showBtn = document.getElementById("btnLoginModal" + showName);
             showBtn.classList.add("active");
@@ -44,7 +44,6 @@
             return false;
         }
     </script>
-
     <div class="modal modal-sm" id="loginModal">
         <a href="#close" class="modal-overlay" aria-label="Close" onclick="return hideModal('loginModal');"></a>
         <div class="modal-container">
@@ -54,7 +53,7 @@
             </div>
             <div class="modal-body">
                 <div class="content">
-                    <ul class="tab tab-block">
+                    <ul class="tab tab-block mb-2">
                         <li class="tab-item">
                             <a href="#" id="btnLoginModalCustomers" class="active" onclick="return showLoginModalTab('Customers', 'Employees');">{{ i18n.trans('customers') }}</a>
                         </li>
@@ -63,29 +62,34 @@
                         </li>
                     </ul>
                     <div id="divLoginModalCustomers">
-                        <br/>
-                        {% if appSettings.get('webportal','fbappid','') != '' %}
+                        {% set facebook = appSettings.get('webportal','fbappid','') %}
+                        {% set google = appSettings.get('webportal','googleappid','') %}
+                        {% set twitter = appSettings.get('webportal','twitterappid','') %}
+                        {% set fsLogin = appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
+                        {% if facebook %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','googleappid','') != '' %}
+                        {% if google %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','twitterappid','') != '' %}
+                        {% if twitter %}
                             <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
                                 <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
                             </a>
                         {% endif %}
-                        {% if appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                            <br/>
+                        {% if fsLogin and (facebook or google or twitter) %}
+                            <p class="form-input-hint">{{ i18n.trans('login-with-social-or-email') }}</p>
+                        {% endif %}
+                        {% if fsLogin %}
                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="fas fa-envelope fa-fw" aria-hidden="true"></i>
+                                            <i class="fas fa-at fa-fw" aria-hidden="true"></i>
                                         </span>
                                         <input type="text" name="fsContact" id="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
                                     </div>
@@ -96,21 +100,21 @@
                                             <i class="fas fa-key fa-fw" aria-hidden="true"></i>
                                         </span>
                                         <input type="password" name="fsContactPass" id="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
+                                        <button type="submit" class="btn btn-primary input-group-btn">
+                                            <i class="fas fa-sign-in-alt fa-fw"></i>
+                                        </button>
                                     </div>
+                                    <p class="form-input-hint">{{ i18n.trans('webportal-forgotten-password') }}</p>
                                 </div>
-                                <button type="submit" class="btn btn-block btn-primary">
-                                    {{ i18n.trans('login') }}
-                                </button>
                                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
                                     <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                        {{ i18n.trans('register-me') }}
+                                        <i class="fas fa-edit fa-fw"></i> {{ i18n.trans('register-me') }}
                                     </a>
                                 {% endif %}
                             </form>
                         {% endif %}
                     </div>
                     <div id="divLoginModalEmployees" class="d-hide">
-                        <br/>
                         <form action="{{ constant('FS_ROUTE') }}/" method="post" class="form">
                             <div class="form-group">
                                 <div class="input-group">
@@ -164,9 +168,6 @@
     </div>
 {% endmacro %}
 
-<!--
-    Loads and displays a list of messages from the given types
--->
 {% macro message(log, types, style) %}
     {% set messages = log.read(types) %}
     {% if messages|length > 0 %}
