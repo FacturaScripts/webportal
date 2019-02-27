@@ -1,4 +1,5 @@
 {
+    "activation-email-sent-error": "No se ha podido enviar el correo de activación",
     "activation-email-sent": "Email de activación enviado. Por favor, compruebe su bandeja de entrada.",
     "allow-login-contacts": "Permitir login a contactos",
     "allow-new-registrations": "Permitir nuevos registros de contactos",
@@ -26,6 +27,7 @@
     "javascript": "JavaScript",
     "javascriptWithCookies": "JavaScript con cookies",
     "last-update": "Última actualización",
+    "login-contact-not-found": "El contacto del login no encontrado",
     "login-to-continue": "Identifíquese para continuar",
     "login-to-continue-paragraph": "Necesita identificarse para continuar con esta acción",
     "login-with-social-or-email": "Identifíquese mediante sus redes sociales o bien con su email.",
@@ -55,6 +57,7 @@
     "short-title": "Título corto",
     "show-on-footer": "Mostrar en pié",
     "show-on-menu": "Mostrar en menú",
+    "verification-url": "URL a verificar",
     "visit-counter": "Contador de visitas",
     "web-block": "Bloque web",
     "webportal": "WebPortal",

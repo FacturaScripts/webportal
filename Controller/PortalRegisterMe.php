@@ -92,7 +92,7 @@ class PortalRegisterMe extends PortalController
 
     /**
      * Active the contact using the url sended previously.
-     * 
+     *
      * @return bool
      */
     protected function activeContact()
@@ -146,7 +146,7 @@ class PortalRegisterMe extends PortalController
     }
 
     /**
-     * 
+     *
      * @return bool
      */
     protected function registerContact(): bool
@@ -197,7 +197,7 @@ class PortalRegisterMe extends PortalController
      *
      * @param string $email
      * @param string $url
-     * 
+     *
      * @return bool
      */
     protected function sendEmailConfirmation(string $email, string $url)
