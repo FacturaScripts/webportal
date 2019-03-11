@@ -278,8 +278,8 @@ class HybridLogin extends PortalController
             return false;
         }
 
-        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
         $this->ipFilter->setAttempt($this->request->getClientIp());
+        $this->sendTimeOut($baseUrl);
         return false;
     }
 
@@ -327,6 +327,15 @@ class HybridLogin extends PortalController
 
         $this->miniLog->critical($this->i18n->trans('send-mail-error'));
         return false;
+    }
+
+    /**
+     *
+     * @param type $baseUrl
+     */
+    protected function sendTimeOut($baseUrl)
+    {
+        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
     }
 
     /**
