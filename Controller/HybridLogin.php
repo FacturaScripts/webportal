@@ -198,7 +198,7 @@ class HybridLogin extends PortalController
     }
 
     /**
-     * 
+     *
      * @param Contacto $contact
      *
      * @return string
@@ -270,26 +270,36 @@ class HybridLogin extends PortalController
             $this->setGeoIpData($contact);
             if ($contact->save()) {
                 $this->contact = $contact;
-                $this->miniLog->notice(
-                    $this->i18n->trans(
-                        'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
-                    )
-                );
                 $this->updateCookies($contact, true);
-                return true;
+                return $this->sendEditProfile($baseUrl);
             }
 
             $this->miniLog->alert($this->i18n->trans('record-save-error'));
             return false;
         }
 
-        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
         $this->ipFilter->setAttempt($this->request->getClientIp());
+        $this->sendTimeOut($baseUrl);
         return false;
     }
 
     /**
-     * 
+     *
+     * @param string $baseUrl
+     * @return boolean
+     */
+    protected function sendEditProfile($baseUrl)
+    {
+        $this->miniLog->notice(
+            $this->i18n->trans(
+                'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
+            )
+        );
+        return true;
+    }
+
+    /**
+     *
      * @param string $email
      * @param string $link
      *
@@ -317,6 +327,15 @@ class HybridLogin extends PortalController
 
         $this->miniLog->critical($this->i18n->trans('send-mail-error'));
         return false;
+    }
+
+    /**
+     *
+     * @param type $baseUrl
+     */
+    protected function sendTimeOut($baseUrl)
+    {
+        $this->miniLog->alert($this->i18n->trans('recovery-timed-out', ['%link%' => $baseUrl . '/EditProfile']));
     }
 
     /**
