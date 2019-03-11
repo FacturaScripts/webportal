@@ -8,7 +8,7 @@
 
         <div class="container">
             <div class="columns">
-                <div class="column">
+                <div class="column col-2 col-lg-12">
                     {# -- Options button -- #}
                     {% if fsc.user %}
                         <div class="dropdown">
@@ -30,7 +30,7 @@
                     {# -- Section selector -- #}
                     {{ macros.sectionsButtons(fsc, i18n) }}
                 </div>
-                <div class="column col-10 col-md-12">
+                <div class="column">
                     {# -- Section content -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% set divClass = (sectionName == fsc.active) ? '' : 'd-hide' %}
@@ -126,7 +126,7 @@
 {% endmacro %}
 
 {% macro sectionsButtons(fsc, i18n) %}
-    <div class="hide-md">
+    <div class="hide-lg">
         {% for name, group in fsc.getSectionGroups() %}
             <ul class="menu">
                 {% if name != '' %}
@@ -151,34 +151,27 @@
             <br/>
         {% endfor %}
     </div>
-    {# -- Smartphone section dropdown -- #}
-    <div class="dropdown show-md mb-2">
-        <div class="btn-group">
-            <a href="#" class="btn dropdown-toggle" tabindex="0">
-                <i class="fas fa-chevron-circle-down fa-fw"></i> {{ i18n.trans('sections') }}
-            </a>
-            <ul class="menu">
-                {% for name, group in fsc.getSectionGroups() %}
-                    {% if name != '' %}
-                        <li class="divider" data-content="{{ i18n.trans(name) }}">
-                        </li>
-                    {% endif %}
-                    {% for sectionName, section in group %}
-                        {% set tabClass = (sectionName == fsc.active) ? 'active' : '' %}
-                        <li class="menu-item">
-                            {% if section.count > 0 %}
-                                <div class="menu-badge">
-                                    <label class="label label-primary">{{ section.count }}</label>
-                                </div>
-                            {% endif %}
-                            <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
-                                <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
-                                {{ section.title }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                {% endfor %}
+    {# -- Smartphone section -- #}
+    <div class="show-lg mb-2">
+        <ul class="tab tab-block">
+        {% for name, group in fsc.getSectionGroups() %}
+            {% if name != '' %}
             </ul>
-        </div>
+            <ul class="tab tab-block">
+                <li class="tab-item">
+                    {{ i18n.trans(name) }}
+                </li>
+            {% endif %}
+            {% for sectionName, section in group %}
+                {% set tabClass = (sectionName == fsc.active) ? 'active' : '' %}
+                <li class="tab-item">
+                    <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
+                        <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                        <br/>{{ section.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
     </div>
 {% endmacro %}
