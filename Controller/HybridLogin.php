@@ -198,7 +198,7 @@ class HybridLogin extends PortalController
     }
 
     /**
-     * 
+     *
      * @param Contacto $contact
      *
      * @return string
@@ -270,13 +270,8 @@ class HybridLogin extends PortalController
             $this->setGeoIpData($contact);
             if ($contact->save()) {
                 $this->contact = $contact;
-                $this->miniLog->notice(
-                    $this->i18n->trans(
-                        'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
-                    )
-                );
                 $this->updateCookies($contact, true);
-                return true;
+                return $this->sendEditProfile($baseUrl);
             }
 
             $this->miniLog->alert($this->i18n->trans('record-save-error'));
@@ -289,7 +284,22 @@ class HybridLogin extends PortalController
     }
 
     /**
-     * 
+     *
+     * @param string $baseUrl
+     * @return boolean
+     */
+    protected function sendEditProfile($baseUrl)
+    {
+        $this->miniLog->notice(
+            $this->i18n->trans(
+                'recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']
+            )
+        );
+        return true;
+    }
+
+    /**
+     *
      * @param string $email
      * @param string $link
      *
