@@ -41,23 +41,21 @@
                 </div>
                 <div class="column">
                     {# -- Section contents -- #}
-                    {% for name, group in fsc.getSectionGroups() %}
-                        {% for sectionName, section in group %}
-                            {% if sectionName != firstSectionName %}
-                                {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
-                                <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
-                                    <div class="show-lg mb-2">
-                                        {% if name == '' %}
-                                            {{ section.title }}
-                                        {% else %}
-                                            {{ i18n.trans(name) }} / {{ section.title }}
-                                        {% endif %}
-                                    </div>
-                                    {{ fsc.setCurrentSection(sectionName) }}
-                                    {% include section.template %}
+                    {% for sectionName, section in fsc.sections %}
+                        {% if sectionName != firstSectionName %}
+                            {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
+                            <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
+                                <div class="show-lg mb-2">
+                                    {% if section.group == '' %}
+                                        {{ section.title }}
+                                    {% else %}
+                                        {{ i18n.trans(section.group) }} / {{ section.title }}
+                                    {% endif %}
                                 </div>
-                            {% endif %}
-                        {% endfor %}
+                                {{ fsc.setCurrentSection(sectionName) }}
+                                {% include section.template %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
