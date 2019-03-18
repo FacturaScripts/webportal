@@ -15,7 +15,7 @@
         {# -- Other sections -- #}
         <div class="container">
             <div class="columns">
-                <div class="column col-2 col-lg-12">
+                <div class="column">
                     {# -- Options button -- #}
                     {% if fsc.user %}
                         <div class="dropdown">
@@ -39,7 +39,7 @@
                         {{ macros.sectionsButtons(fsc, i18n, firstSectionName) }}
                     {% endif %}
                 </div>
-                <div class="column">
+                <div class="column col-10 col-md-12">
                     {# -- Section contents -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% if sectionName != firstSectionName %}
