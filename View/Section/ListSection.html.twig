@@ -65,7 +65,9 @@
 {% endblock %}
 
 {# -- Paginacion -- #}
-{{ macros.sectionPagination(section) }}
+<div class="custom-scroll">
+    {{ macros.sectionPagination(section) }}
+</div>
 
 {# -- Macros -- #}
 {% macro sectionOrder(section) %}
