@@ -184,10 +184,17 @@
             {% for sectionName, section in group %}
                 {% set tabClass = (sectionName == fsc.active) ? 'active' : '' %}
                 <li class="tab-item">
-                    <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }} badge" data-badge="{{ section.count }}" onclick="return showSection('{{ sectionName }}');">
-                        <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
-                        <span class="hide-lg">{{ section.title }}</span>
-                    </a>
+                    {% if section.count > 0 %}
+                        <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }} badge" data-badge="{{ section.count }}" onclick="return showSection('{{ sectionName }}');">
+                            <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            <span class="hide-lg">{{ section.title }}</span>
+                        </a>
+                    {% else %}
+                        <a href="#" id="secBtn{{ sectionName }}2" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
+                            <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                            <span class="hide-lg">{{ section.title }}</span>
+                        </a>
+                    {% endif %}
                 </li>
             {% endfor %}
         {% endfor %}
