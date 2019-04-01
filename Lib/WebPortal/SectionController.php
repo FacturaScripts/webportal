@@ -132,6 +132,24 @@ abstract class SectionController extends PortalController
     }
 
     /**
+     * Add an autocomplete type filter to the ListSection.
+     *
+     * @param string $sectionName
+     * @param string $key        (Filter identifier)
+     * @param string $label      (Human reader description)
+     * @param string $field      (Field of the model to apply filter)
+     * @param string $table      (Table to search)
+     * @param string $fieldcode  (Primary column of the table to search and match)
+     * @param string $fieldtitle (Column to show name or description)
+     * @param array  $where      (Extra where conditions)
+     */
+    protected function addFilterAutocomplete($sectionName, $key, $label, $field, $table, $fieldcode = '', $fieldtitle = '', $where = [])
+    {
+        $filter = new ListFilter\AutocompleteFilter($key, $field, $label, $table, $fieldcode, $fieldtitle, $where);
+        $this->sections[$sectionName]->filters[$key] = $filter;
+    }
+
+    /**
      * Adds a boolean condition type filter to the ListSection.
      *
      * @param string $sectionName

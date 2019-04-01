@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,7 +31,7 @@ class DateFilter extends ParentFilter
     public function render()
     {
         $label = static::$i18n->trans($this->label);
-        return '<div class="column col-3 col-sm-2 mb-2">'
+        return '<div class="column col-2 col-xs-12 mb-2">'
             . '<div class="form-group">'
             . '<div class="input-group">'
             . '<span class="input-group-addon" title="' . $label . '">'
