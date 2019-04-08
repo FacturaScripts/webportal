@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,6 +20,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Model\Pais;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of EditProfile
@@ -115,6 +116,24 @@ class EditProfile extends SectionController
 
             default:
                 return parent::execPreviousAction($action);
+        }
+    }
+
+    /**
+     * 
+     * @param string $sectionName
+     */
+    protected function loadData(string $sectionName)
+    {
+        switch ($sectionName) {
+            default:
+                if (empty($this->contact) || !$this->contact->exists()) {
+                    $this->miniLog->warning($this->i18n->trans('no-data'));
+                    $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
+                    $this->webPage->noindex = true;
+                    $this->setTemplate('Master/Portal404');
+                }
+                break;
         }
     }
 }

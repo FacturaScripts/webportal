@@ -63,7 +63,7 @@
                     {% elseif fsc.contact %}
                         <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
                             <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
-                            <span>{{ fsc.contact.nombre }}</span>
+                            <span>{{ fsc.contact.alias() }}</span>
                         </a>
                     {% else %}
                         <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
