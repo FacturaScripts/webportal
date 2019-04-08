@@ -103,6 +103,8 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
+        $email = $this->rawUrlDecode($email);
+
         $contact = new Contacto();
         $where = [new DataBaseWhere('email', $email)];
         if ($contact->loadFromCode('', $where) && $cod === sha1($contact->idcontacto . $contact->password)) {
@@ -119,6 +121,23 @@ class PortalRegisterMe extends PortalController
         $this->miniLog->error($this->i18n->trans('record-not-found'));
         $this->ipFilter->setAttempt($this->request->getClientIp());
         return false;
+    }
+
+     /**
+     * Decode the email to change character $ for +
+     *
+     * @param string $email
+     * @return string
+     */
+    protected function rawUrlDecode($email)
+    {
+        for($i=0 ; $i < strlen($email); $i++){ 
+            if($email[$i] == "$") {
+                $email[$i] = '+'; 
+            }
+        }  
+
+        return $email;
     }
 
     /**
@@ -159,6 +178,9 @@ class PortalRegisterMe extends PortalController
         }
 
         $emailData = \explode('@', $email);
+        $emailEncode = $this->rawUrlEncode($email);
+        
+        $this->miniLog->warning($email);
         $this->newContact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', '');
@@ -177,7 +199,7 @@ class PortalRegisterMe extends PortalController
         if ($this->newContact->save()) {
             $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate'
                 . '&cod=' . sha1($this->newContact->idcontacto . $this->newContact->password)
-                . '&email=' . $this->newContact->email;
+                . '&email=' . $emailEncode;
 
             if ($this->sendEmailConfirmation($this->newContact->email, $url)) {
                 return true;
@@ -190,6 +212,23 @@ class PortalRegisterMe extends PortalController
 
         $this->miniLog->error($this->i18n->trans('record-not-found'));
         return false;
+    }
+
+    /**
+     * Encode the email to change character + for $
+     *
+     * @param string $email
+     * @return string
+     */
+    protected function rawUrlEncode($email)
+    {
+        for($i=0 ; $i < strlen($email); $i++){ 
+            if($email[$i] == "+") {
+                $email[$i] = '$'; 
+            }
+        }  
+
+        return $email;
     }
 
     /**
