@@ -103,6 +103,7 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
+        $email = rawurldecode($email);
         $contact = new Contacto();
         $where = [new DataBaseWhere('email', $email)];
         if ($contact->loadFromCode('', $where) && $cod === sha1($contact->idcontacto . $contact->password)) {
@@ -159,6 +160,8 @@ class PortalRegisterMe extends PortalController
         }
 
         $emailData = \explode('@', $email);
+        $emailEncode = \rawurlencode($email);
+        
         $this->newContact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', '');
@@ -177,7 +180,7 @@ class PortalRegisterMe extends PortalController
         if ($this->newContact->save()) {
             $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate'
                 . '&cod=' . sha1($this->newContact->idcontacto . $this->newContact->password)
-                . '&email=' . $this->newContact->email;
+                . '&email=' . $emailEncode;
 
             if ($this->sendEmailConfirmation($this->newContact->email, $url)) {
                 return true;
