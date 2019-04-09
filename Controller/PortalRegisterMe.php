@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -103,9 +103,8 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
-        $email = rawurldecode($email);
         $contact = new Contacto();
-        $where = [new DataBaseWhere('email', $email)];
+        $where = [new DataBaseWhere('email', rawurldecode($email))];
         if ($contact->loadFromCode('', $where) && $cod === sha1($contact->idcontacto . $contact->password)) {
             $contact->verificado = true;
             if ($contact->save()) {
@@ -159,9 +158,7 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
-        $emailData = \explode('@', $email);
-        $emailEncode = \rawurlencode($email);
-        
+        $emailData = explode('@', $email);
         $this->newContact->nombre = empty($this->request->request->get('name')) ? $emailData[0] : $this->request->request->get('name');
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', '');
@@ -180,7 +177,7 @@ class PortalRegisterMe extends PortalController
         if ($this->newContact->save()) {
             $url = AppSettings::get('webportal', 'url') . '/PortalRegisterMe?action=activate'
                 . '&cod=' . sha1($this->newContact->idcontacto . $this->newContact->password)
-                . '&email=' . $emailEncode;
+                . '&email=' . rawurlencode($email);
 
             if ($this->sendEmailConfirmation($this->newContact->email, $url)) {
                 return true;
