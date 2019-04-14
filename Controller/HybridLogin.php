@@ -102,7 +102,7 @@ class HybridLogin extends PortalController
     protected function checkContact(Profile $userProfile)
     {
         if (!isset($userProfile->email) || !filter_var($userProfile->email, FILTER_VALIDATE_EMAIL)) {
-            $this->miniLog->warning($this->i18n->trans('invalid-email', ['%email%' => $userProfile->email]));
+            $this->miniLog->warning($this->i18n->trans('not-valid-email', ['%email%' => $userProfile->email]));
             $this->ipFilter->setAttempt($this->request->getClientIp());
             return;
         }
