@@ -1,7 +1,7 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
     <form method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
-        <div class="toast toast-primary cookies">
+        <div class="toast cookies">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn">{{ i18n.trans('accept') }}</button>
             <a href="{{ cookiesPage.url('public') }}">{{ i18n.trans('read-more') }}</a>
         </div>
@@ -173,8 +173,8 @@
 
 {% macro message(log, types, style) %}
     {% set messages = log.read(types) %}
-    {% if messages|length > 0 %}
-        <div class="toast toast-{{ style }}">
+    {% if messages | length > 0 %}
+        <div class="toast {{ style == '' ? '' : 'toast-' ~ style }}">
             {% for msg in messages %}
                 {{ msg.message|raw }}
                 {% if not loop.last %}<br />{% endif %}

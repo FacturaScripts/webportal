@@ -82,7 +82,7 @@
                         {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
-                        {{ Macros.message(log, ['info'], 'primary') }}
+                        {{ Macros.message(log, ['info'], '') }}
                         {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.cookiesPage()) }}{% endif %}
                     </div>
                 </div>
