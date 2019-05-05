@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of PortalRegisterMe
  *
+ * @author Carlos García Gómez          <carlos@facturascripts.com>
  * @author Francesc Pineda Segarra      <francesc.pineda@x-netdigital.com>
  * @author Cristo M. Estévez Hernández  <cristom.estevez@gmail.com>
  */
@@ -134,7 +135,7 @@ class PortalRegisterMe extends PortalController
             case 'activate':
                 if ($this->activeContact()) {
                     $url = empty(AppSettings::get('webportal', 'url')) ? 'EditProfile' : AppSettings::get('webportal', 'url');
-                    $this->response->headers->set('Refresh', '0; ' . $url);
+                    $this->redirect($url);
                 }
                 break;
 

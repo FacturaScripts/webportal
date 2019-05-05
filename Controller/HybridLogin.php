@@ -121,7 +121,7 @@ class HybridLogin extends PortalController
             $this->updateCookies($this->contact, true);
 
             $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
-            $this->response->headers->set('Refresh', '0; ' . $return);
+            $this->redirect($return);
         }
     }
 
@@ -157,7 +157,7 @@ class HybridLogin extends PortalController
             $this->updateCookies($this->contact, true);
 
             $return = empty($_SESSION['hybridLoginReturn']) ? AppSettings::get('webportal', 'url') : $_SESSION['hybridLoginReturn'];
-            $this->response->headers->set('Refresh', '0; ' . $return);
+            $this->redirect($return);
             return true;
         }
 

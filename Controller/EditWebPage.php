@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -75,7 +75,7 @@ class EditWebPage extends ExtendedController\EditController
             case 'preview':
                 $model = $this->views['EditWebPage']->model;
                 if ($model !== false) {
-                    $this->response->headers->set('Refresh', '0; ' . $model->url('public'));
+                    $this->redirect($model->url('public'));
                     UpdateRoutes::setRoutes();
                 }
                 if ($this->user->homepage !== 'PortalHome') {

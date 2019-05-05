@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -68,7 +68,7 @@ class EditWebBlock extends ExtendedController\EditController
                 if ($model !== false && $model->idpage !== null) {
                     $webPage = new WebPage();
                     $webPage->loadFromCode($model->idpage);
-                    $this->response->headers->set('Refresh', '0; ' . $webPage->url('public'));
+                    $this->redirect($webPage->url('public'));
                 }
                 break;
 
