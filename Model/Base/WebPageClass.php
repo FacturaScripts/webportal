@@ -105,11 +105,11 @@ abstract class WebPageClass extends ModelClass
 
         $this->lastip = $ipAddress;
         $this->lastmoddisable = true;
-        if ($this->visitcount < 100 && mt_rand(0, 1) == 0) {
-            $this->visitcount += 2;
+        if ($this->visitcount < 100) {
+            $this->visitcount++;
             $this->save();
-        } elseif ($this->visitcount >= 100 && mt_rand(0, 9) === 0) {
-            $this->visitcount += 10;
+        } elseif ($this->visitcount >= 100 && mt_rand(0, 4) === 0) {
+            $this->visitcount += 5;
             $this->save();
         }
 
