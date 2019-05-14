@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,10 +31,10 @@ trait VisualItemTrait
     {
         switch ($class) {
             case 'col':
-                return 'column';
+                return 'mb-2 column';
 
             case 'col-md-':
-                return 'column col-';
+                return 'mb-2 column col-';
 
             case 'form-control':
             case 'form-control-file':
@@ -45,7 +45,7 @@ trait VisualItemTrait
 
             case 'row':
             case 'form-row':
-                return 'columns mb-2';
+                return 'columns';
 
             default:
                 return $class;
