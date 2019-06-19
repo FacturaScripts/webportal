@@ -22,7 +22,6 @@ use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\EmailTools;
-use FacturaScripts\Dinamic\Lib\IPFilter;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
@@ -40,12 +39,6 @@ class PortalRegisterMe extends PortalController
 {
 
     /**
-     *
-     * @var IPFilter
-     */
-    protected $ipFilter;
-
-    /**
      * New contact
      *
      * @var Contacto
@@ -57,12 +50,6 @@ class PortalRegisterMe extends PortalController
      * @var bool
      */
     public $registrationOK = false;
-
-    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
-    {
-        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        $this->ipFilter = new IPFilter();
-    }
 
     /**
      * Runs the controller's private logic.
@@ -118,7 +105,7 @@ class PortalRegisterMe extends PortalController
         }
 
         $this->miniLog->error($this->i18n->trans('record-not-found'));
-        $this->ipFilter->setAttempt($this->request->getClientIp());
+        $this->ipFilter->setAttempt($this->ipFilter->getClientIp());
         return false;
     }
 
@@ -155,7 +142,7 @@ class PortalRegisterMe extends PortalController
         $email = $this->request->request->get('email');
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->miniLog->warning($this->i18n->trans('email-contact-already-used'));
-            $this->ipFilter->setAttempt($this->request->getClientIp());
+            $this->ipFilter->setAttempt($this->ipFilter->getClientIp());
             return false;
         }
 
@@ -228,7 +215,7 @@ class PortalRegisterMe extends PortalController
      */
     private function setGeoIpData(&$contact)
     {
-        $ipAddress = $this->request->getClientIp() ?? '::1';
+        $ipAddress = $this->ipFilter->getClientIp() ?? '::1';
         $geoLocation = new GeoLocation();
         $geoLocation->setGeoIpData($contact, $ipAddress);
     }

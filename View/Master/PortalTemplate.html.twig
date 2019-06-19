@@ -36,6 +36,7 @@
     </head>
     <body>
         {% import 'Macro/PortalTemplate.html.twig' as Macros %}
+        {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.cookiesPage()) }}{% endif %}
         {% block navbar %}
             <div class="navbar navbar-top">
                 <div class="navbar-section hide-xs">
@@ -83,7 +84,6 @@
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
                         {{ Macros.message(log, ['info'], '') }}
-                        {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.cookiesPage()) }}{% endif %}
                     </div>
                 </div>
             </div>

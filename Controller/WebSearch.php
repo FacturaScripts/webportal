@@ -105,7 +105,7 @@ class WebSearch extends PortalController
             $webSearch->query = $this->query;
         }
         $webSearch->numresults = count($this->searchResults);
-        $webSearch->increaseVisitCount($this->request->getClientIp());
+        $webSearch->increaseVisitCount($this->ipFilter->getClientIp());
 
         $this->setSimilarQueries();
     }

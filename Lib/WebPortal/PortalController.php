@@ -23,6 +23,7 @@ use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\AssetManager;
+use FacturaScripts\Dinamic\Lib\IPFilter;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Model;
@@ -46,7 +47,7 @@ class PortalController extends Controller
      * Period to update contact activity and cookies = 1 hour.
      */
     const PUBLIC_UPDATE_ACTIVITY_PERIOD = 3600;
-    
+
     /**
      *
      * @var string
@@ -66,6 +67,12 @@ class PortalController extends Controller
      * @var string
      */
     public $description;
+
+    /**
+     *
+     * @var IPFilter
+     */
+    protected $ipFilter;
 
     /**
      *
@@ -100,6 +107,7 @@ class PortalController extends Controller
         AssetManager::add('css', FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css', 0);
+        $this->ipFilter = new IPFilter();
         $this->menuComposer = new MenuComposer();
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
@@ -115,7 +123,6 @@ class PortalController extends Controller
         $pageData = parent::getPageData();
         $pageData['menu'] = 'web';
         $pageData['showonmenu'] = false;
-
         return $pageData;
     }
 
@@ -265,7 +272,7 @@ class PortalController extends Controller
         $this->canonicalUrl = $this->webPage->url('public');
 
         if (null !== $this->webPage->idpage) {
-            $ipAddress = $this->request->getClientIp() ?? '::1';
+            $ipAddress = $this->ipFilter->getClientIp() ?? '::1';
             $this->webPage->increaseVisitCount($ipAddress);
         }
 
@@ -290,7 +297,7 @@ class PortalController extends Controller
     protected function updateCookies(&$contact, bool $force = false)
     {
         if ($force || \time() - \strtotime($contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
-            $contact->newLogkey($this->request->getClientIp());
+            $contact->newLogkey($this->ipFilter->getClientIp());
             $contact->save();
 
             $expire = time() + FS_COOKIES_EXPIRE;
