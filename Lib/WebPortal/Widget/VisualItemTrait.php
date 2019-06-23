@@ -34,7 +34,7 @@ trait VisualItemTrait
                 return 'mb-2 column';
 
             case 'col-md-':
-                return 'mb-2 column col-sm-12 col-md-';
+                return 'mb-2 column col-sm-12 col-';
 
             case 'form-control':
             case 'form-control-file':
