@@ -61,13 +61,13 @@
                     <div class="column">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('postalmail') }}</label>
-                            <input class="form-input" type="text" name="apartado" value="{{ fsc.contact.apartado }}" autocomplete="off"/>
+                            <input class="form-input" type="text" name="apartado" value="{{ fsc.contact.apartado }}" maxlength="10" autocomplete="off"/>
                         </div>
                     </div>
                     <div class="column">
                         <div class="form-group">
                             <label class="form-label">{{ i18n.trans('zip-code') }}</label>
-                            <input class="form-input" type="number" name="codpostal" value="{{ fsc.contact.codpostal }}" autocomplete="off"/>
+                            <input class="form-input" type="text" name="codpostal" value="{{ fsc.contact.codpostal }}" maxlength="10" autocomplete="off"/>
                         </div>
                     </div>
                     <div class="column col-6">
