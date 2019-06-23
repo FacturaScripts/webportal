@@ -31,7 +31,7 @@
                     <div class="column">
                         <button type="button" class="btn btn-error" onclick="showSectionDelete('{{ section.getViewName() }}');">
                             <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
-                            {{ i18n.trans('delete') }}
+                            <span class="hide-sm">{{ i18n.trans('delete') }}</span>
                         </button>
                     </div>
                 {% endif %}
@@ -41,13 +41,13 @@
                     {{ row.render() | raw }}
                 </div>
                 <div class="column text-right">
-                    <button class="btn" type="reset">
+                    <button type="reset" class="btn">
                         <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
-                        {{ i18n.trans('undo') }}
+                        <span class="hide-sm">{{ i18n.trans('undo') }}</span>
                     </button>
-                    <button class="btn btn-primary" type="submit">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save fa-fw" aria-hidden="true"></i>
-                        {{ i18n.trans('save') }}
+                        <span class="hide-sm">{{ i18n.trans('save') }}</span>
                     </button>
                 </div>
             </div>
