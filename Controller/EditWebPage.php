@@ -19,7 +19,8 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Lib\ExtendedController;
+use FacturaScripts\Core\Lib\ExtendedController\BaseView;
+use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 
 /**
@@ -27,7 +28,7 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
  *
  * @author Carlos García Gómez
  */
-class EditWebPage extends ExtendedController\EditController
+class EditWebPage extends EditController
 {
 
     /**
@@ -49,7 +50,6 @@ class EditWebPage extends ExtendedController\EditController
         $pageData = parent::getPageData();
         $pageData['title'] = 'page';
         $pageData['menu'] = 'web';
-        $pageData['showonmenu'] = false;
         $pageData['icon'] = 'fas fa-globe';
 
         return $pageData;
@@ -61,6 +61,8 @@ class EditWebPage extends ExtendedController\EditController
     protected function createViews()
     {
         parent::createViews();
+        $this->setTabsPosition('bottom');
+
         $this->addEditListView('EditWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
     }
 
@@ -113,8 +115,8 @@ class EditWebPage extends ExtendedController\EditController
     /**
      * Load data view procedure.
      *
-     * @param string $keyView
-     * @param ExtendedController\BaseView $view
+     * @param string   $keyView
+     * @param BaseView $view
      */
     protected function loadData($keyView, $view)
     {

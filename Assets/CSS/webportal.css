@@ -55,11 +55,19 @@ h2, h3, h4, h5 {
 }
 
 .navbar-top {
-    padding: 10px 10px 0px 10px;
+    background-color: #F8F9FA;
+    border-bottom: 1px solid #E0E3E7;
+    margin-bottom: 10px;
+    padding: 10px;
 }
 
 p {
     word-wrap: break-word;
+}
+
+.accordion {
+    box-shadow: 1px 2px 3px silver;
+    margin-bottom: 10px;
 }
 
 .section-btn {

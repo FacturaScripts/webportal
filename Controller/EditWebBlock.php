@@ -18,7 +18,7 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Lib\ExtendedController;
+use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
@@ -26,7 +26,7 @@ use FacturaScripts\Plugins\webportal\Model\WebPage;
  *
  * @author Carlos García Gómez
  */
-class EditWebBlock extends ExtendedController\EditController
+class EditWebBlock extends EditController
 {
 
     /**

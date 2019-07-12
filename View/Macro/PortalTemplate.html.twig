@@ -1,7 +1,7 @@
 {% macro cookiesMessage(i18n, cookiesPage) %}
     <form method="get">
         <input type="hidden" name="okCookies" value="TRUE"/>
-        <div class="toast cookies">
+        <div class="toast cookies text-center">
             {{ cookiesPage.description | raw }} <button type="submit" class="btn btn-sm">{{ i18n.trans('accept') }}</button>
             <a href="{{ cookiesPage.url('public') }}">{{ i18n.trans('read-more') }}</a>
         </div>
@@ -213,8 +213,8 @@
 {% endmacro %}
 
 {% macro topMenuSmall(fsc, i18n) %}
-    <div class="dropdown show-xs">
-        <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
+    <div class="dropdown">
+        <a href="#" class="btn dropdown-toggle" tabindex="0">
             <i class="fas fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
         </a>
         <ul class="menu">
@@ -231,6 +231,7 @@
                             </a>
                         </li>
                     {% endfor %}
+                    <li class="divider">
                 {% else %}
                     {% set activeClass = (menuItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}
                     <li class="menu-item">

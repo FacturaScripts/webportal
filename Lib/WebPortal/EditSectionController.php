@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -127,7 +127,6 @@ abstract class EditSectionController extends SectionController
         // checks security
         if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
-            $this->sections[$this->active]->model->clear();
             return false;
         }
 
@@ -146,7 +145,6 @@ abstract class EditSectionController extends SectionController
         // save in database
         if ($this->sections[$this->active]->model->save()) {
             $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-            $this->sections[$this->active]->model->clear();
             return true;
         }
 
@@ -162,11 +160,15 @@ abstract class EditSectionController extends SectionController
                 return true;
 
             case 'edit':
-                $this->editAction();
+                if ($this->editAction()) {
+                    $this->sections[$this->active]->model->clear();
+                }
                 return true;
 
             case 'insert':
-                $this->insertAction();
+                if ($this->insertAction()) {
+                    $this->sections[$this->active]->model->clear();
+                }
                 return true;
 
             default:
@@ -202,14 +204,12 @@ abstract class EditSectionController extends SectionController
         // checks security
         if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
-            $this->sections[$this->active]->model->clear();
             return false;
         }
 
         // save in database
         if ($this->sections[$this->active]->model->save()) {
             $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
-            $this->sections[$this->active]->model->clear();
             $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
             return true;
         }

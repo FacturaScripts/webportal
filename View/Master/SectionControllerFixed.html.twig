@@ -16,24 +16,6 @@
         <div class="container">
             <div class="columns">
                 <div class="column">
-                    {# -- Options button -- #}
-                    {% if fsc.user %}
-                        <div class="dropdown">
-                            <a href="#" class="btn btn-link dropdown-toggle">
-                                <i class="fas fa-wrench fa-fw" aria-hidden="true"></i> {{ i18n.trans('options') }}
-                            </a>
-                            <ul class="menu">
-                                {% for sectionName, section in fsc.sections %}
-                                    <li class="menu-item">
-                                        <a href="{{ asset('EditPageOption?code=' ~ sectionName) }}" target="_blank">
-                                            <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i> {{ section.title }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-
                     {# -- Section selector -- #}
                     {% if fsc.sections | length > 1 %}
                         {{ macros.sectionsButtons(fsc, i18n, firstSectionName) }}
@@ -86,29 +68,33 @@
 {% macro sectionsButtons(fsc, i18n, firstSectionName) %}
     <div class="hide-lg">
         {% for name, group in fsc.getSectionGroups() %}
-            <ul class="menu">
-                {% if name != '' %}
-                    <li class="divider" data-content="{{ i18n.trans(name) }}">
-                    </li>
-                {% endif %}
-                {% for sectionName, section in group %}
-                    {% if sectionName != firstSectionName %}
-                        {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2 and name == '') ? 'active' : '' %}
-                        <li class="menu-item">
-                            {% if section.count > 0 %}
-                                <div class="menu-badge">
-                                    <label class="label label-primary">{{ section.count }}</label>
-                                </div>
-                            {% endif %}
-                            <a href="#" id="secBtn{{ sectionName }}" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
-                                <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
-                                {{ section.title }}
-                            </a>
-                        </li>
+            <details class="accordion" open>
+                <summary class="accordion-header">
+                    {% if name != '' %}
+                        <i class="far fa-folder-open fa-fw"></i> {{ i18n.trans(name) }}
                     {% endif %}
-                {% endfor %}
-            </ul>
-            <br/>
+                </summary>
+                <div class="accordion-body">
+                    <ul class="menu menu-nav">
+                        {% for sectionName, section in group %}
+                            {% if sectionName != firstSectionName %}
+                                {% set tabClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2 and name == '') ? 'active' : '' %}
+                                <li class="menu-item">
+                                    {% if section.count > 0 %}
+                                        <div class="menu-badge">
+                                            <label class="label label-primary">{{ section.count }}</label>
+                                        </div>
+                                    {% endif %}
+                                    <a href="#" id="secBtn{{ sectionName }}" class="section-tab {{ tabClass }}" onclick="return showSection('{{ sectionName }}');">
+                                        <i class="{{ section.icon }} fa-fw" aria-hidden="true"></i>
+                                        {{ section.title }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </details>
         {% endfor %}
     </div>
     {# -- Smartphone section dropdown -- #}
