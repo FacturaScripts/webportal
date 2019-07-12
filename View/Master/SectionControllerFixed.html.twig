@@ -71,7 +71,8 @@
             <details class="accordion" open>
                 <summary class="accordion-header">
                     {% if name != '' %}
-                        <i class="far fa-folder-open fa-fw"></i> {{ i18n.trans(name) }}
+                        <div class="divider" data-content="{{ i18n.trans(name) }}">
+                        </div>
                     {% endif %}
                 </summary>
                 <div class="accordion-body">
