@@ -174,7 +174,7 @@
 {% macro message(log, types, style) %}
     {% set messages = log.read(types) %}
     {% if messages | length > 0 %}
-        <div class="toast {{ style == '' ? '' : 'toast-' ~ style }}">
+        <div class="toast {{ style == '' ? '' : 'toast-' ~ style }} text-center">
             {% for msg in messages %}
                 {{ msg.message|raw }}
                 {% if not loop.last %}<br />{% endif %}
