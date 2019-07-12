@@ -36,8 +36,8 @@ class ListWebPage extends ListController
     public function getPageData()
     {
         $pageData = parent::getPageData();
-        $pageData['title'] = 'pages';
         $pageData['menu'] = 'web';
+        $pageData['title'] = 'pages';
         $pageData['icon'] = 'fas fa-globe-americas';
         return $pageData;
     }
@@ -67,6 +67,7 @@ class ListWebPage extends ListController
         $this->addSearchFields($viewName, ['content']);
         $this->addOrderBy($viewName, ['idblock'], 'code');
         $this->addOrderBy($viewName, ['idpage']);
+        $this->addOrderBy($viewName, ['lastmod'], 'last-update', 2);
         $this->addOrderBy($viewName, ['ordernum']);
 
         $blockTypes = $this->codeModel->all('webblocks', 'type', 'type');

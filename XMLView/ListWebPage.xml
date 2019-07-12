@@ -56,9 +56,9 @@
         </column>
     </columns>
     <rows>
-        <row type="status" fieldname="noindex">
-            <option color="warning">1</option>
-            <option color="success">0</option>
+        <row type="status">
+            <option color="warning" fieldname="noindex">1</option>
+            <option color="success" fieldname="noindex">0</option>
         </row>
     </rows>
 </view>

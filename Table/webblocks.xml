@@ -21,6 +21,10 @@
         <type>integer</type>
     </column>
     <column>
+        <name>lastmod</name>
+        <type>date</type>
+    </column>
+    <column>
         <name>ordernum</name>
         <type>integer</type>
         <null>NO</null>

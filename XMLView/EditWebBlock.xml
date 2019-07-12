@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,7 +18,6 @@
  *
  * @author Carlos García Gómez <carlos@facturascripts.com>
 -->
-
 <view>
     <columns>
         <group name="data" numcolumns="12">
@@ -38,12 +37,12 @@
                 </widget>
             </column>
             <column name="idpage" title="page" numcolumns="4" order="120">
-                <widget type="select" fieldname="idpage">
+                <widget type="select" fieldname="idpage" onclick="EditWebPage">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink"></values>
                 </widget>
             </column>
             <column name="sort" numcolumns="4" order="130">
-                <widget type="number" fieldname="ordernum" />
+                <widget type="number" fieldname="ordernum" icon="fas fa-sort" />
             </column>
         </group>
         <group name="content" numcolumns="12">

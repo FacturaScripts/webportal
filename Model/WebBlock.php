@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -53,6 +53,12 @@ class WebBlock extends Base\ModelClass
     public $idpage;
 
     /**
+     *
+     * @var string
+     */
+    public $lastmod;
+
+    /**
      * Position number.
      *
      * @var int
@@ -73,6 +79,7 @@ class WebBlock extends Base\ModelClass
     {
         parent::clear();
         $this->content = 'Hello world!';
+        $this->lastmod = date('d-m-Y');
         $this->ordernum = 100;
         $this->type = 'bodyContainer';
     }
@@ -106,6 +113,17 @@ class WebBlock extends Base\ModelClass
     }
 
     /**
+     * 
+     * @return WebPage
+     */
+    public function getPage()
+    {
+        $webPage = new WebPage();
+        $webPage->loadFromCode($this->idpage);
+        return $webPage;
+    }
+
+    /**
      * Returns the name of the column that is the primary key of the model.
      *
      * @return string
@@ -113,6 +131,29 @@ class WebBlock extends Base\ModelClass
     public static function primaryColumn()
     {
         return 'idblock';
+    }
+
+    /**
+     * 
+     * @return bool
+     */
+    public function save()
+    {
+        /// update last modification date
+        $this->lastmod = date('d-m-Y');
+
+        if (parent::save()) {
+            /// update last modification date of the web page
+            $webPage = $this->getPage();
+            if (strtotime($this->lastmod) > strtotime($webPage->lastmod)) {
+                $webPage->lastmod = $this->lastmod;
+                $webPage->save();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

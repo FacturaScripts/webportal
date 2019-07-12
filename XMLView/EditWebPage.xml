@@ -32,7 +32,7 @@
                 <widget type="text" fieldname="title" required="true" />
             </column>
             <column name="lang-code" numcolumns="2" order="150">
-                <widget type="text" fieldname="langcode" required="true" />
+                <widget type="text" fieldname="langcode" icon="fas fa-language" required="true" />
             </column>
             <column name="description" numcolumns="12" order="160">
                 <widget type="textarea" fieldname="description" required="true" />
@@ -51,22 +51,22 @@
         </group>
         <group name="advanced" numcolumns="12">
             <column name="menu" numcolumns="3" order="90">
-                <widget type="text" fieldname="menu" />
+                <widget type="text" fieldname="menu" icon="fas fa-mouse-pointer" />
             </column>
             <column name="sort" numcolumns="3" order="100">
-                <widget type="number" fieldname="ordernum" />
+                <widget type="number" fieldname="ordernum" icon="fas fa-sort" />
             </column>
             <column name="short-title" numcolumns="3" order="110">
                 <widget type="text" fieldname="shorttitle" />
             </column>
             <column name="icon" numcolumns="3" order="120">
-                <widget type="text" fieldname="icon" />
+                <widget type="text" fieldname="icon" icon="fas fa-icons" />
             </column>
             <column name="equivalence" numcolumns="3" order="130" description="equivalent-page-desc">
                 <widget type="text" fieldname="equivalentpage" />
             </column>
             <column name="custom-controller" numcolumns="3" order="140">
-                <widget type="select" fieldname="customcontroller">
+                <widget type="select" fieldname="customcontroller" icon="fas fa-cog">
                     <values source="pages" fieldcode="name" fieldtitle="name"/>
                 </widget>
             </column>

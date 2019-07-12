@@ -48,10 +48,9 @@ class EditWebPage extends EditController
     public function getPageData()
     {
         $pageData = parent::getPageData();
-        $pageData['title'] = 'page';
         $pageData['menu'] = 'web';
+        $pageData['title'] = 'page';
         $pageData['icon'] = 'fas fa-globe';
-
         return $pageData;
     }
 

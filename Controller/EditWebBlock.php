@@ -47,11 +47,9 @@ class EditWebBlock extends EditController
     public function getPageData()
     {
         $pagedata = parent::getPageData();
-        $pagedata['title'] = 'web-block';
         $pagedata['menu'] = 'web';
+        $pagedata['title'] = 'web-block';
         $pagedata['icon'] = 'fas fa-code';
-        $pagedata['showonmenu'] = false;
-
         return $pagedata;
     }
 
