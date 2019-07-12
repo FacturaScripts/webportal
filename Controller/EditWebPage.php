@@ -62,7 +62,8 @@ class EditWebPage extends EditController
         parent::createViews();
         $this->setTabsPosition('bottom');
 
-        $this->addEditListView('EditWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
+        $this->addListView('ListWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
+        $this->views['ListWebBlock']->addOrderBy(['ordernum'], 'sort');
     }
 
     /**
@@ -120,10 +121,10 @@ class EditWebPage extends EditController
     protected function loadData($keyView, $view)
     {
         switch ($keyView) {
-            case 'EditWebBlock':
+            case 'ListWebBlock':
                 $idpage = $this->getViewModelValue('EditWebPage', 'idpage');
                 $where = [new DataBaseWhere('idpage', $idpage)];
-                $view->loadData('', $where, ['ordernum' => 'ASC']);
+                $view->loadData('', $where);
                 break;
 
             default:
