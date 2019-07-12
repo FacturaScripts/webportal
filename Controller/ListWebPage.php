@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,14 +18,14 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Lib\ExtendedController;
+use FacturaScripts\Core\Lib\ExtendedController\ListController;
 
 /**
  * Description of ListWebPage
  *
  * @author Carlos García Gómez
  */
-class ListWebPage extends ExtendedController\ListController
+class ListWebPage extends ListController
 {
 
     /**
@@ -39,7 +39,6 @@ class ListWebPage extends ExtendedController\ListController
         $pageData['title'] = 'pages';
         $pageData['menu'] = 'web';
         $pageData['icon'] = 'fas fa-globe-americas';
-
         return $pageData;
     }
 
@@ -49,20 +48,7 @@ class ListWebPage extends ExtendedController\ListController
     protected function createViews()
     {
         /// Web pages
-        $this->addView('ListWebPage', 'WebPage', 'pages', 'fas fa-globe-americas');
-        $this->addSearchFields('ListWebPage', ['title', 'description']);
-        $this->addOrderBy('ListWebPage', ['permalink']);
-        $this->addOrderBy('ListWebPage', ['title']);
-        $this->addOrderBy('ListWebPage', ['equivalentpage'], 'equivalence');
-        $this->addOrderBy('ListWebPage', ['ordernum']);
-        $this->addOrderBy('ListWebPage', ['visitcount'], 'visit-counter');
-        $this->addOrderBy('ListWebPage', ['lastmod'], 'last-update');
-
-        $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
-        $this->addFilterSelect('ListWebPage', 'langcode', 'language', 'langcode', $langValues);
-        $this->addFilterCheckbox('ListWebPage', 'showonmenu', 'show-on-menu', 'showonmenu');
-        $this->addFilterCheckbox('ListWebPage', 'showonfooter', 'show-on-footer', 'showonfooter');
-        $this->addFilterCheckbox('ListWebPage', 'noindex', 'no-index', 'noindex');
+        $this->createViewWebPages();
 
         /// Web blocks
         $this->createViewWebBlock();
@@ -71,26 +57,56 @@ class ListWebPage extends ExtendedController\ListController
         $this->createViewWebSearch();
     }
 
-    protected function createViewWebBlock()
+    /**
+     * 
+     * @param string $viewName
+     */
+    protected function createViewWebBlock($viewName = 'ListWebBlock')
     {
-        $this->addView('ListWebBlock', 'WebBlock', 'blocks', 'fas fa-code');
-        $this->addSearchFields('ListWebBlock', ['content']);
-        $this->addOrderBy('ListWebBlock', ['idblock'], 'code');
-        $this->addOrderBy('ListWebBlock', ['idpage']);
-        $this->addOrderBy('ListWebBlock', ['ordernum']);
+        $this->addView($viewName, 'WebBlock', 'blocks', 'fas fa-code');
+        $this->addSearchFields($viewName, ['content']);
+        $this->addOrderBy($viewName, ['idblock'], 'code');
+        $this->addOrderBy($viewName, ['idpage']);
+        $this->addOrderBy($viewName, ['ordernum']);
 
         $blockTypes = $this->codeModel->all('webblocks', 'type', 'type');
-        $this->addFilterSelect('ListWebBlock', 'type', 'type', 'type', $blockTypes);
+        $this->addFilterSelect($viewName, 'type', 'type', 'type', $blockTypes);
 
         $pages = $this->codeModel->all('webpages', 'idpage', 'permalink');
-        $this->addFilterSelect('ListWebBlock', 'idpage', 'page', 'idpage', $pages);
+        $this->addFilterSelect($viewName, 'idpage', 'page', 'idpage', $pages);
     }
 
-    protected function createViewWebSearch()
+    /**
+     * 
+     * @param string $viewName
+     */
+    protected function createViewWebPages($viewName = 'ListWebPage')
     {
-        $this->addView('ListWebSearch', 'WebSearch', 'searches', 'fas fa-search');
-        $this->addSearchFields('ListWebSearch', ['query']);
-        $this->addOrderBy('ListWebSearch', ['lastmod'], 'last-update', 2);
-        $this->addOrderBy('ListWebSearch', ['visitcount'], 'visit-counter');
+        $this->addView($viewName, 'WebPage', 'pages', 'fas fa-globe-americas');
+        $this->addSearchFields($viewName, ['title', 'description']);
+        $this->addOrderBy($viewName, ['permalink']);
+        $this->addOrderBy($viewName, ['title']);
+        $this->addOrderBy($viewName, ['equivalentpage'], 'equivalence');
+        $this->addOrderBy($viewName, ['ordernum']);
+        $this->addOrderBy($viewName, ['visitcount'], 'visit-counter');
+        $this->addOrderBy($viewName, ['lastmod'], 'last-update');
+
+        $langValues = $this->codeModel->all('webpages', 'langcode', 'langcode');
+        $this->addFilterSelect($viewName, 'langcode', 'language', 'langcode', $langValues);
+        $this->addFilterCheckbox($viewName, 'showonmenu', 'show-on-menu', 'showonmenu');
+        $this->addFilterCheckbox($viewName, 'showonfooter', 'show-on-footer', 'showonfooter');
+        $this->addFilterCheckbox($viewName, 'noindex', 'no-index', 'noindex');
+    }
+
+    /**
+     * 
+     * @param string $viewName
+     */
+    protected function createViewWebSearch($viewName = 'ListWebSearch')
+    {
+        $this->addView($viewName, 'WebSearch', 'searches', 'fas fa-search');
+        $this->addSearchFields($viewName, ['query']);
+        $this->addOrderBy($viewName, ['lastmod'], 'last-update', 2);
+        $this->addOrderBy($viewName, ['visitcount'], 'visit-counter');
     }
 }
