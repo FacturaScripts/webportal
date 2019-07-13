@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -101,7 +101,7 @@ class WebSearch extends Base\ModelClass
         }
 
         $this->lastip = $ipAddress;
-        if ($this->visitcount < 100) {
+        if ($this->visitcount < 1000) {
             $this->visitcount++;
             $this->save();
         } elseif ($this->visitcount >= 100 && mt_rand(0, 4) === 0) {

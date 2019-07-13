@@ -18,14 +18,14 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model\Base;
 
-use FacturaScripts\Core\Model\Base\ModelClass;
+use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
 
 /**
  * Description of WebPageClass
  *
  * @author Carlos García Gómez
  */
-abstract class WebPageClass extends ModelClass
+abstract class WebPageClass extends ModelOnChangeClass
 {
 
     /**
@@ -61,7 +61,7 @@ abstract class WebPageClass extends ModelClass
      *
      * @var bool
      */
-    public $lastmoddisable;
+    public $lastmoddisable = false;
 
     /**
      * Position number.
@@ -105,7 +105,7 @@ abstract class WebPageClass extends ModelClass
 
         $this->lastip = $ipAddress;
         $this->lastmoddisable = true;
-        if ($this->visitcount < 100) {
+        if ($this->visitcount < 1000) {
             $this->visitcount++;
             $this->save();
         } elseif ($this->visitcount >= 100 && mt_rand(0, 4) === 0) {
