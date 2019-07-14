@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -30,7 +30,7 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 /**
  * Description of Init
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class Init extends InitClass
 {

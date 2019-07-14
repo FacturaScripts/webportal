@@ -215,7 +215,7 @@ class PortalRegisterMe extends PortalController
      */
     private function setGeoIpData(&$contact)
     {
-        $ipAddress = $this->ipFilter->getClientIp() ?? '::1';
+        $ipAddress = $this->ipFilter->getClientIp();
         $geoLocation = new GeoLocation();
         $geoLocation->setGeoIpData($contact, $ipAddress);
     }

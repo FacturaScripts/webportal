@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez  <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,11 +21,18 @@ namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 /**
  * Description of Permalink
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class Permalink
 {
 
+    /**
+     * 
+     * @param string $title
+     * @param int    $length
+     *
+     * @return string
+     */
     public static function get(string $title, int $length = 200)
     {
         $changes = array('/à/' => 'a', '/á/' => 'a', '/â/' => 'a', '/ã/' => 'a', '/ä/' => 'a',

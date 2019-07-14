@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of HybridLogin
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class HybridLogin extends PortalController
 {
@@ -338,7 +338,7 @@ class HybridLogin extends PortalController
             return;
         }
 
-        $ipAddress = $this->ipFilter->getClientIp() ?? '::1';
+        $ipAddress = $this->ipFilter->getClientIp();
         $geoLocation = new GeoLocation();
         $geoLocation->setGeoIpData($contact, $ipAddress);
     }

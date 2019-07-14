@@ -28,6 +28,10 @@ use FacturaScripts\Core\Lib\ListFilter\DateFilter as ParentFilter;
 class DateFilter extends ParentFilter
 {
 
+    /**
+     * 
+     * @return string
+     */
     public function render()
     {
         $label = static::$i18n->trans($this->label);

@@ -26,7 +26,7 @@ use FacturaScripts\Plugins\webportal\Model\Base\WebPageClass;
 /**
  * Description of WebPage
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class WebPage extends WebPageClass
 {

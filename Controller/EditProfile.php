@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of EditProfile
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class EditProfile extends SectionController
 {
@@ -128,7 +128,6 @@ class EditProfile extends SectionController
         switch ($sectionName) {
             default:
                 if (empty($this->contact) || !$this->contact->exists()) {
-                    $this->miniLog->warning($this->i18n->trans('no-data'));
                     $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
                     $this->webPage->noindex = true;
                     $this->setTemplate('Master/Portal404');

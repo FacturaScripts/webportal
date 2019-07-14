@@ -26,7 +26,7 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget\WidgetAutocomplete;
 /**
  * Description of SectionController
  *
- * @author Carlos Garcia Gomez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 abstract class SectionController extends PortalController
 {

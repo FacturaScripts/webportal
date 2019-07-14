@@ -24,7 +24,7 @@ use FacturaScripts\Core\Model\Base;
 /**
  * Description of WebBlock
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class WebBlock extends Base\ModelClass
 {

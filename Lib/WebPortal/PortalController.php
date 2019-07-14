@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of PortalController class
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class PortalController extends Controller
 {

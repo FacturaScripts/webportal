@@ -61,17 +61,17 @@
                                 <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
                                     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
+                                <a class="btn" href="{{ constant('FS_ROUTE') }}/ListWebPage">
                                     <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
                                 </a>
                             </div>
                         {% elseif fsc.contact %}
-                            <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
+                            <a class="btn" href="#" onclick="return showModal('logoutModal');">
                                 <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
-                                <span>{{ fsc.contact.alias() }}</span>
+                                <span class="hide-md">{{ fsc.contact.alias() }}</span>
                             </a>
                         {% else %}
-                            <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
+                            <a class="btn" href="#" onclick="return showModal('loginModal');">
                                 <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
                                 <span class="hide-md">{{ i18n.trans('login') }}</span>
                             </a>

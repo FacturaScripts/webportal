@@ -20,35 +20,23 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
+use FacturaScripts\Core\Base\ControllerPermissions;
+use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of Sitemap
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class Sitemap extends Controller
 {
 
     /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
-    {
-        $pageData = parent::getPageData();
-        $pageData['title'] = 'sitemap';
-        $pageData['menu'] = 'web';
-        $pageData['showonmenu'] = false;
-
-        return $pageData;
-    }
-
-    /**
      * Execute the public part of the controller.
      *
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param Response $response
      */
     public function publicCore(&$response)
     {
@@ -59,9 +47,9 @@ class Sitemap extends Controller
     /**
      * Runs the controller's private logic.
      *
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \FacturaScripts\Core\Model\User $user
-     * @param \FacturaScripts\Core\Base\ControllerPermissions $permissions
+     * @param Response              $response
+     * @param User                  $user
+     * @param ControllerPermissions $permissions
      */
     public function privateCore(&$response, $user, $permissions)
     {

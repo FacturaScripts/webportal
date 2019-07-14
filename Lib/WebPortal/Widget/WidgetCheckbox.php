@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,13 +23,22 @@ use FacturaScripts\Core\Lib\Widget\WidgetCheckbox as ParentClass;
 /**
  * Description of WidgetCheckbox
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class WidgetCheckbox extends ParentClass
 {
 
     use VisualItemTrait;
 
+    /**
+     * 
+     * @param object $model
+     * @param string $title
+     * @param string $description
+     * @param string $titleurl
+     *
+     * @return string
+     */
     public function edit($model, $title = '', $description = '', $titleurl = '')
     {
         $this->setValue($model);

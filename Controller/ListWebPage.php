@@ -23,7 +23,7 @@ use FacturaScripts\Core\Lib\ExtendedController\ListController;
 /**
  * Description of ListWebPage
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class ListWebPage extends ListController
 {

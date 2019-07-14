@@ -28,6 +28,10 @@ use FacturaScripts\Core\Lib\ListFilter\SelectFilter as ParentFilter;
 class SelectFilter extends ParentFilter
 {
 
+    /**
+     * 
+     * @return string
+     */
     public function render()
     {
         return '<div class="column col-2 col-xs-12 mb-2">'

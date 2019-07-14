@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of EditSectionController
  *
- * @author Carlos Garcia Gomez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 abstract class EditSectionController extends SectionController
 {

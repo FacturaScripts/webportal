@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,6 +35,13 @@ class WidgetMarkdown extends WidgetTextarea
         AssetManager::add('js', FS_ROUTE . '/Dinamic/Assets/JS/WidgetMarkdown.js');
     }
 
+    /**
+     * 
+     * @param string $type
+     * @param string $extraClass
+     *
+     * @return string
+     */
     protected function inputHtml($type = 'text', $extraClass = 'markdown-editor')
     {
         return parent::inputHtml($type, $extraClass);

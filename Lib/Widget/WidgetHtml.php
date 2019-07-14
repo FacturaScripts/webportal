@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@ use FacturaScripts\Core\Lib\Widget\WidgetTextarea;
 /**
  * Description of WidgetHtml
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class WidgetHtml extends WidgetTextarea
 {
@@ -60,6 +60,10 @@ class WidgetHtml extends WidgetTextarea
         return parent::inputHtml($type, $extraClass);
     }
 
+    /**
+     * 
+     * @return string
+     */
     protected function show()
     {
         return htmlentities(parent::show());

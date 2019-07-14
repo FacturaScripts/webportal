@@ -23,7 +23,7 @@ use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
 /**
  * Description of WebPageClass
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 abstract class WebPageClass extends ModelOnChangeClass
 {

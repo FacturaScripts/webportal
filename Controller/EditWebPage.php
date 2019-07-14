@@ -26,7 +26,7 @@ use FacturaScripts\Plugins\webportal\Lib\WebPortal\UpdateRoutes;
 /**
  * Description of EditWebPage.
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class EditWebPage extends EditController
 {

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of webportal plugin for FacturaScripts.
- * Copyright (C) 2018 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,15 +19,18 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\Utils;
-use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use FacturaScripts\Dinamic\Lib\WebPortal\SearchEngine;
+use FacturaScripts\Dinamic\Model\User;
+use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use FacturaScripts\Plugins\webportal\Model\WebSearch as WebSearchModel;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of WebSearch
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez <carlos@facturascripts.com>
  */
 class WebSearch extends PortalController
 {
@@ -60,26 +63,21 @@ class WebSearch extends PortalController
     public $topQueries = [];
 
     /**
-     * Returns basic page attributes
-     *
-     * @return array
+     * 
+     * @param Response              $response
+     * @param User                  $user
+     * @param ControllerPermissions $permissions
      */
-    public function getPageData()
-    {
-        $pageData = parent::getPageData();
-        $pageData['menu'] = 'web';
-        $pageData['showonmenu'] = false;
-        $pageData['icon'] = 'fas fa-search';
-
-        return $pageData;
-    }
-
     public function privateCore(&$response, $user, $permissions)
     {
         parent::privateCore($response, $user, $permissions);
         $this->initSearch();
     }
 
+    /**
+     * 
+     * @param Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
