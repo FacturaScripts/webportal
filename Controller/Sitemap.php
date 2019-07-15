@@ -34,6 +34,20 @@ class Sitemap extends Controller
 {
 
     /**
+     * Returns basic page attributes
+     *
+     * @return array
+     */
+    public function getPageData()
+    {
+        $pageData = parent::getPageData();
+        $pageData['menu'] = 'web';
+        $pageData['title'] = 'sitemap';
+        $pageData['showonmenu'] = false;
+        return $pageData;
+    }
+
+    /**
      * Execute the public part of the controller.
      *
      * @param Response $response
