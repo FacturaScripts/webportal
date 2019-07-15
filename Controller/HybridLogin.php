@@ -296,7 +296,7 @@ class HybridLogin extends PortalController
     {
         $emailTools = new EmailTools();
 
-        $mail = $emailTools->newMail();
+        $mail = $emailTools->newMail(AppSettings::get('webportal', 'title'));
         $mail->Subject = $this->i18n->trans('recover-your-account');
         $mail->addAddress($email);
 

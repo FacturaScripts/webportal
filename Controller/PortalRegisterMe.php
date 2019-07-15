@@ -192,7 +192,7 @@ class PortalRegisterMe extends PortalController
     {
         $emailTools = new EmailTools();
 
-        $mail = $emailTools->newMail();
+        $mail = $emailTools->newMail(AppSettings::get('webportal', 'title'));
         $mail->addCC($email);
         $mail->Subject = $this->i18n->trans('confirm-email');
 
