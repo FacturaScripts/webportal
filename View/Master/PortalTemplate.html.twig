@@ -65,12 +65,12 @@
                                 </a>
                             </div>
                         {% elseif fsc.contact %}
-                            <a class="btn" href="#" onclick="return showModal('logoutModal');">
+                            <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
                                 <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
                                 <span class="hide-md">{{ fsc.contact.alias() }}</span>
                             </a>
                         {% else %}
-                            <a class="btn" href="#" onclick="return showModal('loginModal');">
+                            <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
                                 <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
                                 <span class="hide-md">{{ i18n.trans('login') }}</span>
                             </a>
