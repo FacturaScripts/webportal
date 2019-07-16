@@ -34,13 +34,13 @@
                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
                     <div class="container">
                         <div class="columns">
-                            <div class="column col-6">
+                            <div class="column col-6 col-xs-12">
                                 <div class="form-group">
                                     <label class="form-label" for="name">{{ i18n.trans('name') }}</label>
                                     <input class="form-input" type="text" name="name" id="name" placeholder="{{ i18n.trans('name') }}" autocomplete="off" autofocus=""/>
                                 </div>
                             </div>
-                            <div class="column col-6">
+                            <div class="column col-6 col-xs-12">
                                 <div class="form-group">
                                     <label class="form-label" for="email">{{ i18n.trans('email') }} *</label>
                                     <div class="input-group">
@@ -51,9 +51,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column col-6">
+                            <div class="column col-6 col-xs-12">
                                 <div class="form-group">
                                     <label class="form-label" for="password">{{ i18n.trans('password') }} *</label>
                                     <div class="input-group">
@@ -64,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="column col-6">
+                            <div class="column col-6 col-xs-12">
                                 <div class="form-group">
                                     <label class="form-label" for="password2">{{ i18n.trans('repeat-password') }} *</label>
                                     <div class="input-group">
