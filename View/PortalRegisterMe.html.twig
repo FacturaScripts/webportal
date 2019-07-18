@@ -27,7 +27,7 @@
     <div class="panel">
         <form action="{{ fsc.url() }}?action=register" method="post">
             <div class="panel-header text-center">
-                <i class="fas fa-address-card fa-2x fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-user-circle fa-2x fa-fw" aria-hidden="true"></i>
                 <h1 class="panel-title">{{ i18n.trans('register-new-contact') }}</h1>
             </div>
             <div class="panel-body">
@@ -45,7 +45,7 @@
                                     <label class="form-label" for="email">{{ i18n.trans('email') }} *</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="fas fa-at fa-fw"></i>
+                                            <i class="fas fa-envelope fa-fw"></i>
                                         </span>
                                         <input class="form-input" type="text" name="email" id="email" placeholder="{{ i18n.trans('email') }}" autocomplete="off" required=""/>
                                     </div>
