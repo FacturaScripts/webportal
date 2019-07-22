@@ -67,7 +67,7 @@ class Init extends InitClass
     private function createContact()
     {
         $user = new User();
-        $where = [new DataBaseWhere('email', 'NULL', 'IS NOT')];
+        $where = [new DataBaseWhere('email', null, 'IS NOT')];
         foreach ($user->all($where, [], 0, 0) as $user) {
             $where2 = [new DataBaseWhere('email', $user->email)];
             $contact = new Contacto();

@@ -196,13 +196,6 @@ abstract class EditSectionController extends SectionController
             return false;
         }
 
-        // empty primary key?
-        if (empty($this->sections[$this->active]->model->primaryColumnValue())) {
-            $model = $this->sections[$this->active]->model;
-            // assign a new value
-            $this->sections[$this->active]->model->{$model->primaryColumn()} = $model->newCode();
-        }
-
         // checks security
         if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
             $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
