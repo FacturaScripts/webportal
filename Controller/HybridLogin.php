@@ -137,6 +137,15 @@ class HybridLogin extends PortalController
             return false;
         }
 
+        if ($this->request->request->get('fsContactPassForgot', '') === 'true') {
+            /// Send email to contact with link
+            $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email='
+                . urlencode($email) . '&key=' . $this->getContactRecoverykey($contact);
+
+            $this->sendRecoveryMail($email, $link);
+            return false;
+        }
+
         $passwd = $this->request->request->get('fsContactPass', '');
         if ($contact->verifyPassword($passwd)) {
             $this->setGeoIpData($contact);
@@ -150,12 +159,6 @@ class HybridLogin extends PortalController
 
         $this->miniLog->warning($this->i18n->trans('login-password-fail'));
         $this->ipFilter->setAttempt($this->ipFilter->getClientIp());
-
-        /// Send email to contact with link
-        $link = AppSettings::get('webportal', 'url') . '/HybridLogin?prov=recover&email='
-            . urlencode($email) . '&key=' . $this->getContactRecoverykey($contact);
-
-        $this->sendRecoveryMail($email, $link);
         return false;
     }
 

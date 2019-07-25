@@ -39,14 +39,14 @@
         {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.cookiesPage()) }}{% endif %}
         {% block navbar %}
             <div class="navbar navbar-top">
-                <div class="navbar-section show-xs">
+                <div class="navbar-section show-sm">
                     {{ Macros.TopMenuSmall(fsc, i18n) }}
                 </div>
-                <div class="navbar-section hide-xs">
+                <div class="navbar-section hide-sm">
                     <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" />
                     &nbsp;{{ webTitle }}
                 </div>
-                <div class="navbar-center hide-xs">
+                <div class="navbar-center hide-sm">
                     {{ Macros.TopMenu(fsc, i18n) }}
                 </div>
                 <div class="navbar-section">

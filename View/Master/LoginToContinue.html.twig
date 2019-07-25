@@ -56,7 +56,7 @@
                                                         <span class="input-group-addon">
                                                             <i class="fas fa-envelope fa-fw" aria-hidden="true"></i>
                                                         </span>
-                                                        <input type="text" name="fsContact" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('email') }}" required="" autocomplete="off"/>
+                                                        <input type="text" name="fsContact" class="form-input" maxlength="50" placeholder="{{ i18n.trans('email') }}" required="true" autocomplete="off"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -64,17 +64,25 @@
                                                         <span class="input-group-addon">
                                                             <i class="fas fa-key fa-fw" aria-hidden="true"></i>
                                                         </span>
-                                                        <input type="password" name="fsContactPass" class="form-input" maxlength="50" placeholder=" {{ i18n.trans('password') }}" required="" autocomplete="off"/>
-                                                        <button type="submit" class="btn btn-primary input-group-btn">
-                                                            <i class="fas fa-sign-in-alt fa-fw"></i>
-                                                        </button>
+                                                        <input type="password" name="fsContactPass" class="form-input" maxlength="50" placeholder="{{ i18n.trans('password') }}"/>
                                                     </div>
-                                                    <p class="form-input-hint">{{ i18n.trans('webportal-forgotten-password') }}</p>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label class="form-switch">
+                                                        <input type="checkbox" name="fsContactPassForgot" value="true"/>
+                                                        <i class="form-icon"></i>
+                                                        {{ i18n.trans('webportal-forgotten-password') }}
+                                                    </label>
+                                                </div>
+                                                <button type="submit" class="btn btn-block btn-primary">
+                                                    {{ i18n.trans('login') }}
+                                                </button>
                                                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                                        <i class="fas fa-edit fa-fw"></i> {{ i18n.trans('register-me') }}
-                                                    </a>
+                                                    <div class="mt-2">
+                                                        <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                                            <i class="fas fa-edit fa-fw"></i> {{ i18n.trans('register-me') }}
+                                                        </a>
+                                                    </div>
                                                 {% endif %}
                                             </form>
                                         </div>
