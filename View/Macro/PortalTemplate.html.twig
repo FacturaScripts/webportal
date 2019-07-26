@@ -224,11 +224,12 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro topMenuSmall(fsc, i18n) %}
+{% macro topMenuSmall(fsc, i18n, webTitle) %}
     <div class="dropdown">
         <a href="#" class="btn dropdown-toggle" tabindex="0">
-            <i class="fas fa-bars fa-fw" aria-hidden="true"></i> {{ i18n.trans('menu') }}
+            <i class="fas fa-bars fa-fw" aria-hidden="true"></i>
         </a>
+        &nbsp; {{ webTitle }}
         <ul class="menu">
             {% for menuKey, menuItem in fsc.menuComposer.getTopMenu() %}
                 {% if menuItem is iterable %}

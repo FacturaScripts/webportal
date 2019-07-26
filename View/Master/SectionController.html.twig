@@ -5,7 +5,8 @@
     {% if fsc.user %}
         <div class="dropdown">
             <a href="#" class="btn dropdown-toggle">
-                <i class="fas fa-wrench fa-fw" aria-hidden="true"></i> {{ i18n.trans('options') }}
+                <i class="fas fa-wrench fa-fw" aria-hidden="true"></i>
+                <span class="hide-sm">{{ i18n.trans('options') }}</span>
             </a>
             <ul class="menu">
                 {% for name, group in fsc.getSectionGroups() %}
