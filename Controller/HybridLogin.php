@@ -258,6 +258,7 @@ class HybridLogin extends PortalController
         $recoveryKey = urldecode(base64_decode($this->request->get('key', '')));
         if ($contact->verifyLogkey($recoveryKey)) {
             $this->setGeoIpData($contact);
+            $contact->verificado = true;
             if ($contact->save()) {
                 $this->contact = $contact;
                 $this->updateCookies($contact, true);
