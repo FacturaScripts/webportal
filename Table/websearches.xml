@@ -30,7 +30,7 @@
     </column>
     <column>
         <name>query</name>
-        <type>character varying(100)</type>
+        <type>character varying(200)</type>
         <null>NO</null>
     </column>
     <column>

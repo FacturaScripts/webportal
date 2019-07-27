@@ -31,6 +31,8 @@ class WebSearch extends Base\ModelClass
 
     use Base\ModelTrait;
 
+    const MAX_QUERY_LENGTH = 200;
+
     /**
      * Creation date.
      *
@@ -138,7 +140,7 @@ class WebSearch extends Base\ModelClass
     public function test()
     {
         $this->query = Utils::noHtml($this->query);
-        return parent::test();
+        return parent::test() && strlen($this->query) <= self::MAX_QUERY_LENGTH;
     }
 
     /**
