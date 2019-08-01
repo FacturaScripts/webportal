@@ -3,7 +3,6 @@
 {% block body %}
     {% import _self as macros %}
     <div class="body-section">
-        <br/>
         <div class="container grid-lg">
             <div class="columns">
                 <div class="column col-12">
@@ -25,69 +24,80 @@
 
 {% macro RegistrationForm(fsc, i18n, appSettings) %}
     <div class="panel">
-        <form action="{{ fsc.url() }}?action=register" method="post">
-            <div class="panel-header text-center">
-                <i class="fas fa-user-circle fa-2x fa-fw" aria-hidden="true"></i>
-                <h1 class="panel-title">{{ i18n.trans('register-new-contact') }}</h1>
-            </div>
-            <div class="panel-body">
-                {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                    <div class="container">
-                        <div class="columns">
-                            <div class="column col-6 col-xs-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="name">{{ i18n.trans('name') }}</label>
-                                    <input class="form-input" type="text" name="name" id="name" placeholder="{{ i18n.trans('name') }}" autocomplete="off" autofocus=""/>
+        <div class="panel-header text-center">
+            <h1 class="h3 panel-title">
+                <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i> {{ i18n.trans('register-new-contact') }}
+            </h1>
+        </div>
+        {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
+            <form action="{{ fsc.url() }}?action=register" method="post">
+                <div class="panel-body">
+                    <div class="columns">
+                        <div class="column col-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="form-label" for="name">{{ i18n.trans('name') }}</label>
+                                <input class="form-input" type="text" name="name" id="name" placeholder="{{ i18n.trans('name') }}" autocomplete="off" autofocus=""/>
+                            </div>
+                        </div>
+                        <div class="column col-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="form-label" for="email">{{ i18n.trans('email') }} *</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fas fa-envelope fa-fw"></i>
+                                    </span>
+                                    <input class="form-input" type="text" name="email" id="email" placeholder="{{ i18n.trans('email') }}" autocomplete="off" required=""/>
                                 </div>
                             </div>
-                            <div class="column col-6 col-xs-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="email">{{ i18n.trans('email') }} *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fas fa-envelope fa-fw"></i>
-                                        </span>
-                                        <input class="form-input" type="text" name="email" id="email" placeholder="{{ i18n.trans('email') }}" autocomplete="off" required=""/>
-                                    </div>
+                        </div>
+                        <div class="column col-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="form-label" for="password">{{ i18n.trans('password') }} *</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fas fa-key fa-fw"></i>
+                                    </span>
+                                    <input class="form-input" type="password" name="password" id="password" placeholder="{{ i18n.trans('password') }}" required=""/>
                                 </div>
                             </div>
-                            <div class="column col-6 col-xs-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="password">{{ i18n.trans('password') }} *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fas fa-key fa-fw"></i>
-                                        </span>
-                                        <input class="form-input" type="password" name="password" id="password" placeholder="{{ i18n.trans('password') }}" required=""/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column col-6 col-xs-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="password2">{{ i18n.trans('repeat-password') }} *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fas fa-key fa-fw"></i>
-                                        </span>
-                                        <input class="form-input" type="password" name="password2" id="password2" placeholder="{{ i18n.trans('repeat-password') }}" required=""/>
-                                    </div>
+                        </div>
+                        <div class="column col-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="form-label" for="password2">{{ i18n.trans('repeat-password') }} *</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fas fa-key fa-fw"></i>
+                                    </span>
+                                    <input class="form-input" type="password" name="password2" id="password2" placeholder="{{ i18n.trans('repeat-password') }}" required=""/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% else %}
-                    <div class="container text-center">
-                        {{ i18n.trans('new-registrations-are-closed') }}
+                </div>
+                <div class="panel-footer">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="form-group">
+                                <label class="form-switch">
+                                    <input type="checkbox" name="privacy" value="true"/>
+                                    <i class="form-icon"></i>
+                                    {{ i18n.trans('i-accept-privacy-policy') }}
+                                    <a href="{{ fsc.getPrivacyPage().url('public') | raw }}" target="_blank">
+                                        {{ i18n.trans('read-more') }}
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="column text-right">
+                            <button class="btn btn-success">{{ i18n.trans('register-me') }}</button>
+                        </div>
                     </div>
-                {% endif %}
+                </div>
+            </form>
+        {% else %}
+            <div class="container text-center">
+                {{ i18n.trans('new-registrations-are-closed') }}
             </div>
-            <div class="panel-footer text-right">
-                {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                    <div class="container">
-                        <button class="btn btn-primary input-group-btn">{{ i18n.trans('register-me') }}</button>
-                    </div>
-                {% endif %}
-            </div>
-        </form>
+        {% endif %}
     </div>
 {% endmacro %}

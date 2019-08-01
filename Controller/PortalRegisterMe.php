@@ -26,6 +26,7 @@ use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
+use FacturaScripts\Plugins\webportal\Model\WebPage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -50,6 +51,18 @@ class PortalRegisterMe extends PortalController
      * @var bool
      */
     public $registrationOK = false;
+
+    /**
+     * 
+     * @return WebPage
+     */
+    public function getPrivacyPage()
+    {
+        $idpage = AppSettings::get('webportal', 'privacypage');
+        $webPage = new WebPage();
+        $webPage->loadFromCode($idpage);
+        return $webPage;
+    }
 
     /**
      * Runs the controller's private logic.
@@ -139,6 +152,11 @@ class PortalRegisterMe extends PortalController
      */
     protected function registerContact(): bool
     {
+        if ('true' !== $this->request->request->get('privacy')) {
+            $this->miniLog->warning($this->i18n->trans('you-must-accept-privacy-policy'));
+            return false;
+        }
+
         $email = $this->request->request->get('email');
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->miniLog->warning($this->i18n->trans('email-contact-already-used'));
@@ -151,6 +169,9 @@ class PortalRegisterMe extends PortalController
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', '');
         $this->newContact->email = $email;
+        if (!$this->newContact->test()) {
+            return false;
+        }
 
         $newPassword = $this->request->request->get('password', '');
         $newPassword2 = $this->request->request->get('password2', '');

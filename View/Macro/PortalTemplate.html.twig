@@ -49,45 +49,22 @@
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#close" onclick="return hideModal('loginModal');" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">{{ i18n.trans('login') }}</div>
+                <ul class="tab tab-block">
+                    <li class="tab-item">
+                        <a href="#" id="btnLoginModalCustomers" class="active" onclick="return showLoginModalTab('Customers', 'Employees');">{{ i18n.trans('customers') }}</a>
+                    </li>
+                    <li class="tab-item">
+                        <a href="#" id="btnLoginModalEmployees" onclick="return showLoginModalTab('Employees', 'Customers');">{{ i18n.trans('employees') }}</a>
+                    </li>
+                </ul>
             </div>
             <div class="modal-body">
                 <div class="content">
-                    <ul class="tab tab-block mb-2">
-                        <li class="tab-item">
-                            <a href="#" id="btnLoginModalCustomers" class="active" onclick="return showLoginModalTab('Customers', 'Employees');">{{ i18n.trans('customers') }}</a>
-                        </li>
-                        <li class="tab-item">
-                            <a href="#" id="btnLoginModalEmployees" onclick="return showLoginModalTab('Employees', 'Customers');">{{ i18n.trans('employees') }}</a>
-                        </li>
-                    </ul>
                     <div id="divLoginModalCustomers">
                         {% set facebook = appSettings.get('webportal','fbappid','') %}
                         {% set google = appSettings.get('webportal','googleappid','') %}
                         {% set twitter = appSettings.get('webportal','twitterappid','') %}
                         {% set fsLogin = appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
-                        {% if facebook or google or twitter %}
-                            <div class="btn-group btn-group-block">
-                                {% if facebook %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-facebook fa-fw" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                                {% if google %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-google fa-fw" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                                {% if twitter %}
-                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
-                                        <i class="fab fa-twitter fa-fw" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
-                            {% if fsLogin %}
-                                <p class="form-input-hint">{{ i18n.trans('login-with-social-or-email') }}</p>
-                            {% endif %}
-                        {% endif %}
                         {% if fsLogin %}
                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                 <div class="form-group">
@@ -117,13 +94,34 @@
                                     {{ i18n.trans('login') }}
                                 </button>
                                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                    <div class="mt-2">
-                                        <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                            {{ i18n.trans('register-me') }}
-                                        </a>
-                                    </div>
+                                    <p class="form-input-hint mb-2 mt-2">{{ i18n.trans('do-not-have-account') }}</p>
+                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                        {{ i18n.trans('register-me') }}
+                                    </a>
                                 {% endif %}
                             </form>
+                            {% if facebook or google or twitter %}
+                                <p class="form-input-hint mb-2 mt-2">{{ i18n.trans('login-with-social-or-email') }}</p>
+                            {% endif %}
+                        {% endif %}
+                        {% if facebook or google or twitter %}
+                            <div class="btn-group btn-group-block">
+                                {% if facebook %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-facebook fa-fw" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                                {% if google %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-google fa-fw" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                                {% if twitter %}
+                                    <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block">
+                                        <i class="fab fa-twitter fa-fw" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
                     <div id="divLoginModalEmployees" class="d-hide">

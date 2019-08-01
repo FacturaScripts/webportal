@@ -24,19 +24,24 @@
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" required="true" />
             </column>
-            <column name="title" numcolumns="12" order="100">
+            <column name="title" numcolumns="6" order="100">
                 <widget type="text" fieldname="title"/>
             </column>
-            <column name="url" numcolumns="9" order="110">
+            <column name="url" numcolumns="6" order="110">
                 <widget type="text" fieldname="url"/>
             </column>
-            <column name="homepage" numcolumns="3" order="120">
+            <column name="copyright" title="copyright-text" numcolumns="12" order="120">
+                <widget type="textarea" fieldname="copyright"/>
+            </column>
+            <column name="homepage" numcolumns="6" order="130">
                 <widget type="select" fieldname="homepage" required="true">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
                 </widget>
             </column>
-            <column name="copyright" title="copyright-text" numcolumns="12" order="130">
-                <widget type="textarea" fieldname="copyright"/>
+            <column name="privacy" numcolumns="6" order="140">
+                <widget type="select" fieldname="privacypage" required="true">
+                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
+                </widget>
             </column>
         </group>
         <group name="ipinfodb-credentials" title="ipinfodb-credentials" icon="fas fa-map-marker" numcolumns="12">

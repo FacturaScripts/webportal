@@ -2,7 +2,6 @@
 
 {% block body %}
     <div class="body-section">
-        <br/>
         <div class="container grid-lg">
             <div class="columns">
                 <div class="column col-12">
@@ -25,30 +24,8 @@
                             {% set fsLogin = appSettings.get('webportal','allowlogincontacts','false') == 'true' %}
                             <div class="container">
                                 <div class="columns">
-                                    {% if fsLogin and (facebook or google or twitter) %}
-                                        <div class="column">
-                                            <br/>
-                                            {% if facebook %}
-                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block mb-2">
-                                                    <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
-                                                </a>
-                                            {% endif %}
-                                            {% if google %}
-                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block mb-2">
-                                                    <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
-                                                </a>
-                                            {% endif %}
-                                            {% if twitter %}
-                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block mb-2">
-                                                    <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
-                                                </a>
-                                            {% endif %}
-                                            <p>{{ i18n.trans('login-with-social-or-email') }}</p>
-                                        </div>
-                                        <div class="divider-vert hide-xs"></div>
-                                    {% endif %}
                                     {% if fsLogin %}
-                                        <div class="column">
+                                        <div class="column col-xs-12">
                                             <br/>
                                             <form action="{{ constant('FS_ROUTE') }}/HybridLogin?prov=fs" method="post" class="form">
                                                 <div class="form-group">
@@ -67,7 +44,7 @@
                                                         <input type="password" name="fsContactPass" class="form-input" maxlength="50" placeholder="{{ i18n.trans('password') }}"/>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group text-left">
                                                     <label class="form-switch">
                                                         <input type="checkbox" name="fsContactPassForgot" value="true"/>
                                                         <i class="form-icon"></i>
@@ -78,13 +55,38 @@
                                                     {{ i18n.trans('login') }}
                                                 </button>
                                                 {% if appSettings.get('webportal','allownewregistrations','false') == 'true' %}
-                                                    <div class="mt-2">
-                                                        <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
-                                                            <i class="fas fa-edit fa-fw"></i> {{ i18n.trans('register-me') }}
-                                                        </a>
-                                                    </div>
+                                                    <p class="mb-2 mt-2 text-left">{{ i18n.trans('do-not-have-account') }}</p>
+                                                    <a class="btn btn-block btn-success" href="{{ constant('FS_ROUTE') }}/PortalRegisterMe">
+                                                        {{ i18n.trans('register-me') }}
+                                                    </a>
                                                 {% endif %}
                                             </form>
+                                        </div>
+                                    {% endif %}
+                                    {% if fsLogin and (facebook or google or twitter) %}
+                                        <div class="divider-vert hide-xs"></div>
+                                    {% endif %}
+                                    {% if facebook or google or twitter %}
+                                        <div class="column col-xs-12">
+                                            <br/>
+                                            {% if fsLogin %}
+                                                <p class="mb-2">{{ i18n.trans('login-with-social-or-email') }}</p>
+                                            {% endif %}
+                                            {% if facebook %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=facebook&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-facebook fa-fw" aria-hidden="true"></i> facebook
+                                                </a>
+                                            {% endif %}
+                                            {% if google %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=google&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-google fa-fw" aria-hidden="true"></i> google
+                                                </a>
+                                            {% endif %}
+                                            {% if twitter %}
+                                                <a href="{{ constant('FS_ROUTE') }}/HybridLogin?prov=twitter&return={{ fsc.url() }}" class="btn btn-block mb-2">
+                                                    <i class="fab fa-twitter fa-fw" aria-hidden="true"></i> twitter
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     {% endif %}
                                 </div>
