@@ -18,7 +18,9 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
+use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\MiniLog;
 use FacturaScripts\Plugins\webportal\Model\WebPage;
 
 /**
@@ -47,12 +49,22 @@ class MenuComposer
      */
     public function cookiesPage()
     {
-        $where = [new DataBaseWhere('permalink', '/cookies')];
-        foreach ($this->webPage->all($where) as $cookiePage) {
-            return $cookiePage;
-        }
+        $minilog = new MiniLog();
+        $minilog->warning('cookiesPage() is now deprecated. Use getCookiesPage()');
 
-        return $this->webPage;
+        return $this->getCookiesPage();
+    }
+
+    /**
+     * 
+     * @return WebPage
+     */
+    public function getCookiesPage()
+    {
+        $idpage = AppSettings::get('webportal', 'cookiespage');
+        $webPage = new WebPage();
+        $webPage->loadFromCode($idpage);
+        return $webPage;
     }
 
     /**
@@ -110,6 +122,18 @@ class MenuComposer
         }
 
         return $roots;
+    }
+
+    /**
+     * 
+     * @return WebPage
+     */
+    public function getPrivacyPage()
+    {
+        $idpage = AppSettings::get('webportal', 'privacypage');
+        $webPage = new WebPage();
+        $webPage->loadFromCode($idpage);
+        return $webPage;
     }
 
     /**

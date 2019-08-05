@@ -36,7 +36,7 @@
     </head>
     <body>
         {% import 'Macro/PortalTemplate.html.twig' as Macros %}
-        {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.cookiesPage()) }}{% endif %}
+        {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.getCookiesPage()) }}{% endif %}
         {% block navbar %}
             <div class="navbar navbar-top">
                 <div class="navbar-section show-sm">

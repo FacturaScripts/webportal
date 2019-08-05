@@ -21,7 +21,7 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\Utils;
-use FacturaScripts\Dinamic\Lib\EmailTools;
+use FacturaScripts\Core\Lib\Email\NewMail;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -298,20 +298,12 @@ class HybridLogin extends PortalController
      */
     protected function sendRecoveryMail($email, $link)
     {
-        $emailTools = new EmailTools();
-
-        $mail = $emailTools->newMail(AppSettings::get('webportal', 'title'));
-        $mail->Subject = $this->i18n->trans('recover-your-account');
+        $mail = new NewMail();
+        $mail->fromName = AppSettings::get('webportal', 'title');
         $mail->addAddress($email);
-
-        $params = [
-            'body' => $this->i18n->trans('recover-your-account-body', ['%link%' => $link]),
-            'company' => AppSettings::get('webportal', 'title'),
-            'footer' => AppSettings::get('webportal', 'copyright'),
-            'title' => $mail->Subject,
-        ];
-        $mail->msgHTML($emailTools->getTemplateHtml($params));
-        if ($emailTools->send($mail)) {
+        $mail->title = $this->i18n->trans('recover-your-account');
+        $mail->text = $this->i18n->trans('recover-your-account-body', ['%link%' => $link]);
+        if ($mail->send()) {
             $this->miniLog->notice($this->i18n->trans('recover-email-send-ok'));
             return true;
         }

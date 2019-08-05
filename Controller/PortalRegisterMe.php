@@ -21,12 +21,12 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Dinamic\Lib\EmailTools;
+use FacturaScripts\Dinamic\Lib\Email\ButtonBlock;
+use FacturaScripts\Dinamic\Lib\Email\NewMail;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
-use FacturaScripts\Plugins\webportal\Model\WebPage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -51,18 +51,6 @@ class PortalRegisterMe extends PortalController
      * @var bool
      */
     public $registrationOK = false;
-
-    /**
-     * 
-     * @return WebPage
-     */
-    public function getPrivacyPage()
-    {
-        $idpage = AppSettings::get('webportal', 'privacypage');
-        $webPage = new WebPage();
-        $webPage->loadFromCode($idpage);
-        return $webPage;
-    }
 
     /**
      * Runs the controller's private logic.
@@ -211,22 +199,13 @@ class PortalRegisterMe extends PortalController
      */
     protected function sendEmailConfirmation(string $email, string $url)
     {
-        $emailTools = new EmailTools();
-
-        $mail = $emailTools->newMail(AppSettings::get('webportal', 'title'));
-        $mail->addCC($email);
-        $mail->Subject = $this->i18n->trans('confirm-email');
-
-        $params = [
-            'body' => '<h1>' . $mail->Subject . '</h1>' . $this->i18n->trans('please-click-on-confirm-email')
-            . ' <a href="' . $url . '">' . $mail->Subject . '</a>',
-            'company' => AppSettings::get('webportal', 'title'),
-            'footer' => AppSettings::get('webportal', 'copyright'),
-            'title' => $mail->Subject,
-        ];
-        $mail->msgHTML($emailTools->getTemplateHtml($params));
-
-        return $emailTools->send($mail);
+        $mail = new NewMail();
+        $mail->fromName = AppSettings::get('webportal', 'title');
+        $mail->addAddress($email);
+        $mail->title = $this->i18n->trans('confirm-email');
+        $mail->text = $this->i18n->trans('please-click-on-confirm-email');
+        $mail->addMainBlock(new ButtonBlock($this->i18n->trans('confirm-email'), $url));
+        return $mail->send();
     }
 
     /**

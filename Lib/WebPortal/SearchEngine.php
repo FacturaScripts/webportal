@@ -104,7 +104,7 @@ class SearchEngine
     protected function findWebBlocks(&$results, $query)
     {
         $webBlockModel = new WebBlock();
-        $where = [new DataBaseWhere('content', $query, 'LIKE')];
+        $where = [new DataBaseWhere('content', $query, 'XLIKE')];
         foreach ($webBlockModel->all($where) as $wblock) {
             $link = $wblock->url('public');
             if (empty($link)) {
@@ -128,7 +128,7 @@ class SearchEngine
     protected function findWebPages(&$results, $query)
     {
         $webPageModel = new WebPage();
-        $where = [new DataBaseWhere('description|title', $query, 'LIKE')];
+        $where = [new DataBaseWhere('description|title', $query, 'XLIKE')];
         foreach ($webPageModel->all($where, ['visitcount' => 'DESC']) as $wpage) {
             $this->addSearchResults($results, [
                 'icon' => $wpage->icon,

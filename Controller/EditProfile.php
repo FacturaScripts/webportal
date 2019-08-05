@@ -18,7 +18,8 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Model\Pais;
+use FacturaScripts\Core\App\AppSettings;
+use FacturaScripts\Dinamic\Model\CodeModel;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,13 +32,15 @@ class EditProfile extends SectionController
 {
 
     /**
-     * 
-     * @return array
+     *
+     * @var CodeModel
      */
-    public function getCountries(): array
+    public $codeModel;
+
+    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
-        $pais = new Pais();
-        return $pais->all([], ['nombre' => 'ASC'], 0, 0);
+        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        $this->codeModel = new CodeModel();
     }
 
     /**
@@ -70,14 +73,14 @@ class EditProfile extends SectionController
      */
     protected function changedPersonalData()
     {
-        $this->contact->nombre = $this->request->get('nombre', '');
-        $this->contact->apellidos = $this->request->get('apellidos', '');
-        $this->contact->direccion = $this->request->get('direccion', '');
-        $this->contact->apartado = $this->request->get('apartado', '');
-        $this->contact->codpostal = $this->request->get('codpostal', '');
-        $this->contact->ciudad = $this->request->get('ciudad', '');
-        $this->contact->provincia = $this->request->get('provincia', '');
-        $this->contact->codpais = $this->request->get('codpais', '');
+        $fields = [
+            'nombre', 'apellidos', 'tipoidfiscal', 'cifnif', 'direccion',
+            'apartado', 'codpostal', 'ciudad', 'provincia', 'codpais'
+        ];
+        foreach ($fields as $field) {
+            $this->contact->{$field} = $this->request->get($field, '');
+        }
+
         return true;
     }
 
@@ -92,6 +95,48 @@ class EditProfile extends SectionController
 
     /**
      * 
+     * @return bool
+     */
+    protected function customDeleteAction()
+    {
+        if ('DELETE' === $this->request->get('security', '') && $this->contact->delete()) {
+            $this->response->headers->clearCookie('fsIdcontacto');
+            $this->response->headers->clearCookie('fsLogkey');
+            $this->contact = null;
+
+            $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
+            $this->miniLog->notice($this->i18n->trans('reloading'));
+            $this->redirect(AppSettings::get('webportal', 'url'), 3);
+            return true;
+        }
+
+        $this->miniLog->warning($this->i18n->trans('record-deleted-error'));
+        return true;
+    }
+
+    /**
+     * 
+     * @return bool
+     */
+    protected function customEditAction()
+    {
+        if (!$this->contact->exists()) {
+            /// we must prevent from unauthorized contact creation
+            return true;
+        }
+
+        if ($this->changedPersonalData() && $this->changedPassword()) {
+            if ($this->contact->save()) {
+                $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            } else {
+                $this->miniLog->alert($this->i18n->trans('record-save-error'));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 
      * @param string $action
      *
      * @return bool
@@ -99,20 +144,11 @@ class EditProfile extends SectionController
     protected function execPreviousAction(string $action)
     {
         switch ($action) {
-            case 'edit':
-                if (!$this->contact->exists()) {
-                    /// we must prevent from unauthorized contact creation
-                    return true;
-                }
+            case 'delete':
+                return $this->customDeleteAction();
 
-                if ($this->changedPersonalData() && $this->changedPassword()) {
-                    if ($this->contact->save()) {
-                        $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-                    } else {
-                        $this->miniLog->alert($this->i18n->trans('record-save-error'));
-                    }
-                }
-                return true;
+            case 'edit':
+                return $this->customEditAction();
 
             default:
                 return parent::execPreviousAction($action);

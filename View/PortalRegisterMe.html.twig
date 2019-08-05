@@ -76,17 +76,29 @@
                 </div>
                 <div class="panel-footer">
                     <div class="columns">
-                        <div class="column">
+                        <div class="column col-6 col-xs-12">
                             <div class="form-group">
                                 <label class="form-switch">
                                     <input type="checkbox" name="privacy" value="true"/>
                                     <i class="form-icon"></i>
                                     {{ i18n.trans('i-accept-privacy-policy') }}
-                                    <a href="{{ fsc.getPrivacyPage().url('public') | raw }}" target="_blank">
+                                    <a href="{{ fsc.menuComposer.getPrivacyPage().url('public') | raw }}" target="_blank">
                                         {{ i18n.trans('read-more') }}
                                     </a>
                                 </label>
                             </div>
+                            {% if fsc.showCookiesPolicy %}
+                                <div class="form-group">
+                                    <label class="form-switch">
+                                        <input type="checkbox" name="okCookies" value="TRUE"/>
+                                        <i class="form-icon"></i>
+                                        {{ i18n.trans('i-accept-cookies-policy') }}
+                                        <a href="{{ fsc.menuComposer.getCookiesPage().url('public') | raw }}" target="_blank">
+                                            {{ i18n.trans('read-more') }}
+                                        </a>
+                                    </label>
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="column text-right">
                             <button class="btn btn-success">{{ i18n.trans('register-me') }}</button>

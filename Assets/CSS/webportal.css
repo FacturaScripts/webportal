@@ -70,6 +70,12 @@ p {
     margin-bottom: 10px;
 }
 
+.btn-warning {
+    background-color: #E4A731;
+    border-color: #E4A731;
+    color: black;
+}
+
 .section-btn {
     margin-bottom: 5px;
 }
