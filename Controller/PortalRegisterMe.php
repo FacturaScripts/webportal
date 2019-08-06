@@ -157,6 +157,7 @@ class PortalRegisterMe extends PortalController
         $this->newContact->apellidos = $this->request->request->get('surname', '');
         $this->newContact->descripcion = $this->request->request->get('description', '');
         $this->newContact->email = $email;
+        $this->newContact->aceptaprivacidad = true;
         if (!$this->newContact->test()) {
             return false;
         }
