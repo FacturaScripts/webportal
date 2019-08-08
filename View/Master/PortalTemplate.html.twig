@@ -104,6 +104,7 @@
                 {{ Macros.logoutModal(i18n, fsc) }}
             {% elseif fsc.user == false %}
                 {{ Macros.loginModal(i18n, appSettings, fsc) }}
+                {{ Macros.userLoginModal(i18n, appSettings, fsc) }}
             {% endif %}
         {% endblock %}
         {% block footer %}
@@ -118,6 +119,16 @@
                     </div>
                     <div class="columns">
                         {{ Macros.footerMenu(fsc) }}
+                        {% if fsc.user is empty and fsc.contact is empty %}
+                            <div class="column col-md-3 col-sm-12">
+                                <dl>
+                                    <dt>{{ i18n.trans('employees') }}</dt>
+                                    <dd>
+                                        <a href="#" onclick="return showModal('userLoginModal');">{{ i18n.trans('login') }}</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="columns">
                         <div class="column">

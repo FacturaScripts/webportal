@@ -131,7 +131,7 @@ class HybridLogin extends PortalController
         }
 
         $contact = new Contacto();
-        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)]) || !$contact->habilitado) {
             $this->miniLog->warning($this->i18n->trans('email-not-registered'));
             $this->ipFilter->setAttempt($this->ipFilter->getClientIp());
             return false;

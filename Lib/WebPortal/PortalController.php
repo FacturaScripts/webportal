@@ -203,7 +203,7 @@ class PortalController extends Controller
         }
 
         $contacto = new Contacto();
-        if ($contacto->loadFromCode($idcontacto)) {
+        if ($contacto->loadFromCode($idcontacto) && $contacto->habilitado) {
             if ($contacto->verifyLogkey($this->request->cookies->get('fsLogkey'))) {
                 $this->contact = $contacto;
                 $this->updateCookies($this->contact);

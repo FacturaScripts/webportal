@@ -95,6 +95,7 @@ class PortalRegisterMe extends PortalController
         $contact = new Contacto();
         $where = [new DataBaseWhere('email', rawurldecode($email))];
         if ($contact->loadFromCode('', $where) && $cod === sha1($contact->idcontacto . $contact->password)) {
+            $contact->habilitado = true;
             $contact->verificado = true;
             if ($contact->save()) {
                 $this->updateCookies($contact, true);
@@ -158,6 +159,7 @@ class PortalRegisterMe extends PortalController
         $this->newContact->descripcion = $this->request->request->get('description', '');
         $this->newContact->email = $email;
         $this->newContact->aceptaprivacidad = true;
+        $this->newContact->habilitado = false;
         if (!$this->newContact->test()) {
             return false;
         }
