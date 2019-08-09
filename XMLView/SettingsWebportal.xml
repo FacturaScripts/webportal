@@ -33,18 +33,23 @@
             <column name="copyright" title="copyright-text" numcolumns="12" order="120">
                 <widget type="textarea" fieldname="copyright"/>
             </column>
-            <column name="homepage" numcolumns="4" order="130">
-                <widget type="select" fieldname="homepage" required="true">
+            <column name="homepage" titleurl="ListWebPage" numcolumns="3" order="130">
+                <widget type="select" fieldname="homepage" onclick="EditWebPage" required="true">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
                 </widget>
             </column>
-            <column name="cookies-page" numcolumns="4" order="140">
-                <widget type="select" fieldname="cookiespage" required="true">
+            <column name="cookies-page" titleurl="ListWebPage" numcolumns="3" order="140">
+                <widget type="select" fieldname="cookiespage" onclick="EditWebPage" required="true">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
                 </widget>
             </column>
-            <column name="privacy-page" numcolumns="4" order="150">
-                <widget type="select" fieldname="privacypage" required="true">
+            <column name="privacy-page" titleurl="ListWebPage" numcolumns="3" order="150">
+                <widget type="select" fieldname="privacypage" onclick="EditWebPage" required="true">
+                    <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
+                </widget>
+            </column>
+            <column name="terms-page" titleurl="ListWebPage" numcolumns="3" order="160">
+                <widget type="select" fieldname="termspage" onclick="EditWebPage" required="true">
                     <values source="webpages" fieldcode="idpage" fieldtitle="permalink" />
                 </widget>
             </column>

@@ -30,6 +30,7 @@
     "ipinfodb-credentials": "Credenciales IPInfoDB",
     "i-accept-cookies-policy": "Acepto la política de cookies.",
     "i-accept-privacy-policy": "Acepto la política de privacidad.",
+    "i-accept-terms": "Acepto los términos y condiciones.",
     "javascript": "JavaScript",
     "javascriptWithCookies": "JavaScript con cookies",
     "last-update": "Última actualización",
@@ -68,11 +69,13 @@
     "short-title": "Título corto",
     "show-on-footer": "Mostrar en pié",
     "show-on-menu": "Mostrar en menú",
+    "terms-page": "Términos y condiciones",
     "twitter-login": "Acceder con Twitter",
     "verification-url": "URL a verificar",
     "visit-counter": "Contador de visitas",
     "web-block": "Bloque web",
     "webportal": "WebPortal",
     "webportal-forgotten-password": "He olvidado la contraseña",
-    "you-must-accept-privacy-policy": "Debe aceptar la política de privacidad"
+    "you-must-accept-privacy-policy": "Debe aceptar la política de privacidad",
+    "you-must-accept-privacy-policy": "You must accept the terms and conditions"
 }

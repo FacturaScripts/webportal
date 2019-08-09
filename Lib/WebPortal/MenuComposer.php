@@ -137,6 +137,18 @@ class MenuComposer
     }
 
     /**
+     * 
+     * @return WebPage
+     */
+    public function getTermsPage()
+    {
+        $idpage = AppSettings::get('webportal', 'termspage');
+        $webPage = new WebPage();
+        $webPage->loadFromCode($idpage);
+        return $webPage;
+    }
+
+    /**
      * Return public menu.
      *
      * @return array
