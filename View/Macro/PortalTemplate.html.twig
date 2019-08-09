@@ -158,7 +158,7 @@
                 <a href="#" class="btn{{ activeClass }} dropdown-toggle" tabindex="0">
                     {{ menuKey }} <i class="fas fa-caret-down"></i>
                 </a>
-                <ul class="menu">
+                <ul class="menu menu-big">
                     {% for childItem in menuItem %}
                         <li class="menu-item">
                             {% set activeClass = (childItem.idpage == fsc.webPage.idpage) ? 'active' : '' %}

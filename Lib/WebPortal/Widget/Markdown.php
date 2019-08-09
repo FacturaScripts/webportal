@@ -42,7 +42,9 @@ class Markdown
 
         /// some html fixes
         return str_replace(
-            ['<pre>', '<img '], ['<pre class="code">', '<img class="img-responsive" '], $html
+            ['<pre>', '<img ', '<h2>', '<h3>'],
+            ['<pre class="code">', '<img class="img-responsive" ', '<h2 class="h3">', '<h3 class="h4">'],
+            $html
         );
     }
 }
