@@ -67,14 +67,18 @@ class SearchEngine
         }
 
         $item['position'] = false;
+        $text = mb_strtolower($item['title'] . ' ' . $item['description']);
         foreach (explode(' ', $query) as $subQuery) {
-            $position = stripos($item['title'] . ' ' . $item['description'], $subQuery);
+            $position = mb_strpos($text, $subQuery);
             if (false === $position) {
                 $item['position'] = false;
                 break;
+            } elseif (false === $item['position']) {
+                $item['position'] = $position;
+                continue;
             }
 
-            $item['position'] = max([(int) $item['position'], (int) $position]);
+            $item['position'] = min([(int) $item['position'], (int) $position]);
         }
 
         $item['icon'] = isset($item['icon']) ? $item['icon'] : 'fas fa-file';
@@ -83,6 +87,49 @@ class SearchEngine
         $item['priority'] = isset($item['priority']) ? $item['priority'] : 0;
         $results[$item['link']] = $item;
         return true;
+    }
+
+    /**
+     * 
+     * @param array $results
+     */
+    private function beforeSort(&$results)
+    {
+        /// we need maximum value of position and priority
+        $maxPosition = 0;
+        $maxPriority = -1000;
+        foreach ($results as $item) {
+            if ($item['position'] > $maxPosition) {
+                $maxPosition = $item['position'];
+            }
+
+            if ($item['priority'] > $maxPriority) {
+                $maxPriority = $item['priority'];
+            }
+        }
+
+        $lastOrdernum = 0;
+        $lastPriority = -1000;
+        foreach ($results as $key => $value) {
+            if ($value['priority'] != $lastPriority) {
+                $lastPriority = $value['priority'];
+                $lastOrdernum = 0;
+            }
+
+            /// add max position when position is FALSE
+            if (false === $value['position']) {
+                $results[$key]['position'] = 1 + $maxPosition;
+            }
+
+            $results[$key]['ordernum'] = $lastOrdernum;
+            $lastOrdernum += 0.5;
+
+            if ($value['priority'] == $maxPriority) {
+                $results[$key]['index'] = $results[$key]['position'] + $results[$key]['ordernum'];
+            } else {
+                $results[$key]['index'] = ($results[$key]['position'] + $results[$key]['ordernum']) * pow(2, abs($maxPriority - $value['priority']));
+            }
+        }
     }
 
     /**
@@ -191,35 +238,13 @@ class SearchEngine
      */
     protected function sort(&$results)
     {
-        /// we need maximum value of position and priority
-        $maxPosition = 0;
-        $maxPriority = 0;
-        foreach ($results as $item) {
-            if ($item['position'] > $maxPosition) {
-                $maxPosition = 1 + $item['position'];
-            }
+        $this->beforeSort($results);
 
-            if ($item['priority'] > $maxPriority) {
-                $maxPriority = 1 + $item['priority'];
-            }
-        }
-
-        /// add max position when position is FALSE
-        foreach ($results as $key => $value) {
-            if (false === $value['position']) {
-                $results[$key]['position'] = $maxPosition;
-            }
-
-            if ($value['priority'] < $maxPriority) {
-                $results[$key]['position'] += $maxPosition * ($maxPriority - $value['priority']);
-            }
-        }
-
-        /// sort by position
+        /// sort by index
         usort($results, function($item1, $item2) {
-            if ($item1['position'] == $item2['position']) {
+            if ($item1['index'] == $item2['index']) {
                 return 0;
-            } else if ($item1['position'] > $item2['position']) {
+            } else if ($item1['index'] > $item2['index']) {
                 return 1;
             }
 

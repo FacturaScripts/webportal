@@ -28,7 +28,10 @@
                             <div class="tile-content">
                                 <a href="{{ item.link }}" class="tile-title">{{ item.title | raw }}</a>
                                 {% if fsc.user %}
+                                    <span class="label">{{ item.index }}</span>
                                     <span class="label">{{ item.position }}</span>
+                                    <span class="label">{{ item.ordernum }}</span>
+                                    <span class="label">{{ item.priority }}</span>
                                 {% endif %}
                                 <p class="tile-subtitle text-gray">{{ item.description | raw }}</p>
                             </div>
