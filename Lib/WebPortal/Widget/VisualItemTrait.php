@@ -31,7 +31,7 @@ trait VisualItemTrait
     {
         switch ($class) {
             case 'col':
-                return 'mb-2 column';
+                return 'mb-2 column col-xs-12';
 
             case 'col-md-':
                 return 'mb-2 column col-sm-12 col-';
