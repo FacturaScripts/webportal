@@ -106,7 +106,10 @@ class PortalController extends Controller
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
         AssetManager::add('css', FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css', 3);
+        AssetManager::add('css', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css', 0);
+        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js');
+        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js');
         $this->ipFilter = new IPFilter();
         $this->menuComposer = new MenuComposer();
         $this->pageComposer = new PageComposer();

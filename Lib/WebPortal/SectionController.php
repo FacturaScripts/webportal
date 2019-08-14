@@ -19,7 +19,6 @@
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
 use FacturaScripts\Core\Model\CodeModel;
-use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Lib\Widget\VisualItem;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget\WidgetAutocomplete;
 
@@ -68,9 +67,6 @@ abstract class SectionController extends PortalController
     public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
     {
         parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        AssetManager::add('css', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css');
-        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js');
-        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js');
         $this->codeModel = new CodeModel();
     }
 

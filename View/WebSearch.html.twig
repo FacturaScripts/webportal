@@ -1,10 +1,5 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
-{% block css %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}" />
-{% endblock %}
-
 {% block body %}
     <div class="body-section">
         <div class="container grid-lg">
@@ -60,8 +55,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             var availableTags = {{ fsc.topQueries | json_encode() | raw }};

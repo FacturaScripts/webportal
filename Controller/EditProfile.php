@@ -19,7 +19,6 @@
 namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\App\AppSettings;
-use FacturaScripts\Dinamic\Model\CodeModel;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,18 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EditProfile extends SectionController
 {
-
-    /**
-     *
-     * @var CodeModel
-     */
-    public $codeModel;
-
-    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
-    {
-        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
-        $this->codeModel = new CodeModel();
-    }
 
     /**
      * 
