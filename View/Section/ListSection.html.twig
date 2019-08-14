@@ -1,72 +1,78 @@
 {% import _self as macros %}
 {% set section = fsc.getCurrentSection() %}
 
-{# -- List form -- #}
-<form id="secForm{{ section.getViewName() }}" method="post">
-    <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
-    <input type="hidden" name="offset" value="0"/>
-    <div class="columns">
-        <div class="column mb-2">
-            {# -- Row actions -- #}
-            {% set row = section.getRow('actions') %}
-            {{ row.render(true) | raw }}
-        </div>
-        <div class="column text-right mb-2">
-            {% if section.filters is not empty %}
-                <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
-                    <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
-                </a>
-            {% endif %}
-        </div>
-        <div class="column col-3 col-sm-12 mb-2">
-            {{ macros.sectionSearch(section, i18n) }}
-        </div>
-        <div class="column col-3 col-sm-12 mb-2">
-            {{ macros.sectionOrder(section) }}
-        </div>
+<div class="card">
+    <div class="card-header">
+        {# -- List form -- #}
+        <form id="secForm{{ section.getViewName() }}" method="post">
+            <input type="hidden" name="activetab" value="{{ section.getViewName() }}"/>
+            <input type="hidden" name="offset" value="0"/>
+            <div class="columns">
+                <div class="column mb-2">
+                    {# -- Row actions -- #}
+                    {% set row = section.getRow('actions') %}
+                    {{ row.render(true) | raw }}
+                </div>
+                <div class="column text-right mb-2">
+                    {% if section.filters is not empty %}
+                        <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
+                            <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="column col-3 col-sm-12 mb-2">
+                    {{ macros.sectionSearch(section, i18n) }}
+                </div>
+                <div class="column col-3 col-sm-12 mb-2">
+                    {{ macros.sectionOrder(section) }}
+                </div>
+            </div>
+            {# -- Filters -- #}
+            {% set divFiltersStyle = section.showFilters ? '' : 'display: none;' %}
+            <div id="form{{ section.getViewName() }}Filters" class="columns" style="{{ divFiltersStyle }}">
+                {% for filterName, filter in section.filters %}
+                    {{ filter.render() | raw }}
+                {% endfor %}
+            </div>
+        </form>
     </div>
-    {# -- Filters -- #}
-    {% set divFiltersStyle = section.showFilters ? '' : 'display: none;' %}
-    <div id="form{{ section.getViewName() }}Filters" class="columns" style="{{ divFiltersStyle }}">
-        {% for filterName, filter in section.filters %}
-            {{ filter.render() | raw }}
-        {% endfor %}
-    </div>
-</form>
 
-{# -- Body section -- #}
-{% block sectionBody %}
-    <div class="custom-scroll">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    {% for column in section.getColumns() %}
-                        {{ column.tableHeader() | raw }}
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% set rowStatus = section.getRow('status') %}
-                {% for model in section.cursor %}
-                    {% set trClass = rowStatus.trClass(model) %}
-                    <tr class="clickableRow c-hand {{ trClass }}" data-href="{{ asset(model.url('public')) }}">
+    {# -- Body section -- #}
+    {% block sectionBody %}
+        <div class="custom-scroll">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
                         {% for column in section.getColumns() %}
-                            {{ column.tableCell(model) | raw }}
+                            {{ column.tableHeader() | raw }}
                         {% endfor %}
                     </tr>
-                {% else %}
-                    <tr>
-                        <td class="bg-warning" colspan="{{ 1 + section.getColumns() | length }}">{{ i18n.trans('no-data') }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% endblock %}
+                </thead>
+                <tbody>
+                    {% set rowStatus = section.getRow('status') %}
+                    {% for model in section.cursor %}
+                        {% set trClass = rowStatus.trClass(model) %}
+                        <tr class="clickableRow c-hand {{ trClass }}" data-href="{{ asset(model.url('public')) }}">
+                            {% for column in section.getColumns() %}
+                                {{ column.tableCell(model) | raw }}
+                            {% endfor %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td class="bg-warning" colspan="{{ 1 + section.getColumns() | length }}">{{ i18n.trans('no-data') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endblock %}
 
-{# -- Paginacion -- #}
-<div class="custom-scroll">
-    {{ macros.sectionPagination(section) }}
+    {# -- Paginacion -- #}
+    {% if section.getPagination() | length > 0 %}
+        <div class="card-footer">
+            {{ macros.sectionPagination(section) }}
+        </div>
+    {% endif %}
 </div>
 
 {# -- Macros -- #}

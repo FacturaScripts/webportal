@@ -15,13 +15,13 @@
         {# -- Other sections -- #}
         <div class="container">
             <div class="columns">
-                <div class="column">
+                <div class="column col-2 col-lg-12">
                     {# -- Section selector -- #}
                     {% if fsc.sections | length > 1 %}
                         {{ macros.sectionsButtons(fsc, i18n, firstSectionName) }}
                     {% endif %}
                 </div>
-                <div class="column col-10 col-md-12">
+                <div class="column">
                     {# -- Section contents -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% if sectionName != firstSectionName %}
