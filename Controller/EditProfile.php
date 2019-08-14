@@ -44,47 +44,6 @@ class EditProfile extends SectionController
     }
 
     /**
-     * Check if password if valid. If the user don´t write nothing, the password is the same and storage the rest of the changes.
-     *
-     * @return bool
-     */
-    protected function changedPassword(): bool
-    {
-        $password = $this->request->get('password', '');
-        $repassword = $this->request->get('re-password', '');
-
-        if ('' == $password && $repassword == '') {
-            return true;
-        }
-
-        if ($password !== $repassword) {
-            $this->miniLog->warning($this->i18n->trans('different-passwords', ['%userNick%' => $this->contact->email]));
-            return false;
-        }
-
-        $this->contact->setPassword($password);
-        return true;
-    }
-
-    /**
-     * Storage the personal data 
-     *
-     * @return bool
-     */
-    protected function changedPersonalData()
-    {
-        $fields = [
-            'nombre', 'apellidos', 'tipoidfiscal', 'cifnif', 'direccion',
-            'apartado', 'codpostal', 'ciudad', 'provincia', 'codpais'
-        ];
-        foreach ($fields as $field) {
-            $this->contact->{$field} = $this->request->get($field, '');
-        }
-
-        return true;
-    }
-
-    /**
      * 
      */
     protected function createSections()
@@ -125,13 +84,21 @@ class EditProfile extends SectionController
             return true;
         }
 
-        if ($this->changedPersonalData() && $this->changedPassword()) {
-            if ($this->contact->save()) {
-                $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
-            } else {
-                $this->miniLog->alert($this->i18n->trans('record-save-error'));
-            }
+        $fields = [
+            'nombre', 'apellidos', 'tipoidfiscal', 'cifnif', 'direccion',
+            'apartado', 'codpostal', 'ciudad', 'provincia', 'codpais',
+            'newPassword', 'newPassword2'
+        ];
+        foreach ($fields as $field) {
+            $this->contact->{$field} = $this->request->get($field, '');
         }
+
+        if ($this->contact->save()) {
+            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+        } else {
+            $this->miniLog->alert($this->i18n->trans('record-save-error'));
+        }
+
         return true;
     }
 
