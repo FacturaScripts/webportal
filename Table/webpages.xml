@@ -31,7 +31,6 @@
         <name>idpage</name>
         <type>serial</type>
         <null>NO</null>
-        <default>nextval('webpages_idpage_seq'::regclass)</default>
     </column>
     <column>
         <name>langcode</name>

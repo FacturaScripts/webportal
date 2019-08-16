@@ -14,7 +14,6 @@
         <name>idblock</name>
         <type>serial</type>
         <null>NO</null>
-        <default>nextval('webblocks_idblock_seq'::regclass)</default>
     </column>
     <column>
         <name>idpage</name>
