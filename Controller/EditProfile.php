@@ -18,7 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\SectionController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -50,13 +49,13 @@ class EditProfile extends SectionController
             $this->response->headers->clearCookie('fsLogkey');
             $this->contact = null;
 
-            $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
-            $this->miniLog->notice($this->i18n->trans('reloading'));
-            $this->redirect(AppSettings::get('webportal', 'url'), 3);
+            $this->toolBox()->i18nLog()->notice('record-deleted-correctly');
+            $this->toolBox()->i18nLog()->notice('reloading');
+            $this->redirect($this->toolBox()->appSettings()->get('webportal', 'url'), 3);
             return true;
         }
 
-        $this->miniLog->warning($this->i18n->trans('record-deleted-error'));
+        $this->toolBox()->i18nLog()->error('record-deleted-error');
         return true;
     }
 
@@ -81,9 +80,9 @@ class EditProfile extends SectionController
         }
 
         if ($this->contact->save()) {
-            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            $this->toolBox()->i18nLog()->notice('record-updated-correctly');
         } else {
-            $this->miniLog->alert($this->i18n->trans('record-save-error'));
+            $this->toolBox()->i18nLog()->error('record-save-error');
         }
 
         return true;

@@ -18,8 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
-use FacturaScripts\Core\App\AppSettings;
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Plugins\webportal\Model\Base\WebPageClass;
 
@@ -168,14 +166,25 @@ class WebPage extends WebPageClass
      */
     public function test()
     {
+        $utils = $this->toolBox()->utils();
         $this->description = str_replace("\n", ' ', $this->description);
-        $this->description = mb_substr(Utils::noHtml($this->description), 0, 300);
-        $this->permalink = Utils::noHtml($this->permalink);
-        $this->title = Utils::noHtml($this->title);
-        $this->shorttitle = empty($this->shorttitle) ? $this->title : Utils::noHtml($this->shorttitle);
+        $this->description = mb_substr($utils->noHtml($this->description), 0, 300);
+        $this->permalink = $utils->noHtml($this->permalink);
+        $this->title = $utils->noHtml($this->title);
+        $this->shorttitle = empty($this->shorttitle) ? $this->title : $utils->noHtml($this->shorttitle);
 
-        $homepage = $this->get(AppSettings::get('webportal', 'homepage'));
-        if ((false !== $homepage) && $this->langcode !== $homepage->langcode && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
+        /// check permalink
+        if (!preg_match('/^[A-Z0-9_\+\.\-\/]{1,200}$/i', $this->permalink)) {
+            $this->toolBox()->i18nLog()->error(
+                'invalid-alphanumeric-code',
+                ['%value%' => $this->permalink, '%column%' => 'permalink', '%min%' => '1', '%max%' => '200']
+            );
+            return false;
+        }
+
+        /// check langcode in permalink
+        $homepage = $this->get($this->toolBox()->appSettings()->get('webportal', 'homepage'));
+        if (false !== $homepage && $this->langcode !== $homepage->langcode && substr($this->permalink, 0, 4) !== '/' . $this->langcode . '/') {
             $this->permalink = '/' . $this->langcode . '/' . $this->permalink;
         } elseif ($this->permalink[0] !== '/') {
             $this->permalink = '/' . $this->permalink;
@@ -197,7 +206,7 @@ class WebPage extends WebPageClass
         switch ($type) {
             case 'public':
                 /// don't use ===
-                if ($this->idpage == AppSettings::get('webportal', 'homepage')) {
+                if ($this->idpage == $this->toolBox()->appSettings()->get('webportal', 'homepage')) {
                     return FS_ROUTE . '/';
                 }
 

@@ -18,9 +18,12 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
-use FacturaScripts\Core\Model\CodeModel;
+use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Dinamic\Lib\Widget\VisualItem;
+use FacturaScripts\Dinamic\Model\CodeModel;
+use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\Widget\WidgetAutocomplete;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of SectionController
@@ -64,9 +67,14 @@ abstract class SectionController extends PortalController
 
     abstract protected function createSections();
 
-    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    /**
+     * 
+     * @param string $className
+     * @param string $uri
+     */
+    public function __construct(string $className, string $uri = '')
     {
-        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        parent::__construct($className, $uri);
         $this->codeModel = new CodeModel();
     }
 
@@ -93,12 +101,22 @@ abstract class SectionController extends PortalController
         return $group;
     }
 
+    /**
+     * 
+     * @param Response              $response
+     * @param User                  $user
+     * @param ControllerPermissions $permissions
+     */
     public function privateCore(&$response, $user, $permissions)
     {
         parent::privateCore($response, $user, $permissions);
         $this->commonCore();
     }
 
+    /**
+     * 
+     * @param Response $response
+     */
     public function publicCore(&$response)
     {
         parent::publicCore($response);
@@ -262,7 +280,7 @@ abstract class SectionController extends PortalController
     protected function addSection($sectionName, $newSection)
     {
         if ($sectionName !== $newSection->getViewName()) {
-            $this->miniLog->error('$sectionName must be equals to $view->name');
+            $this->toolBox()->log()->critical('$sectionName must be equals to $view->name');
             return;
         }
 
@@ -384,7 +402,7 @@ abstract class SectionController extends PortalController
         $column = $this->sections[$sectionName]->columnForField($fieldName);
         if (!empty($column)) {
             foreach ($column->widget->values as $value) {
-                $result[] = ['key' => $this->i18n->trans($value['title']), 'value' => $value['value']];
+                $result[] = ['key' => $this->toolBox()->i18n()->trans($value['title']), 'value' => $value['value']];
             }
         }
         return $result;
@@ -398,18 +416,6 @@ abstract class SectionController extends PortalController
     protected function loadData(string $sectionName)
     {
         $this->sections[$sectionName]->loadData();
-    }
-
-    /**
-     * 
-     * @param string $sectionName
-     * @param array  $where
-     */
-    protected function loadListSection(string $sectionName, array $where = [])
-    {
-        $this->miniLog->alert('loadListSection($sectionName, $where) is deprecated. Please, '
-            . 'use $this->sections[$sectionName]->loadData(\'\', $where)');
-        $this->sections[$sectionName]->loadData('', $where);
     }
 
     /**

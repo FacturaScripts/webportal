@@ -18,7 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Dinamic\Model\User;
@@ -98,7 +97,7 @@ class Sitemap extends Controller
     {
         $this->setTemplate(false);
         $this->response->headers->set('Content-type', 'text/xml');
-        $domain = AppSettings::get('webportal', 'url', '');
+        $domain = $this->toolBox()->appSettings()->get('webportal', 'url', '');
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
             . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";

@@ -61,7 +61,7 @@ class ListWebPage extends ListController
      * 
      * @param string $viewName
      */
-    protected function createViewWebBlock($viewName = 'ListWebBlock')
+    protected function createViewWebBlock(string $viewName = 'ListWebBlock')
     {
         $this->addView($viewName, 'WebBlock', 'blocks', 'fas fa-code');
         $this->addSearchFields($viewName, ['content']);
@@ -81,7 +81,7 @@ class ListWebPage extends ListController
      * 
      * @param string $viewName
      */
-    protected function createViewWebPages($viewName = 'ListWebPage')
+    protected function createViewWebPages(string $viewName = 'ListWebPage')
     {
         $this->addView($viewName, 'WebPage', 'pages', 'fas fa-globe-americas');
         $this->addSearchFields($viewName, ['title', 'description']);
@@ -103,7 +103,7 @@ class ListWebPage extends ListController
      * 
      * @param string $viewName
      */
-    protected function createViewWebSearch($viewName = 'ListWebSearch')
+    protected function createViewWebSearch(string $viewName = 'ListWebSearch')
     {
         $this->addView($viewName, 'WebSearch', 'searches', 'fas fa-search');
         $this->addSearchFields($viewName, ['query']);

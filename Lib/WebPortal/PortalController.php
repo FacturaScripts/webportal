@@ -18,15 +18,13 @@
  */
 namespace FacturaScripts\Plugins\webportal\Lib\WebPortal;
 
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\AssetManager;
-use FacturaScripts\Dinamic\Lib\IPFilter;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Dinamic\Model\User;
-use FacturaScripts\Plugins\webportal\Model;
+use FacturaScripts\Dinamic\Model\WebPage;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -70,12 +68,6 @@ class PortalController extends Controller
 
     /**
      *
-     * @var IPFilter
-     */
-    protected $ipFilter;
-
-    /**
-     *
      * @var MenuComposer
      */
     public $menuComposer;
@@ -97,20 +89,24 @@ class PortalController extends Controller
     /**
      * The web page object.
      *
-     * @var Model\WebPage
+     * @var WebPage
      */
     public $webPage;
 
-    public function __construct(&$cache, &$i18n, &$miniLog, $className, $uri = '')
+    /**
+     * 
+     * @param string $className
+     * @param string $uri
+     */
+    public function __construct(string $className, string $uri = '')
     {
-        parent::__construct($cache, $i18n, $miniLog, $className, $uri);
+        parent::__construct($className, $uri);
         AssetManager::add('css', FS_ROUTE . '/Plugins/webportal/node_modules/spectre.css/dist/spectre.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/node_modules/@fortawesome/fontawesome-free/css/all.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css', 3);
         AssetManager::add('css', FS_ROUTE . '/Dinamic/Assets/CSS/webportal.css', 0);
         AssetManager::add('js', FS_ROUTE . '/node_modules/jquery/dist/jquery.min.js');
         AssetManager::add('js', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js');
-        $this->ipFilter = new IPFilter();
         $this->menuComposer = new MenuComposer();
         $this->pageComposer = new PageComposer();
         $this->webPage = $this->getWebPage();
@@ -213,27 +209,28 @@ class PortalController extends Controller
                 return true;
             }
 
-            $this->miniLog->warning($this->i18n->trans('login-cookie-fail'));
+            $this->toolBox()->i18nLog()->warning('login-cookie-fail');
             $this->response->headers->clearCookie('fsIdcontacto');
             return false;
         }
 
-        $this->miniLog->debug($this->i18n->trans('login-contact-not-found'));
+        $this->toolBox()->i18nLog()->debug('login-contact-not-found');
         return false;
     }
 
     /**
      * Returns the webpage.
      *
-     * @return Model\WebPage
+     * @return WebPage
      */
     protected function getWebPage()
     {
-        $webPage = new Model\WebPage();
+        $webPage = new WebPage();
 
         /// show default page?
         if ($this->uri === '/' || $this->uri === '/index.php') {
-            if ($webPage->loadFromCode(AppSettings::get('webportal', 'homepage'))) {
+            $code = $this->toolBox()->appSettings()->get('webportal', 'homepage');
+            if ($webPage->loadFromCode($code)) {
                 return $webPage;
             }
         }
@@ -269,13 +266,13 @@ class PortalController extends Controller
     protected function processWebPage()
     {
         $this->setTemplate('Master/PortalTemplate');
-        $this->i18n->setLangCode($this->webPage->langcode);
+        $this->toolBox()->i18n()->setDefaultLang($this->webPage->langcode);
         $this->title = $this->webPage->title;
         $this->description = $this->webPage->description;
         $this->canonicalUrl = $this->webPage->url('public');
 
         if (null !== $this->webPage->idpage) {
-            $ipAddress = $this->ipFilter->getClientIp() ?? '::1';
+            $ipAddress = $this->toolBox()->ipFilter()->getClientIp();
             $this->webPage->increaseVisitCount($ipAddress);
         }
 
@@ -300,7 +297,7 @@ class PortalController extends Controller
     protected function updateCookies(&$contact, bool $force = false)
     {
         if ($force || \time() - \strtotime($contact->lastactivity) > self::PUBLIC_UPDATE_ACTIVITY_PERIOD) {
-            $contact->newLogkey($this->ipFilter->getClientIp());
+            $contact->newLogkey($this->toolBox()->ipFilter()->getClientIp());
             $contact->save();
 
             $expire = time() + FS_COOKIES_EXPIRE;

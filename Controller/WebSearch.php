@@ -20,7 +20,6 @@ namespace FacturaScripts\Plugins\webportal\Controller;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\ControllerPermissions;
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Dinamic\Lib\WebPortal\SearchEngine;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
@@ -103,7 +102,7 @@ class WebSearch extends PortalController
             $webSearch->query = $this->query;
         }
         $webSearch->numresults = count($this->searchResults);
-        $webSearch->increaseVisitCount($this->ipFilter->getClientIp());
+        $webSearch->increaseVisitCount($this->toolBox()->ipFilter()->getClientIp());
 
         $this->setSimilarQueries();
     }
@@ -117,7 +116,7 @@ class WebSearch extends PortalController
     {
         $code = $this->request->get('code', '');
         $query = $this->request->get('query', $code);
-        return Utils::noHtml(mb_strtolower($query, 'UTF8'));
+        return $this->toolBox()->utils()->noHtml(mb_strtolower($query, 'UTF8'));
     }
 
     /**

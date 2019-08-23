@@ -84,7 +84,7 @@ abstract class EditSectionController extends SectionController
     protected function deleteAction()
     {
         if (!$this->contactCanEdit()) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-delete'));
+            $this->toolBox()->i18nLog()->warning('not-allowed-delete');
             $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
@@ -93,12 +93,12 @@ abstract class EditSectionController extends SectionController
         $code = $this->request->request->get('code', '');
         if ($model->loadFromCode($code) && $this->checkModelSecurity($model) && $model->delete()) {
             // deleting a single row?
-            $this->miniLog->notice($this->i18n->trans('record-deleted-correctly'));
+            $this->toolBox()->i18nLog()->notice('record-deleted-correctly');
             $model->clear();
             return true;
         }
 
-        $this->miniLog->warning($this->i18n->trans('record-deleted-error'));
+        $this->toolBox()->i18nLog()->error('record-deleted-error');
         $model->clear();
         return false;
     }
@@ -111,7 +111,7 @@ abstract class EditSectionController extends SectionController
     protected function editAction()
     {
         if (!$this->contactCanEdit()) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->toolBox()->i18nLog()->warning('not-allowed-modify');
             $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
@@ -119,7 +119,7 @@ abstract class EditSectionController extends SectionController
         // loads model data
         $code = $this->request->request->get('code', '');
         if (!$this->sections[$this->active]->model->loadFromCode($code)) {
-            $this->miniLog->error($this->i18n->trans('record-not-found'));
+            $this->toolBox()->i18nLog()->error('record-not-found');
             return false;
         }
 
@@ -128,7 +128,7 @@ abstract class EditSectionController extends SectionController
 
         // checks security
         if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->toolBox()->i18nLog()->warning('not-allowed-modify');
             return false;
         }
 
@@ -139,18 +139,18 @@ abstract class EditSectionController extends SectionController
             $this->sections[$this->active]->model->{$pkColumn} = $code;
             // change in database
             if (!$this->sections[$this->active]->model->changePrimaryColumnValue($this->sections[$this->active]->newCode)) {
-                $this->miniLog->error($this->i18n->trans('record-save-error'));
+                $this->toolBox()->i18nLog()->error('record-save-error');
                 return false;
             }
         }
 
         // save in database
         if ($this->sections[$this->active]->model->save()) {
-            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            $this->toolBox()->i18nLog()->notice('record-updated-correctly');
             return true;
         }
 
-        $this->miniLog->error($this->i18n->trans('record-save-error'));
+        $this->toolBox()->i18nLog()->error('record-save-error');
         return false;
     }
 
@@ -184,7 +184,7 @@ abstract class EditSectionController extends SectionController
     protected function insertAction()
     {
         if (!$this->contactCanEdit()) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->toolBox()->i18nLog()->warning('not-allowed-modify');
             $this->response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             return false;
         }
@@ -192,24 +192,24 @@ abstract class EditSectionController extends SectionController
         // loads form data
         $this->sections[$this->active]->processFormData($this->request, 'edit');
         if ($this->sections[$this->active]->model->exists()) {
-            $this->miniLog->error($this->i18n->trans('duplicate-record'));
+            $this->toolBox()->i18nLog()->error('duplicate-record');
             return false;
         }
 
         // checks security
         if (!$this->checkModelSecurity($this->sections[$this->active]->model)) {
-            $this->miniLog->alert($this->i18n->trans('not-allowed-modify'));
+            $this->toolBox()->i18nLog()->warning('not-allowed-modify');
             return false;
         }
 
         // save in database
         if ($this->sections[$this->active]->model->save()) {
             $this->sections[$this->active]->newCode = $this->sections[$this->active]->model->primaryColumnValue();
-            $this->miniLog->notice($this->i18n->trans('record-updated-correctly'));
+            $this->toolBox()->i18nLog()->notice('record-updated-correctly');
             return true;
         }
 
-        $this->miniLog->error($this->i18n->trans('record-save-error'));
+        $this->toolBox()->i18nLog()->error('record-save-error');
         return false;
     }
 }

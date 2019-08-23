@@ -18,7 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -139,7 +138,7 @@ class WebSearch extends Base\ModelClass
      */
     public function test()
     {
-        $this->query = Utils::noHtml($this->query);
+        $this->query = $this->toolBox()->utils()->noHtml($this->query);
         return parent::test() && strlen($this->query) <= self::MAX_QUERY_LENGTH;
     }
 

@@ -18,7 +18,6 @@
  */
 namespace FacturaScripts\Plugins\webportal\Model;
 
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base;
 
 /**
@@ -95,7 +94,8 @@ class WebBlock extends Base\ModelClass
      */
     public function content(bool $striptags = false, int $length = 0): string
     {
-        $html = $striptags ? strip_tags(Utils::fixHtml($this->content)) : Utils::fixHtml($this->content);
+        $utils = $this->toolBox()->utils();
+        $html = $striptags ? strip_tags($utils->fixHtml($this->content)) : $utils->fixHtml($this->content);
         if ($length <= 0) {
             return $html;
         }
@@ -173,7 +173,7 @@ class WebBlock extends Base\ModelClass
      */
     public function test()
     {
-        $this->content = Utils::noHtml($this->content);
+        $this->content = $this->toolBox()->utils()->noHtml($this->content);
         return parent::test();
     }
 
