@@ -174,7 +174,7 @@ class WebPage extends WebPageClass
         $this->shorttitle = empty($this->shorttitle) ? $this->title : $utils->noHtml($this->shorttitle);
 
         /// check permalink
-        if (!preg_match('/^[A-Z0-9_\+\.\-\/]{1,200}$/i', $this->permalink)) {
+        if (!preg_match('/^[A-Z0-9_\+\.\-\/\*]{1,200}$/i', $this->permalink)) {
             $this->toolBox()->i18nLog()->error(
                 'invalid-alphanumeric-code',
                 ['%value%' => $this->permalink, '%column%' => 'permalink', '%min%' => '1', '%max%' => '200']
