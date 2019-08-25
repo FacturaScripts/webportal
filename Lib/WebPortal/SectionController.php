@@ -45,7 +45,7 @@ abstract class SectionController extends PortalController
      *
      * @var CodeModel
      */
-    protected $codeModel;
+    public $codeModel;
 
     /**
      *
