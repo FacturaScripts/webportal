@@ -128,7 +128,7 @@ class HybridLogin extends PortalController
 
         $contact = new Contacto();
         if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)]) || !$contact->habilitado) {
-            $this->toolBox()->i18nLog()->warning('email-not-registered');
+            $this->toolBox()->i18nLog()->warning('email-not-registered', ['%email%' => $email]);
             $this->setIPWarning();
             return false;
         }
@@ -236,10 +236,10 @@ class HybridLogin extends PortalController
     protected function recoverAccount(): bool
     {
         /// Checks email
-        $email = $this->request->get('email', '');
+        $email = rawurldecode($this->request->get('email', ''));
         $contact = new Contacto();
-        if (!$contact->loadFromCode('', [new DataBaseWhere('email', rawurldecode($email))]) || !$contact->habilitado) {
-            $this->toolBox()->i18nLog()->warning('email-not-registered');
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)]) || !$contact->habilitado) {
+            $this->toolBox()->i18nLog()->warning('email-not-registered', ['%email%' => $email]);
             $this->setIPWarning();
             return false;
         }

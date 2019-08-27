@@ -159,7 +159,7 @@ class PortalRegisterMe extends PortalController
 
         $email = $this->request->request->get('email');
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
-            $this->toolBox()->i18nLog()->warning('email-contact-already-used');
+            $this->toolBox()->i18nLog()->warning('email-contact-already-used', ['%email%' => $email]);
             $this->setIPWarning();
             return false;
         }
