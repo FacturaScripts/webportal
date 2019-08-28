@@ -1,5 +1,5 @@
 {
-    "activation-email-sent": "Activation email sent",
+    "activation-email-sent": "Activation email sent. Please check your inbox, including the SPAM tray.",
     "activation-email-sent-error": "Can't sent activation email",
     "allow-login-contacts": "Allow login contacts",
     "allow-new-registrations": "Allow new contact registrations",

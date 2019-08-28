@@ -127,9 +127,12 @@ class HybridLogin extends PortalController
         }
 
         $contact = new Contacto();
-        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)]) || !$contact->habilitado) {
+        if (!$contact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->toolBox()->i18nLog()->warning('email-not-registered', ['%email%' => $email]);
             $this->setIPWarning();
+            return false;
+        } elseif (!$contact->habilitado) {
+            $this->toolBox()->i18nLog()->warning('activation-email-sent', ['%email%' => $email]);
             return false;
         }
 

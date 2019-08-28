@@ -83,7 +83,7 @@
             <div class="container">
                 <div class="columns">
                     <div class="column col-12 mb-2">
-                        {{ Macros.message(log, ['error', 'critical', 'alert', 'emergency'], 'error') }}
+                        {{ Macros.message(log, ['error', 'critical'], 'error') }}
                         {{ Macros.message(log, ['warning'], 'warning') }}
                         {{ Macros.message(log, ['notice'], 'success') }}
                         {{ Macros.message(log, ['info'], '') }}

@@ -1,6 +1,6 @@
 {
     "activation-email-sent-error": "No se ha podido enviar el correo de activación",
-    "activation-email-sent": "Email de activación enviado. Por favor, compruebe su bandeja de entrada.",
+    "activation-email-sent": "Email de activación enviado. Por favor, compruebe su bandeja de entrada, incluso la bandeja de SPAM.",
     "allow-login-contacts": "Permitir login a contactos",
     "allow-new-registrations": "Permitir nuevos registros de contactos",
     "app-id": "Id. de aplicación",
