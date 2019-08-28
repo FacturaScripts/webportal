@@ -18,7 +18,9 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
+use Exception;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Lib\Email\ButtonBlock;
 use FacturaScripts\Core\Lib\Email\NewMail;
 use FacturaScripts\Dinamic\Model\Contacto;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
@@ -98,6 +100,10 @@ class HybridLogin extends PortalController
             $contact->email = $userProfile->email;
             $contact->nombre = $userProfile->firstName;
             $contact->apellidos = $userProfile->lastName;
+        } elseif (!$contact->habilitado) {
+            $this->toolBox()->i18nLog()->warning('email-disabled', ['%email%' => $contact->email]);
+            $this->setIPWarning();
+            return false;
         }
 
         $this->setGeoIpData($contact);
@@ -132,7 +138,13 @@ class HybridLogin extends PortalController
             $this->setIPWarning();
             return false;
         } elseif (!$contact->habilitado) {
-            $this->toolBox()->i18nLog()->warning('activation-email-sent', ['%email%' => $email]);
+            $this->toolBox()->i18nLog()->warning('email-disabled', ['%email%' => $email]);
+            $this->setIPWarning();
+            return false;
+        } elseif (!$contact->verificado) {
+            $this->sendEmailConfirmation($contact);
+            $this->toolBox()->i18nLog()->warning('activation-email-sent');
+            $this->setIPWarning();
             return false;
         }
 
@@ -184,10 +196,21 @@ class HybridLogin extends PortalController
 
             $userProfile = $facebook->getUserProfile();
             $this->checkContact($userProfile);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
         }
+    }
+
+    /**
+     * 
+     * @param Contacto $contact
+     *
+     * @return string
+     */
+    protected function getActivationCode($contact): string
+    {
+        return sha1($contact->idcontacto . $contact->password);
     }
 
     /**
@@ -225,14 +248,14 @@ class HybridLogin extends PortalController
 
             $userProfile = $google->getUserProfile();
             $this->checkContact($userProfile);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
         }
     }
 
     /**
-     * Try to recover the contact account
+     * Try to recover access to the account from the link data sent by email.
      *
      * @return bool
      */
@@ -262,7 +285,7 @@ class HybridLogin extends PortalController
             return false;
         }
 
-        $this->toolBox()->i18nLog()->warning('recovery-timed-out', ['%link%' => $this->defaultWebportalUrl() . '/EditProfile']);
+        $this->toolBox()->i18nLog()->warning('recovery-timed-out');
         $this->setIPWarning();
         return false;
     }
@@ -281,8 +304,31 @@ class HybridLogin extends PortalController
      */
     protected function sendEditProfile($baseUrl)
     {
-        $this->toolBox()->i18n()->notice('recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']);
+        $this->toolBox()->i18nLog()->notice('recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']);
         return true;
+    }
+
+    /**
+     * Send and email with data posted from form.
+     *
+     * @param Contacto $contact
+     *
+     * @return bool
+     */
+    protected function sendEmailConfirmation($contact)
+    {
+        $i18n = $this->toolBox()->i18n();
+        $link = $this->defaultWebportalUrl() . '/PortalRegisterMe?action=activate'
+            . '&cod=' . $this->getActivationCode($contact)
+            . '&email=' . rawurlencode($contact->email);
+
+        $mail = new NewMail();
+        $mail->fromName = $this->toolBox()->appSettings()->get('webportal', 'title');
+        $mail->addAddress($contact->email);
+        $mail->title = $i18n->trans('confirm-email');
+        $mail->text = $i18n->trans('please-click-on-confirm-email');
+        $mail->addMainBlock(new ButtonBlock($i18n->trans('confirm-email'), $link));
+        return $mail->send();
     }
 
     /**
@@ -294,14 +340,16 @@ class HybridLogin extends PortalController
      */
     protected function sendRecoveryMail($contact)
     {
+        $i18n = $this->toolBox()->i18n();
         $link = $this->defaultWebportalUrl() . '/HybridLogin?prov=recover&email='
             . rawurlencode($contact->email) . '&key=' . $this->getContactRecoverykey($contact);
 
         $mail = new NewMail();
         $mail->fromName = $this->toolBox()->appSettings()->get('webportal', 'title');
         $mail->addAddress($contact->email);
-        $mail->title = $this->toolBox()->i18n()->trans('recover-your-account');
-        $mail->text = $this->toolBox()->i18n()->trans('recover-your-account-body', ['%link%' => $link]);
+        $mail->title = $i18n->trans('recover-your-account');
+        $mail->text = $i18n->trans('recover-your-account-body', ['%link%' => $link]);
+        $mail->addMainBlock(new ButtonBlock($i18n->trans('confirm-email'), $link));
         if ($mail->send()) {
             $this->toolBox()->i18nLog()->notice('recover-email-send-ok');
             return true;
@@ -354,7 +402,7 @@ class HybridLogin extends PortalController
 
             $userProfile = $twitter->getUserProfile();
             $this->checkContact($userProfile);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
         }

@@ -18,12 +18,10 @@
  */
 namespace FacturaScripts\Plugins\webportal\Controller;
 
-use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\Email\ButtonBlock;
 use FacturaScripts\Dinamic\Lib\Email\NewMail;
 use FacturaScripts\Dinamic\Model\Contacto;
-use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\GeoLocation;
 use FacturaScripts\Plugins\webportal\Lib\WebPortal\PortalController;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,19 +48,6 @@ class PortalRegisterMe extends PortalController
      * @var bool
      */
     public $registrationOK = false;
-
-    /**
-     * Runs the controller's private logic.
-     *
-     * @param Response              $response
-     * @param User                  $user
-     * @param ControllerPermissions $permissions
-     */
-    public function privateCore(&$response, $user, $permissions)
-    {
-        parent::privateCore($response, $user, $permissions);
-        $this->setTemplate('PortalRegisterMe');
-    }
 
     /**
      * Execute the public part of the controller.
@@ -94,7 +79,6 @@ class PortalRegisterMe extends PortalController
         $contact = new Contacto();
         $where = [new DataBaseWhere('email', rawurldecode($email))];
         if ($contact->loadFromCode('', $where) && $cod === $this->getActivationCode($contact)) {
-            $contact->habilitado = true;
             $contact->verificado = true;
             if ($contact->save()) {
                 $this->updateCookies($contact, true);
@@ -170,7 +154,6 @@ class PortalRegisterMe extends PortalController
         $this->newContact->descripcion = $this->request->request->get('description', '');
         $this->newContact->email = $email;
         $this->newContact->aceptaprivacidad = true;
-        $this->newContact->habilitado = false;
         $this->newContact->newPassword = $this->request->request->get('password', '');
         $this->newContact->newPassword2 = $this->request->request->get('password2', '');
         if (!$this->newContact->test()) {
@@ -204,7 +187,7 @@ class PortalRegisterMe extends PortalController
     protected function sendEmailConfirmation($contact)
     {
         $i18n = $this->toolBox()->i18n();
-        $url = $this->toolBox()->appSettings()->get('webportal', 'url') . '/PortalRegisterMe?action=activate'
+        $link = $this->toolBox()->appSettings()->get('webportal', 'url') . '/PortalRegisterMe?action=activate'
             . '&cod=' . $this->getActivationCode($contact)
             . '&email=' . rawurlencode($contact->email);
 
@@ -213,7 +196,7 @@ class PortalRegisterMe extends PortalController
         $mail->addAddress($contact->email);
         $mail->title = $i18n->trans('confirm-email');
         $mail->text = $i18n->trans('please-click-on-confirm-email');
-        $mail->addMainBlock(new ButtonBlock($i18n->trans('confirm-email'), $url));
+        $mail->addMainBlock(new ButtonBlock($i18n->trans('confirm-email'), $link));
         return $mail->send();
     }
 
