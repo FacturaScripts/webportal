@@ -1,6 +1,6 @@
 {
-    "activation-email-sent-error": "No se ha podido enviar el correo de activación",
     "activation-email-sent": "Email de activación enviado. Por favor, compruebe su bandeja de entrada, incluso la bandeja de SPAM.",
+    "activation-email-sent-error": "No se ha podido enviar el correo de activación",
     "allow-login-contacts": "Permitir login a contactos",
     "allow-new-registrations": "Permitir nuevos registros de contactos",
     "app-id": "Id. de aplicación",
@@ -56,8 +56,7 @@
     "read-more": "Leer más",
     "recover-email-send-ok": "Le hemos enviado un email para que pueda cambiar la contraseña.",
     "recover-your-account": "Recuperación de acceso a su cuenta",
-    "recover-your-account-body": "Pulse en <a href='%link%'>este enlace</a> para recuperar el acceso a su cuenta, cuando esté identificado cambie su contraseña.",
-    "recovered-access-go-to-account": "Ha recuperado el acceso a su cuenta, vaya a <a href='%link%'>su perfil</a> y actualice la contraseña.",
+    "recover-your-account-body": "Pulse el botón para recuperar el acceso a su cuenta. Cuando esté identificado, por favor, cambie su contraseña.",
     "recovery-timed-out": "Recuperación caducada o ya realizada.",
     "register-me": "Crear cuenta",
     "register-new-contact": "Crear una cuenta",

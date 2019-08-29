@@ -81,7 +81,8 @@ class PortalRegisterMe extends PortalController
         if ($contact->loadFromCode('', $where) && $cod === $this->getActivationCode($contact)) {
             $contact->verificado = true;
             if ($contact->save()) {
-                $this->updateCookies($contact, true);
+                $this->contact = $contact;
+                $this->updateCookies($this->contact, true);
                 return true;
             }
 
@@ -105,10 +106,11 @@ class PortalRegisterMe extends PortalController
     {
         switch ($action) {
             case 'activate':
+                $this->setTemplate('Master/LoginToContinue');
                 if ($this->activateContact()) {
                     $defaultUrl = $this->toolBox()->appSettings()->get('webportal', 'url');
                     $url = empty($defaultUrl) ? 'EditProfile' : $defaultUrl;
-                    $this->redirect($url);
+                    $this->redirect($url, 1);
                 }
                 break;
 
@@ -141,7 +143,7 @@ class PortalRegisterMe extends PortalController
             return false;
         }
 
-        $email = $this->request->request->get('email');
+        $email = \strtolower(\trim($this->request->request->get('email', '')));
         if ($this->newContact->loadFromCode('', [new DataBaseWhere('email', $email)])) {
             $this->toolBox()->i18nLog()->warning('email-contact-already-used', ['%email%' => $email]);
             $this->setIPWarning();

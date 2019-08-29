@@ -23,6 +23,7 @@ use FacturaScripts\Core\Base\ControllerPermissions;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\Contacto;
+use FacturaScripts\Dinamic\Model\EmailSent;
 use FacturaScripts\Dinamic\Model\User;
 use FacturaScripts\Dinamic\Model\WebPage;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -169,6 +170,13 @@ class PortalController extends Controller
             $this->showCookiesPolicy = false;
         } elseif ('' !== $this->request->cookies->get('okCookies', '')) {
             $this->showCookiesPolicy = false;
+        }
+
+        /// Email verification
+        $verificode = $this->request->get('verificode', '');
+        if (!empty($verificode)) {
+            $email = empty($this->contact) ? '' : $this->contact->email;
+            EmailSent::verify($verificode, $email);
         }
     }
 

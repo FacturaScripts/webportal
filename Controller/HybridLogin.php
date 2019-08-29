@@ -125,7 +125,7 @@ class HybridLogin extends PortalController
             return false;
         }
 
-        $email = \strtolower($this->request->request->get('fsContact', ''));
+        $email = \strtolower(\trim($this->request->request->get('fsContact', '')));
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->toolBox()->i18nLog()->warning('not-valid-email', ['%email%' => $email]);
             $this->setIPWarning();
@@ -278,7 +278,8 @@ class HybridLogin extends PortalController
             if ($contact->save()) {
                 $this->contact = $contact;
                 $this->updateCookies($contact, true);
-                return $this->sendEditProfile($this->defaultWebportalUrl());
+                $this->returnAfterLogin();
+                return true;
             }
 
             $this->toolBox()->i18nLog()->error('record-save-error');
@@ -294,18 +295,6 @@ class HybridLogin extends PortalController
     {
         $return = empty($_SESSION['hybridLoginReturn']) ? $this->defaultWebportalUrl() : $_SESSION['hybridLoginReturn'];
         $this->redirect($return);
-    }
-
-    /**
-     *
-     * @param string $baseUrl
-     *
-     * @return bool
-     */
-    protected function sendEditProfile($baseUrl)
-    {
-        $this->toolBox()->i18nLog()->notice('recovered-access-go-to-account', ['%link%' => $baseUrl . '/EditProfile']);
-        return true;
     }
 
     /**
@@ -348,7 +337,7 @@ class HybridLogin extends PortalController
         $mail->fromName = $this->toolBox()->appSettings()->get('webportal', 'title');
         $mail->addAddress($contact->email);
         $mail->title = $i18n->trans('recover-your-account');
-        $mail->text = $i18n->trans('recover-your-account-body', ['%link%' => $link]);
+        $mail->text = $i18n->trans('recover-your-account-body');
         $mail->addMainBlock(new ButtonBlock($i18n->trans('confirm-email'), $link));
         if ($mail->send()) {
             $this->toolBox()->i18nLog()->notice('recover-email-send-ok');
