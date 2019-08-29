@@ -149,6 +149,12 @@ class PortalController extends Controller
 
         $this->processWebPage();
         $this->showCookiesPolicy = false;
+
+        /// Email verification
+        $verificode = $this->request->get('verificode', '');
+        if (!empty($verificode)) {
+            EmailSent::verify($verificode, $this->user->email);
+        }
     }
 
     /**
