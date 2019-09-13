@@ -56,14 +56,13 @@
                     &nbsp;
                     {% block navbarButtons %}
                         {% if fsc.user %}
-                            <div class="btn-group">
-                                <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
-                                    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-                                </a>
-                                <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
-                                    <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
-                                </a>
-                            </div>
+                            <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
+                                <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
+                                <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
+                            </a>
                         {% elseif fsc.contact %}
                             <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
                                 <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
@@ -156,14 +155,14 @@
         {% block javascripts %}
             <script>
                 function showModal(idModal) {
-                    var element = document.getElementById(idModal);
-                    element.classList.add("active");
-                    return false;
+                var element = document.getElementById(idModal);
+                element.classList.add("active");
+                return false;
                 }
                 function hideModal(idModal) {
-                    var element = document.getElementById(idModal);
-                    element.classList.remove("active");
-                    return false;
+                var element = document.getElementById(idModal);
+                element.classList.remove("active");
+                return false;
                 }
             </script>
             {# Adds custom JS assets #}
