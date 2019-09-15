@@ -37,13 +37,19 @@
             <div class="columns">
                 {% if fsc.getSectionGroups() | length > 1 %}
                     <div class="column col-2 col-lg-12">
+                        <h1 class="h5">{{ fsc.title }}</h1>
                         {# -- Section selector -- #}
                         {{ macros.sectionsButtons(fsc, i18n) }}
                     </div>
                 {% elseif fsc.sections | length > 1 %}
                     <div class="column col-12 mb-2">
+                        <h1 class="h5">{{ fsc.title }}</h1>
                         {# -- Section tabs -- #}
                         {{ macros.sectionsButtonsTabs(fsc, i18n) }}
+                    </div>
+                {% else %}
+                    <div class="column col-12 mb-2">
+                        <h1 class="h5">{{ fsc.title }}</h1>
                     </div>
                 {% endif %}
                 <div class="column">
