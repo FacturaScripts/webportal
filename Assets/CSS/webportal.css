@@ -61,8 +61,7 @@ h2, h3, h4, h5 {
 .navbar-top {
     background-color: #F8F9FA;
     border-bottom: 1px solid #E0E3E7;
-    margin-bottom: 10px;
-    padding: 10px;
+    padding: 10px 10px 2px 10px;
 }
 
 p {
@@ -80,8 +79,10 @@ p {
     color: black;
 }
 
-.section-btn {
-    margin-bottom: 5px;
+.breadcrumb h1 {
+    display: inline-block;
+    font-size: 1em;
+    font-weight: normal;
 }
 
 .word-wrap {

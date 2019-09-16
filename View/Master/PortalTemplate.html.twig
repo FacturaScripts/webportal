@@ -39,42 +39,42 @@
         {% if fsc.showCookiesPolicy %}{{ Macros.cookiesMessage(i18n, fsc.menuComposer.getCookiesPage()) }}{% endif %}
         {% block navbar %}
             <div class="navbar navbar-top">
-                <div class="navbar-section show-sm">
-                    {{ Macros.TopMenuSmall(fsc, i18n, webTitle) }}
-                </div>
-                <div class="navbar-section hide-sm">
-                    <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" />
+                <div class="navbar-section mb-2">
+                    {% block navbarButtonsLeft %}
+                    {% endblock %}
+                    {{ Macros.TopMenuSmall(fsc, i18n) }}
+                    <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}" width="30" height="30" alt="{{ webTitle }}" class="hide-sm" />
                     &nbsp;{{ webTitle }}
                 </div>
-                <div class="navbar-center hide-sm">
+                <div class="navbar-center mb-2 hide-sm">
                     {{ Macros.TopMenu(fsc, i18n) }}
                 </div>
-                <div class="navbar-section">
+                <div class="navbar-section mb-2">
                     <a class="btn" href="{{ constant('FS_ROUTE') }}/WebSearch">
                         <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                     </a>
                     &nbsp;
-                    {% block navbarButtons %}
-                        {% if fsc.user %}
-                            <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
-                                <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-                            </a>
-                            &nbsp;
-                            <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
-                                <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
-                            </a>
-                        {% elseif fsc.contact %}
-                            <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
-                                <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
-                                <span class="hide-md">{{ fsc.contact.alias() }}</span>
-                            </a>
-                        {% else %}
-                            <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
-                                <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
-                                <span class="hide-md">{{ i18n.trans('login') }}</span>
-                            </a>
-                        {% endif %}
+                    {% block navbarButtonsRight %}
                     {% endblock %}
+                    {% if fsc.user %}
+                        <a class="btn" href="{{ constant('FS_ROUTE') }}/{{ fsc.webPage.url('edit') }}">
+                            <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+                        </a>
+                        &nbsp;
+                        <a class="btn btn-success" href="{{ constant('FS_ROUTE') }}/ListWebPage">
+                            <i class="fas fa-sign-in-alt fa-fw" aria-hidden="true"></i>
+                        </a>
+                    {% elseif fsc.contact %}
+                        <a class="btn btn-success" href="#" onclick="return showModal('logoutModal');">
+                            <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <span class="hide-md">{{ fsc.contact.alias() }}</span>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-primary" href="#" onclick="return showModal('loginModal');">
+                            <i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <span class="hide-md">{{ i18n.trans('login') }}</span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endblock %}
@@ -181,6 +181,6 @@
                 {% endfor %}
             {% endblock %}
         {% endif %}
-        {{ debugBarRender.render()|raw }}
+        {{ debugBarRender.render() | raw }}
     </body>
 </html>
