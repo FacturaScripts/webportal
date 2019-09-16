@@ -195,7 +195,7 @@
                 <a href="#close" class="btn btn-clear float-right" aria-label="Close" onclick="return hideModal('modalSectionSelector');"></a>
                 <div class="modal-title h5">{{ i18n.trans('sections') }}</div>
             </div>
-            <div class="mb-2">
+            <div class="modal-body">
                 {% for name, group in fsc.getSectionGroups() %}
                     <details class="accordion" open>
                         <summary class="accordion-header">
