@@ -5,42 +5,52 @@
     {% set firstSectionName = firstSection.getViewName() %}
 
     <div class="body-section">
-        {% block navigationLinks %}
-            {{ _self.navigationLinks(fsc.navigationLinks) }}
-        {% endblock %}
-
-        {# -- Fixed section -- #}
-        {{ fsc.setCurrentSection(firstSectionName) }}
-        {% include firstSection.template %}
-
-        {# -- Other sections -- #}
-        <div class="container">
-            <div class="columns">
-                {% if fsc.sections | length > 1 %}
-                    <div class="column col-2 col-lg-12">
-                        {# -- Section selector -- #}
-                        <div class="hide-lg">
-                            {{ _self.sectionsButtons(fsc, i18n, firstSectionName) }}
-                        </div>
-                        <div class="show-lg">
-                            {{ _self.sectionSelector(fsc, i18n, firstSectionName) }}
-                        </div>
-                    </div>
-                {% endif %}
-                <div class="column">
-                    {# -- Section contents -- #}
-                    {% for sectionName, section in fsc.sections %}
-                        {% if sectionName != firstSectionName %}
-                            {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
-                            <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
-                                {{ fsc.setCurrentSection(sectionName) }}
-                                {% include section.template %}
+        {% for block in fsc.pageComposer.getBlocks('body') %}
+            {% if block.ordernum <= 100 %}
+                {{ block.content() | raw }}
+            {% endif %}
+        {% endfor %}
+        <div class="sections-container">
+            {% block navigationLinks %}
+                {{ _self.navigationLinks(fsc.navigationLinks) }}
+            {% endblock %}
+            {# -- Fixed section -- #}
+            {{ fsc.setCurrentSection(firstSectionName) }}
+            {% include firstSection.template %}
+            {# -- Other sections -- #}
+            <div class="container">
+                <div class="columns">
+                    {% if fsc.sections | length > 1 %}
+                        <div class="column col-2 col-lg-12">
+                            {# -- Section selector -- #}
+                            <div class="hide-lg">
+                                {{ _self.sectionsButtons(fsc, i18n, firstSectionName) }}
                             </div>
-                        {% endif %}
-                    {% endfor %}
+                            <div class="show-lg">
+                                {{ _self.sectionSelector(fsc, i18n, firstSectionName) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="column">
+                        {# -- Section contents -- #}
+                        {% for sectionName, section in fsc.sections %}
+                            {% if sectionName != firstSectionName %}
+                                {% set divClass = (sectionName == fsc.active) or (fsc.active == firstSectionName and loop.index == 2) ? '' : 'd-hide' %}
+                                <div id="secDiv{{ sectionName }}" class="section-div {{ divClass }}">
+                                    {{ fsc.setCurrentSection(sectionName) }}
+                                    {% include section.template %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
+        {% for block in fsc.pageComposer.getBlocks('body') %}
+            {% if block.ordernum > 100 %}
+                {{ block.content() | raw }}
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}
 

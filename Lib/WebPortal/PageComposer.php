@@ -134,17 +134,9 @@ class PageComposer
             }
         }
 
-        if ($bodyFound) {
-            if ($title !== '' && $page->title !== $title) {
-                $page->title = $title;
-                $page->save();
-            }
-        } else {
-            $emptyBlock = new WebBlock();
-            $emptyBlock->idpage = $page->idpage;
-            $emptyBlock->type = 'bodyContainer';
-            $emptyBlock->content = '<h1>' . $page->title . '</h1><p>' . $page->description . '</p>';
-            $this->addBlock($emptyBlock, $page);
+        if ($bodyFound && $title !== '' && $page->title !== $title) {
+            $page->title = $title;
+            $page->save();
         }
     }
 

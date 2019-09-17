@@ -69,6 +69,7 @@ p {
 }
 
 .accordion-box {
+    background-color: white;
     box-shadow: 1px 2px 3px silver;
     margin-bottom: 10px;
 }
@@ -83,6 +84,11 @@ p {
     display: inline-block;
     font-size: 1em;
     font-weight: normal;
+}
+
+.sections-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .word-wrap {

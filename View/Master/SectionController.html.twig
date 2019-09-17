@@ -1,6 +1,6 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
-{% block navbarButtonsLeft %}
+{% block navbarButtonsRight %}
     {# -- Options button -- #}
     {% if fsc.user %}
         <div class="dropdown">
@@ -30,10 +30,15 @@
 
 {% block body %}
     <div class="body-section">
-        {% block navigationLinks %}
-            {{ _self.navigationLinks(fsc.navigationLinks, fsc.title) }}
-        {% endblock %}
-        <div class="container">
+        {% for block in fsc.pageComposer.getBlocks('body') %}
+            {% if block.ordernum <= 100 %}
+                {{ block.content() | raw }}
+            {% endif %}
+        {% endfor %}
+        <div class="container sections-container">
+            {% block navigationLinks %}
+                {{ _self.navigationLinks(fsc.navigationLinks) }}
+            {% endblock %}
             <div class="columns">
                 {% if fsc.sections | length > 1 %}
                     <div class="column col-2 col-lg-12">
@@ -58,6 +63,11 @@
                 </div>
             </div>
         </div>
+        {% for block in fsc.pageComposer.getBlocks('body') %}
+            {% if block.ordernum > 100 %}
+                {{ block.content() | raw }}
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}
 
@@ -120,8 +130,8 @@
     </script>
 {% endblock %}
 
-{% macro navigationLinks(links, title) %}
-    <div class="container">
+{% macro navigationLinks(links) %}
+    {% if links | length > 0 %}
         <div class="columns">
             <div class="column">
                 <ul class="breadcrumb">
@@ -130,13 +140,10 @@
                             <a href="{{ link.url }}">{{ link.title }}</a>
                         </li>
                     {% endfor %}
-                    <li class="breadcrumb-item">
-                        <h1>{{ title }}</h1>
-                    </li>
                 </ul>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endmacro %}
 
 {% macro sectionsButtons(fsc, i18n) %}
