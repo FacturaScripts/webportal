@@ -35,7 +35,7 @@ class AutocompleteFilter extends ParentFilter
     public function render()
     {
         $label = static::$i18n->trans($this->label);
-        $html = '<div class="column col-2 col-xs-12 mb-2">'
+        $html = '<div class="column col-2 col-md-12 mb-2">'
             . '<input type="hidden" name="' . $this->name() . '" value="' . $this->value . '"/>'
             . '<div class="form-group">'
             . '<div class="input-group">';

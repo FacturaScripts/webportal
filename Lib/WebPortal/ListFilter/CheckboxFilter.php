@@ -35,7 +35,7 @@ class CheckboxFilter extends ParentFilter
     public function render()
     {
         $extra = is_null($this->value) ? '' : ' checked=""';
-        return '<div class="column col-2 col-xs-12 mb-2">'
+        return '<div class="column col-2 col-md-12 mb-2">'
             . '<div class="form-group">'
             . '<label class="form-switch">'
             . '<input type="checkbox" name="' . $this->name() . '" value="TRUE"' . $extra . $this->onChange() . '/>'

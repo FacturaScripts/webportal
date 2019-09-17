@@ -14,25 +14,23 @@
                     {{ row.render(true) | raw }}
                 </div>
                 <div class="column text-right mb-2">
-                    {% if section.filters is not empty %}
-                        <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
-                            <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
-                        </a>
-                    {% endif %}
-                </div>
-                <div class="column col-3 col-md-12 mb-2">
-                    {{ macros.sectionSearch(section, i18n) }}
-                </div>
-                <div class="column col-3 col-md-12 mb-2">
-                    {{ macros.sectionOrder(section) }}
+                    <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
+                        <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
+                    </a>
                 </div>
             </div>
             {# -- Filters -- #}
-            {% set divFiltersStyle = section.showFilters ? '' : 'display: none;' %}
+            {% set divFiltersStyle = (section.showFilters or section.query is not empty) ? '' : 'display: none;' %}
             <div id="form{{ section.getViewName() }}Filters" class="columns" style="{{ divFiltersStyle }}">
+                <div class="column col-3 col-md-12 mb-2">
+                    {{ macros.sectionSearch(section, i18n) }}
+                </div>
                 {% for filterName, filter in section.filters %}
                     {{ filter.render() | raw }}
                 {% endfor %}
+                <div class="column col-3 col-md-12 mb-2">
+                    {{ macros.sectionOrder(section) }}
+                </div>
             </div>
         </form>
     </div>
