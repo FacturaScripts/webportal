@@ -25,7 +25,7 @@
                 <widget type="text" fieldname="idblock" required="true" />
             </column>
             <column name="type" numcolumns="4" order="110">
-                <widget type="select" fieldname="type">
+                <widget type="select" fieldname="type" required="true">
                     <values title="body">body</values>
                     <values title="bodyContainer">bodyContainer</values>
                     <values title="meta">meta</values>
