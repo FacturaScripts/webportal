@@ -91,6 +91,18 @@ p {
     padding-bottom: 10px;
 }
 
+.table-error {
+    background-color: #F5C6CB;
+}
+
+.table-success {
+    background-color: #C3E6CB;
+}
+
+.table-warning {
+    background-color: #FFEEBA;
+}
+
 .word-wrap {
     word-wrap: break-word;
 }
@@ -99,7 +111,7 @@ p {
     z-index: 500;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 600px) {
     .custom-scroll {
         overflow-x: auto;
         overflow-y: hidden;
