@@ -1,4 +1,3 @@
-{% import _self as macros %}
 {% set section = fsc.getCurrentSection() %}
 
 <div class="card">
@@ -12,9 +11,7 @@
                     {# -- Row actions -- #}
                     {% set row = section.getRow('actions') %}
                     {{ row.render(true) | raw }}
-                </div>
-                <div class="column text-right mb-2">
-                    <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle();'>
+                    <a href="#" class="btn" onclick='$("#form{{ section.getViewName() }}Filters").toggle(); return false;'>
                         <i class="fas fa-filter fa-fw"></i> {{ i18n.trans('filters') }}
                     </a>
                 </div>
@@ -22,15 +19,11 @@
             {# -- Filters -- #}
             {% set divFiltersStyle = (section.showFilters or section.query is not empty) ? '' : 'display: none;' %}
             <div id="form{{ section.getViewName() }}Filters" class="columns" style="{{ divFiltersStyle }}">
-                <div class="column col-3 col-md-12 mb-2">
-                    {{ macros.sectionSearch(section, i18n) }}
-                </div>
+                {{ _self.sectionSearch(section, i18n) }}
                 {% for filterName, filter in section.filters %}
                     {{ filter.render() | raw }}
                 {% endfor %}
-                <div class="column col-3 col-md-12 mb-2">
-                    {{ macros.sectionOrder(section) }}
-                </div>
+                {{ _self.sectionOrder(section) }}
             </div>
         </form>
     </div>
@@ -68,7 +61,7 @@
     {# -- Paginacion -- #}
     {% if section.getPagination() | length > 0 %}
         <div class="card-footer">
-            {{ macros.sectionPagination(section) }}
+            {{ _self.sectionPagination(section) }}
         </div>
     {% endif %}
 </div>
@@ -76,19 +69,21 @@
 {# -- Macros -- #}
 {% macro sectionOrder(section) %}
     {% if section.orderOptions | length > 0 %}
-        <div class="input-group">
-            <span class="input-group-addon">
-                <i class="fas fa-sort fa-fw" aria-hidden="true"></i>
-            </span>
-            <select name="order" class="form-select" onchange="this.form.submit();">
-                {% for key, option in section.orderOptions %}
-                    {% if section.orderKey == key %}
-                        <option value="{{ key }}" selected="">{{ option.label }} {{ option.type }}</option>
-                    {% else %}
-                        <option value="{{ key }}">{{ option.label }} {{ option.type }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+        <div class="column col-3 col-md-12 mb-2">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fas fa-sort fa-fw" aria-hidden="true"></i>
+                </span>
+                <select name="order" class="form-select" onchange="this.form.submit();">
+                    {% for key, option in section.orderOptions %}
+                        {% if section.orderKey == key %}
+                            <option value="{{ key }}" selected="">{{ option.label }} {{ option.type }}</option>
+                        {% else %}
+                            <option value="{{ key }}">{{ option.label }} {{ option.type }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
         </div>
     {% endif %}
 {% endmacro %}
@@ -111,11 +106,13 @@
 
 {% macro sectionSearch(section, i18n) %}
     {% if section.searchFields | length > 0 %}
-        <div class="input-group">
-            <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
-            <button class="btn btn-primary input-group-btn">
-                <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-            </button>
+        <div class="column col-3 col-md-12 mb-2">
+            <div class="input-group">
+                <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
+                <button class="btn btn-primary input-group-btn">
+                    <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
     {% endif %}
 {% endmacro %}
