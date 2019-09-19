@@ -51,7 +51,8 @@
                         </div>
                     </div>
                 {% endif %}
-                <div class="column">
+                {% set colNumClass = (fsc.sections | length > 1) ? 'col-10 col-lg-12' : '' %}
+                <div class="column {{ colNumClass }}">
                     {# -- Section content -- #}
                     {% for sectionName, section in fsc.sections %}
                         {% set divClass = (sectionName == fsc.active) ? '' : 'd-hide' %}

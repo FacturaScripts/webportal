@@ -20,7 +20,7 @@
             {# -- Other sections -- #}
             <div class="container">
                 <div class="columns">
-                    {% if fsc.sections | length > 1 %}
+                    {% if fsc.sections | length > 2 %}
                         <div class="column col-2 col-lg-12">
                             {# -- Section selector -- #}
                             <div class="hide-lg">
@@ -31,7 +31,8 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="column">
+                    {% set colNumClass = (fsc.sections | length > 2) ? 'col-10 col-lg-12' : '' %}
+                    <div class="column {{ colNumClass }}">
                         {# -- Section contents -- #}
                         {% for sectionName, section in fsc.sections %}
                             {% if sectionName != firstSectionName %}
