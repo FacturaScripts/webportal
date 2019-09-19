@@ -50,7 +50,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td class="bg-warning" colspan="{{ 1 + section.getColumns() | length }}">{{ i18n.trans('no-data') }}</td>
+                            <td class="table-warning" colspan="{{ 1 + section.getColumns() | length }}">{{ i18n.trans('no-data') }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
