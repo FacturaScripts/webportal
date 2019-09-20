@@ -30,6 +30,10 @@
                                 {{ _self.sectionSelector(fsc, i18n, firstSectionName) }}
                             </div>
                         </div>
+                    {% elseif fsc.sections | length == 2 %}
+                        <div class="column col-12">
+                            {{ _self.sectionSelector(fsc, i18n, firstSectionName) }}
+                        </div>
                     {% endif %}
                     {% set colNumClass = (fsc.sections | length > 2) ? 'col-10 col-lg-12' : '' %}
                     <div class="column {{ colNumClass }}">
