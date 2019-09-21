@@ -106,7 +106,7 @@
 
 {% macro sectionSearch(section, i18n) %}
     {% if section.searchFields | length > 0 %}
-        <div class="column col-3 col-md-12 mb-2">
+        <div class="column col-2 col-md-12 mb-2">
             <div class="input-group">
                 <input type="text" name="query" value="{{ section.query }}" class="form-input" placeholder="{{ i18n.trans('search') }}" autocomplete="off"/>
                 <button class="btn btn-primary input-group-btn">
