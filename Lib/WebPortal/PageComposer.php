@@ -94,8 +94,6 @@ class PageComposer
         foreach ($this->webBlock->all($where2, ['ordernum' => 'ASC'], 0, 0) as $block) {
             $this->addBlock($block, $page);
         }
-
-        $this->checkBody($page);
     }
 
     /**
@@ -115,29 +113,6 @@ class PageComposer
         }
 
         $this->blocks[] = $block;
-    }
-
-    /**
-     * Check body of a page.
-     *
-     * @param WebPage $page
-     */
-    private function checkBody(WebPage &$page)
-    {
-        $bodyFound = false;
-        $title = '';
-        foreach ($this->blocks as $block) {
-            if ('body' === substr($block->type, 0, 4)) {
-                $bodyFound = true;
-                $title = $this->getH1Ttitle($block->content());
-                break;
-            }
-        }
-
-        if ($bodyFound && $title !== '' && $page->title !== $title) {
-            $page->title = $title;
-            $page->save();
-        }
     }
 
     /**
