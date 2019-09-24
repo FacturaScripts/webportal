@@ -85,6 +85,7 @@ class WebSearch extends PortalController
 
     protected function initSearch()
     {
+        $this->title = $this->toolBox()->i18n()->trans('search');
         $this->setTemplate('WebSearch');
         $this->setTopQueries();
 
