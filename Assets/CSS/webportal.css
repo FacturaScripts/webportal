@@ -20,8 +20,20 @@
     Author     : Carlos García Gómez
 */
 
-.body-padding {
-    padding: 10px;
+
+h1 {
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+h2, h3, h4, h5 {
+    margin-top: 35px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+p {
+    word-wrap: break-word;
 }
 
 .body-section {
@@ -43,29 +55,18 @@
     border-top: 1px solid #E0E3E7;
 }
 
-h1 {
-    margin-bottom: 5px;
-    word-wrap: break-word;
-}
-
-h2, h3, h4, h5 {
-    margin-top: 35px;
-    margin-bottom: 5px;
-    word-wrap: break-word;
-}
-
 .menu-big {
     width: 285px;
+}
+
+.mt-3 {
+    margin-top: .6rem !important;
 }
 
 .navbar-top {
     background-color: #F8F9FA;
     border-bottom: 1px solid #E0E3E7;
     padding: 10px 10px 2px 10px;
-}
-
-p {
-    word-wrap: break-word;
 }
 
 .accordion-box {

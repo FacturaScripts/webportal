@@ -1,12 +1,11 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
 {% block body %}
-    {% import _self as macros %}
     <div class="body-section">
         <br/>
         <div class="container grid-lg">
             <div class="columns">
-                <div class="column col-12">
+                <div class="column">
                     {% if fsc.registrationOK %}
                         <div class="empty">
                             <div class="empty-icon">
@@ -15,7 +14,7 @@
                             <p class="empty-title h5">{{ i18n.trans('activation-email-sent') }}</p>
                         </div>
                     {% else %}
-                        {{ macros.RegistrationForm(fsc, i18n, appSettings) }}
+                        {{ _self.RegistrationForm(fsc, i18n, appSettings) }}
                     {% endif %}
                 </div>
             </div>

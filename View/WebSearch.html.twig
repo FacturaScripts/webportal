@@ -1,11 +1,10 @@
 {% extends "Master/PortalTemplate.html.twig" %}
 
 {% block body %}
-    <br/>
     <div class="body-section">
-        <div class="container grid-lg">
+        <div class="container grid-lg mt-3">
             <div class="columns">
-                <div class="column col-12">
+                <div class="column">
                     <h1 class="h3 text-center">{{ i18n.trans('search') }}</h1>
                     <form id="searchForm" action="{{ fsc.url() }}" method="post">
                         <div class="input-group">
@@ -59,7 +58,7 @@
     <script>
         $(document).ready(function () {
             var availableTags = {{ fsc.topQueries | json_encode() | raw }};
-                    $("#queryInput").autocomplete({
+            $("#queryInput").autocomplete({
                 source: availableTags,
                 select: function (event, ui) {
                     $("#queryInput").val(ui.item.label);
