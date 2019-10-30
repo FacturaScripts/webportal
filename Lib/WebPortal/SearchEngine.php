@@ -69,6 +69,10 @@ class SearchEngine
         $item['position'] = false;
         $text = mb_strtolower($item['title'] . ' ' . $item['description']);
         foreach (explode(' ', $query) as $subQuery) {
+            if (empty($subQuery)) {
+                continue;
+            }
+
             $position = mb_strpos($text, $subQuery);
             if (false === $position) {
                 $item['position'] = false;
