@@ -196,6 +196,9 @@ class HybridLogin extends PortalController
 
             $userProfile = $facebook->getUserProfile();
             $this->checkContact($userProfile);
+
+            /// call to setContactSource extension
+            $this->pipe('setContactSource', 'facebook');
         } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
@@ -248,6 +251,9 @@ class HybridLogin extends PortalController
 
             $userProfile = $google->getUserProfile();
             $this->checkContact($userProfile);
+
+            /// call to setContactSource extension
+            $this->pipe('setContactSource', 'google');
         } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
@@ -391,6 +397,9 @@ class HybridLogin extends PortalController
 
             $userProfile = $twitter->getUserProfile();
             $this->checkContact($userProfile);
+
+            /// call to setContactSource extension
+            $this->pipe('setContactSource', 'twitter');
         } catch (Exception $exc) {
             $this->toolBox()->log()->warning($exc->getMessage());
             $this->setIPWarning();
