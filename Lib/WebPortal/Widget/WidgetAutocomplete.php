@@ -76,6 +76,12 @@ class WidgetAutocomplete extends ParentClass
      */
     protected function inputGroupClearBtn()
     {
+        if ($this->readonly()) {
+            return '<button class="btn input-group-btn" type="button">'
+                . '<i class="fas fa-lock" aria-hidden="true"></i>'
+                . '</button>';
+        }
+
         return '<button class="btn btn-error input-group-btn" type="button" onclick="this.form.' . $this->fieldname . '.value = \'\'; this.form.submit();">'
             . '<i class="fas fa-times" aria-hidden="true"></i>'
             . '</button>';
