@@ -1,6 +1,8 @@
 {
-    "name": "vendor/webportal",
+    "name": "facturascripts/webportal",
     "description": "Adds a web portal to FacturaScripts.",
+    "homepage": "https://facturascripts.com/plugins/webportal",
+    "license": "LGPL-3.0-or-later",
     "authors": [
         {
             "name": "Carlos Garcia Gomez",
